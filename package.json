@@ -1,0 +1,29 @@
+{
+  "name": "patientassignmenttool-hono",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev:client": "vite client",
+    "dev:server": "tsx watch server/index.ts",
+    "dev": "concurrently -k -p \"[{name}]\" -n \"client,server\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run dev:client\" \"npm run dev:server\"",
+    "build": "vite build client",
+    "preview": "vite preview",
+    "core:build": "echo 'building core...' && cd ../patientassignmenttool-core && npm run build",
+    "core:copy": "echo 'copying core...' && cp -rv ../patientassignmenttool-core/dist/* ./server/core",
+    "core:get": "npm run core:build && npm run core:copy"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.7",
+    "hono": "^4.6.13",
+    "ofetch": "^1.4.1",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "concurrently": "^9.1.0",
+    "tsx": "^4.19.2",
+    "vite": "^6.0.1"
+  }
+}
