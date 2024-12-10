@@ -9,13 +9,16 @@ app.get("/api/hello", (c) => {
 });
 
 // serve files built by vite
-// assets
-app.get("/assets/*", serveStatic({ root: "./dist" }));
-// public
-app.get("/*", serveStatic({ root: "./dist" }));
-// index.html
-app.get("/", serveStatic({ path: "./dist" }));
+// paths relative to project root, not this file
 
+// client/assets
+app.get("/assets/*", serveStatic({ root: "./dist/client" }));
+// client/public
+app.get("/*", serveStatic({ root: "./dist/client" }));
+// client/index.html
+app.get("/", serveStatic({ path: "./dist/client" }));
+
+// start server
 const port = 3000;
 console.log(`Server is running on http://localhost:${port}`);
 

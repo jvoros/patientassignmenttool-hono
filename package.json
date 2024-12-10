@@ -7,16 +7,23 @@
     "dev:client": "vite client",
     "dev:server": "tsx watch server/index.ts",
     "dev": "concurrently -k -p \"[{name}]\" -n \"client,server\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run dev:client\" \"npm run dev:server\"",
-    "build": "vite build client",
+    "build:client": "vite build client",
+    "build:server": "tsc",
+    "build": "npm run build:client && npm run build:server",
     "preview": "vite preview",
     "core:build": "echo 'building core...' && cd ../patientassignmenttool-core && npm run build",
     "core:copy": "echo 'copying core...' && cp -rv ../patientassignmenttool-core/dist/* ./server/core",
-    "core:get": "npm run core:build && npm run core:copy"
+    "core:get": "npm run core:build && npm run core:copy",
+    "serve": "node dist/server/index.js",
+    "launch": "npm run build && npm run serve"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",
     "hono": "^4.6.13",
+    "immer": "^10.1.1",
+    "mongodb": "^6.12.0",
     "ofetch": "^1.4.1",
+    "short-unique-id": "^5.2.0",
     "vue": "^3.5.13"
   },
   "devDependencies": {
@@ -24,6 +31,7 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "concurrently": "^9.1.0",
     "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
     "vite": "^6.0.1"
   }
 }
