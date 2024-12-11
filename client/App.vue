@@ -1,9 +1,4 @@
-<script setup>
-import Auth from "./components/Auth.vue";
-import HelloWorld from "./components/HelloWorld.vue";
-import Home from "./components/Home.vue";
-import Login from "./components/Login.vue";
-</script>
+<script setup></script>
 
 <template>
   <div>
