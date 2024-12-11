@@ -23,7 +23,7 @@ const login = async () => {
 <template>
   <div>
     <h1>Login</h1>
-    <p v-if="error">{{ error }}</p>
+    <p v-if="error" class="error">{{ error }}</p>
     <input v-model="code" />
     <button @click="login">Login</button>
   </div>
@@ -35,6 +35,11 @@ div {
   align-items: center;
   justify-content: center;
 }
+
+.error {
+  color: red;
+}
+
 input {
   padding: 10px;
   margin: 10px;
