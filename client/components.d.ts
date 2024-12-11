@@ -8,6 +8,13 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Auth: typeof import('./components/Auth.vue')['default']
+    Button: typeof import('./shadcn-vue/components/ui/button/Button.vue')['default']
+    Card: typeof import('./shadcn-vue/components/ui/card/Card.vue')['default']
+    CardContent: typeof import('./shadcn-vue/components/ui/card/CardContent.vue')['default']
+    CardDescription: typeof import('./shadcn-vue/components/ui/card/CardDescription.vue')['default']
+    CardFooter: typeof import('./shadcn-vue/components/ui/card/CardFooter.vue')['default']
+    CardHeader: typeof import('./shadcn-vue/components/ui/card/CardHeader.vue')['default']
+    CardTitle: typeof import('./shadcn-vue/components/ui/card/CardTitle.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     Home: typeof import('./components/Home.vue')['default']
     Login: typeof import('./components/Login.vue')['default']
