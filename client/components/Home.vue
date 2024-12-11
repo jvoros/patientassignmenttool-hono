@@ -1,7 +1,6 @@
 <script setup>
 import { ofetch } from "ofetch";
 import { store } from "../store.js";
-import { Button } from "@/components/ui/button/index.js";
 
 const logout = async () => {
   const res = await ofetch("/api/logout", {
@@ -21,4 +20,11 @@ const logout = async () => {
     <button @click="logout">Logout</button>
     <Button>Shadcn</Button>
   </div>
+  <Card>
+    <CardHeader>
+      <CardTitle>Card Title</CardTitle>
+    </CardHeader>
+    <CardContent>Content</CardContent>
+    <CardFooter>Footer</CardFooter>
+  </Card>
 </template>
