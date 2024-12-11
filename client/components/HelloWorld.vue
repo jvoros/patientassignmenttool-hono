@@ -14,11 +14,14 @@ const testLogin = async () => {
   const res = await ofetch("/api/login", {
     method: "POST",
     body: { password: "7800" },
-  }).catch((e) => {
-    console.error(e.data);
-  });
+  })
+    .then(() => {
+      store.logIn();
+    })
+    .catch((e) => {
+      console.error(e.data);
+    });
   x.value = res;
-  store.logIn();
 };
 
 const testHono = async () => {
@@ -29,9 +32,10 @@ const testHono = async () => {
 const testLogout = async () => {
   const res = await ofetch("/api/logout", {
     method: "POST",
+  }).then(() => {
+    store.logOut();
   });
   x.value = res;
-  store.logOut();
 };
 
 const getCookie = async () => {

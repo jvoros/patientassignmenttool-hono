@@ -1,9 +1,8 @@
-import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
-import { decode, sign, verify } from "hono/jwt";
-import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from "hono/cookie";
-import { cors } from "hono/cors";
+import { sign, verify } from "hono/jwt";
+import { getCookie, setCookie, deleteCookie } from "hono/cookie";
 
 const app = new Hono();
 

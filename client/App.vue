@@ -1,6 +1,8 @@
 <script setup>
 import Auth from "./components/Auth.vue";
 import HelloWorld from "./components/HelloWorld.vue";
+import Home from "./components/Home.vue";
+import Login from "./components/Login.vue";
 </script>
 
 <template>
@@ -14,13 +16,12 @@ import HelloWorld from "./components/HelloWorld.vue";
   </div>
   <Auth>
     <template #auth>
-      <h1>Authenticated</h1>
+      <Home />
     </template>
     <template #noauth>
-      <h1>Not Authenticated</h1>
+      <Login />
     </template>
   </Auth>
-  <HelloWorld message="Message" />
 </template>
 
 <style scoped>
