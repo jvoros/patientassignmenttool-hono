@@ -1,4 +1,5 @@
 <script setup>
+import Auth from "./components/Auth.vue";
 import HelloWorld from "./components/HelloWorld.vue";
 </script>
 
@@ -11,7 +12,15 @@ import HelloWorld from "./components/HelloWorld.vue";
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
-  <HelloWorld msg="Hello Vite & Vue" />
+  <Auth>
+    <template #auth>
+      <h1>Authenticated</h1>
+    </template>
+    <template #noauth>
+      <h1>Not Authenticated</h1>
+    </template>
+  </Auth>
+  <HelloWorld message="Message" />
 </template>
 
 <style scoped>
