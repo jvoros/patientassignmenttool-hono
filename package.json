@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev:client": "vite client",
-    "dev:server": "tsx watch server/index.ts",
+    "dev:server": "npx tsx --env-file=.dev.env --watch server/index.ts",
     "dev": "concurrently -k -p \"[{name}]\" -n \"client,server\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run dev:client\" \"npm run dev:server\"",
     "build:client": "vite build client",
     "build:server": "tsc",
