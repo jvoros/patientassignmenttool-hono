@@ -18,6 +18,7 @@ declare module 'vue' {
     CardFooter: typeof import('./shadcn-vue/components/card/CardFooter.vue')['default']
     CardHeader: typeof import('./shadcn-vue/components/card/CardHeader.vue')['default']
     CardTitle: typeof import('./shadcn-vue/components/card/CardTitle.vue')['default']
+    Container: typeof import('./components/Container.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     Home: typeof import('./components/Home.vue')['default']
     Icon: typeof import('./components/Icon.vue')['default']
