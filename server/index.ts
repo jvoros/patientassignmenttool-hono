@@ -13,9 +13,10 @@ app.get("/api/hello", (c) => {
 // auth routes
 app.post("/api/login", async (c) => {
   console.log("login route");
-  const { password } = await c.req.json();
+  const { site, code } = await c.req.json();
+  console.log(site, code);
 
-  if (password && password.toString() === process.env.ACCESS_TOKEN?.toString()) {
+  if (code && code.toString() === process.env.ACCESS_TOKEN?.toString()) {
     const payload = {
       role: "user",
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,

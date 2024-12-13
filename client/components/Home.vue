@@ -27,4 +27,10 @@ const logout = async () => {
     <CardContent>Content</CardContent>
     <CardFooter>Footer</CardFooter>
   </Card>
+  <div class="mt-8 ml-72">
+    <Popover>
+      <PopoverTrigger><Button>Open</Button></PopoverTrigger>
+      <PopoverContent>This is the content</PopoverContent>
+    </Popover>
+  </div>
 </template>

@@ -4,12 +4,14 @@ import { ofetch } from "ofetch";
 import { store } from "../store.js";
 
 const code = ref();
+const site = ref("smh");
 const error = ref();
 
-const login = async () => {
+const login = async (e) => {
+  e.preventDefault();
   const res = await ofetch("/api/login", {
     method: "POST",
-    body: { password: code.value },
+    body: { site: site.value, code: code.value },
   })
     .then(() => {
       store.logIn();
@@ -21,31 +23,24 @@ const login = async () => {
 };
 </script>
 <template>
-  <div>
-    <h1>Login</h1>
-    <p v-if="error" class="error">{{ error }}</p>
-    <input v-model="code" />
-    <button @click="login">Login</button>
-  </div>
+  <form>
+    <Card class="w-full max-w-sm mx-auto mt-12">
+      <CardHeader>
+        <img src="/assets/pat.svg" alt="Patient Assignment Tool Logo" class="w-24 mb-4" />
+        <CardTitle class="text-4xl font-bold">Welcome to the Rotation.</CardTitle>
+      </CardHeader>
+      <CardContent class="grid gap-4">
+        <div class="grid gap-2">
+          <Label for="code"
+            >Access Code
+            <span v-if="error" class="text-red-500 text-sm float-right">{{ error }}</span>
+          </Label>
+          <Input id="code" type="password" v-model="code" />
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button class="w-full" type="submit" @click="login">Login</Button>
+      </CardFooter>
+    </Card>
+  </form>
 </template>
-<style scoped>
-div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.error {
-  color: red;
-}
-
-input {
-  padding: 10px;
-  margin: 10px;
-  border: 1px solid lightgray;
-  border-radius: 8px;
-  display: block;
-  decoration: none;
-}
-</style>
