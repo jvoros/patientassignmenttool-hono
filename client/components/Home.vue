@@ -15,22 +15,15 @@ const logout = async () => {
 };
 </script>
 <template>
-  <div>
-    <h1 class="mb-8 bg-slate-600">Home</h1>
-    <button @click="logout">Logout</button>
-    <Button>Shadcn</Button>
-  </div>
-  <Card>
-    <CardHeader>
-      <CardTitle>Card Title</CardTitle>
-    </CardHeader>
-    <CardContent>Content</CardContent>
-    <CardFooter>Footer</CardFooter>
-  </Card>
-  <div class="mt-8 ml-72">
-    <Popover>
-      <PopoverTrigger><Button>Open</Button></PopoverTrigger>
-      <PopoverContent>This is the content</PopoverContent>
-    </Popover>
-  </div>
+  <Container class="border-b">
+    <nav class="flex justify-between items-center py-4">
+      <div class="flex gap-2 items-center">
+        <img src="/assets/pat.svg" alt="Patient Assignment Tool Logo" class="w-12" />
+        <h1 class="font-bold text-2xl">
+          Patient Assignement Tool <span class="text-xs font-light text-slate-500">v0.1.0</span>
+        </h1>
+      </div>
+      <Button @click="logout">Logout <Icon icon="logout" /></Button>
+    </nav>
+  </Container>
 </template>

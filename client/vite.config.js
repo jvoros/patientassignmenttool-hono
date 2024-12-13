@@ -4,7 +4,6 @@ import Components from "unplugin-vue-components/vite";
 import autoprefixer from "autoprefixer";
 import tailwind from "tailwindcss";
 import { fileURLToPath, URL } from "node:url";
-import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 
 // https://vite.dev/config/
 export default defineConfig({
