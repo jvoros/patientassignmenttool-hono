@@ -19,11 +19,11 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",
+    "@vueuse/core": "^12.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "hono": "^4.6.13",
     "immer": "^10.1.1",
-    "lucide-vue-next": "^0.468.0",
     "mongodb": "^6.12.0",
     "ofetch": "^1.4.1",
     "radix-vue": "^1.9.11",

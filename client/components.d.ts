@@ -7,6 +7,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Alert: typeof import('./shadcn-vue/components/alert/Alert.vue')['default']
+    AlertDescription: typeof import('./shadcn-vue/components/alert/AlertDescription.vue')['default']
+    AlertTitle: typeof import('./shadcn-vue/components/alert/AlertTitle.vue')['default']
     Auth: typeof import('./components/Auth.vue')['default']
     Button: typeof import('./shadcn-vue/components/button/Button.vue')['default']
     Card: typeof import('./shadcn-vue/components/card/Card.vue')['default']
@@ -17,6 +20,12 @@ declare module 'vue' {
     CardTitle: typeof import('./shadcn-vue/components/card/CardTitle.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     Home: typeof import('./components/Home.vue')['default']
+    Icon: typeof import('./components/Icon.vue')['default']
+    Input: typeof import('./shadcn-vue/components/input/Input.vue')['default']
+    Label: typeof import('./shadcn-vue/components/label/Label.vue')['default']
     Login: typeof import('./components/Login.vue')['default']
+    Popover: typeof import('./shadcn-vue/components/popover/Popover.vue')['default']
+    PopoverContent: typeof import('./shadcn-vue/components/popover/PopoverContent.vue')['default']
+    PopoverTrigger: typeof import('./shadcn-vue/components/popover/PopoverTrigger.vue')['default']
   }
 }
