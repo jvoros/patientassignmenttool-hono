@@ -1,17 +1,11 @@
 import { Hono } from "hono";
-import { serve } from "@hono/node-server";
-import { serveStatic } from "@hono/node-server/serve-static";
 import { sign, verify } from "hono/jwt";
 import { getCookie, setCookie, deleteCookie } from "hono/cookie";
 
-const app = new Hono();
-
-app.get("/api/hello", (c) => {
-  return c.text(process.env.JWT_SECRET!);
-});
+const auth = new Hono();
 
 // auth routes
-app.post("/api/login", async (c) => {
+auth.post("/login", async (c) => {
   console.log("login route");
   const { site, code } = await c.req.json();
   console.log(site, code);
@@ -21,7 +15,7 @@ app.post("/api/login", async (c) => {
       role: "user",
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
     };
-    const token = await sign(payload, process.env.JWT_SECRET!);
+    const token = await sign(payload, process.env.JWT_SECRET);
     setCookie(c, "auth", token, {
       httpOnly: true,
       sameSite: "Lax",
@@ -34,16 +28,16 @@ app.post("/api/login", async (c) => {
   }
 });
 
-app.post("/api/logout", async (c) => {
+auth.post("/logout", async (c) => {
   deleteCookie(c, "auth");
   return c.text("Logged out");
 });
 
-app.post("/api/verify", async (c) => {
+auth.post("/verify", async (c) => {
   const token = getCookie(c, "auth");
   if (token) {
     try {
-      const payload = await verify(token, process.env.JWT_SECRET!);
+      const payload = await verify(token, process.env.JWT_SECRET);
       return c.text("Valid token");
     } catch {
       return c.text("Invalid token", 400);
@@ -53,21 +47,4 @@ app.post("/api/verify", async (c) => {
   }
 });
 
-// serve files built by vite
-// paths relative to project root, not this file
-
-// client/assets
-app.get("/assets/*", serveStatic({ root: "./dist/client" }));
-// client/public
-app.get("/*", serveStatic({ root: "./dist/client" }));
-// client/index.html
-app.get("/", serveStatic({ path: "./dist/client" }));
-
-// start server
-const port = 3000;
-console.log(`Server is running on http://localhost:${port}`);
-
-serve({
-  fetch: app.fetch,
-  port,
-});
+export default auth;

@@ -9,7 +9,7 @@ const error = ref();
 
 const login = async (e) => {
   e.preventDefault();
-  const res = await ofetch("/api/login", {
+  const res = await ofetch("/api/auth/login", {
     method: "POST",
     body: { site: site.value, code: code.value },
   })

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev:client": "vite client",
-    "dev:server": "npx tsx --env-file=.dev.env --watch server/index.ts",
+    "dev:server": "node --env-file=.dev.env --watch server/index.js",
     "dev": "concurrently -k -p \"[{name}]\" -n \"client,server\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run dev:client\" \"npm run dev:server\"",
     "build:client": "vite build client",
     "build:server": "tsc",
@@ -37,6 +37,7 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "autoprefixer": "^10.4.20",
     "concurrently": "^9.1.0",
+    "lucide-vue-next": "^0.468.0",
     "tailwindcss": "^3.4.16",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
