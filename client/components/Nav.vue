@@ -1,6 +1,6 @@
 <script setup>
 import { ofetch } from "ofetch";
-import { store } from "../store.js";
+import { auth } from "../auth.js";
 import { useColorMode } from "@vueuse/core";
 
 const mode = useColorMode({ disableTransition: false });
@@ -10,15 +10,7 @@ const toggleMode = () => {
 };
 
 const logout = async () => {
-  const res = await ofetch("/api/auth/logout", {
-    method: "POST",
-  })
-    .then(() => {
-      store.logOut();
-    })
-    .catch((e) => {
-      console.error(e.data);
-    });
+  auth.logout();
 };
 </script>
 <template>

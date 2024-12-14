@@ -6,13 +6,11 @@ const auth = new Hono();
 
 // auth routes
 auth.post("/login", async (c) => {
-  console.log("login route");
   const { site, code } = await c.req.json();
-  console.log(site, code);
-
   if (code && code.toString() === process.env.ACCESS_TOKEN?.toString()) {
     const payload = {
       role: "user",
+      site,
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
     };
     const token = await sign(payload, process.env.JWT_SECRET);
@@ -21,9 +19,8 @@ auth.post("/login", async (c) => {
       sameSite: "Lax",
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
-    return c.text("Logged in");
+    return c.json(payload);
   } else {
-    console.log("login route fail path");
     return c.text("Invalid access code", 401);
   }
 });
@@ -38,7 +35,7 @@ auth.post("/verify", async (c) => {
   if (token) {
     try {
       const payload = await verify(token, process.env.JWT_SECRET);
-      return c.text("Valid token");
+      return c.json(payload);
     } catch {
       return c.text("Invalid token", 400);
     }
