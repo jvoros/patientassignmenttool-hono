@@ -10,9 +10,8 @@ export const store = reactive({
     this.loggedIn = false;
   },
   async checkLogin() {
-    ofetch("/api/verify", {
+    ofetch("/api/auth/verify", {
       method: "POST",
-      body: { password: "7800" },
     })
       .then(() => {
         this.loggedIn = true;
