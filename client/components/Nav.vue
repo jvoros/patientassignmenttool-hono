@@ -1,6 +1,6 @@
 <script setup>
 import { ofetch } from "ofetch";
-import { auth } from "../auth.js";
+import { auth } from "../stores/auth.js";
 import { useColorMode } from "@vueuse/core";
 
 const mode = useColorMode({ disableTransition: false });
