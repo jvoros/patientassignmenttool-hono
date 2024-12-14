@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { ofetch } from "ofetch";
-import { auth } from "../auth.js";
+import { auth } from "../stores/auth.js";
 
 const code = ref();
 const site = ref("smh");
@@ -9,7 +9,11 @@ const error = ref();
 
 const login = async (e) => {
   e.preventDefault();
-  auth.login(code.value, site.value);
+  try {
+    await auth.login(code.value, site.value);
+  } catch (e) {
+    error.value = e.message;
+  }
 };
 </script>
 <template>

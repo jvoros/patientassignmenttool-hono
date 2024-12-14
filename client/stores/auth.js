@@ -11,21 +11,25 @@ export const auth = reactive({
       method: "POST",
       body: { site: site, code: code },
     }).catch((e) => {
-      error.value = e.data;
-      console.error(e.data);
+      console.error("[pat] login error: ", e.data);
+      throw new Error(e.data);
+      return;
     });
-
+    if (!user) return;
     this.role = user.role;
     this.site = user.site;
     this.loggedIn = true;
   },
 
   async logout() {
-    await ofetch("/api/auth/logout", {
+    const data = await ofetch("/api/auth/logout", {
       method: "POST",
     }).catch((e) => {
-      console.error(e.data);
+      console.error("[pat] logout error: ", e.data);
+      return;
     });
+    if (!data) return;
+    console.log("[pat] logged out: ", data);
     this.loggedIn = false;
     this.role = null;
     this.site = null;
@@ -36,11 +40,15 @@ export const auth = reactive({
     const data = await ofetch("/api/auth/verify", {
       method: "POST",
     }).catch((e) => {
+      console.log("[pat] checkLogin error: ", e.data);
       this.loggedIn = false;
+      return;
     });
+    if (!data) return;
     console.log("[pat] logged in: ", data);
     this.loggedIn = true;
     this.site = data.site;
     this.role = data.role;
+    return;
   },
 });

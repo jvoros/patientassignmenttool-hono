@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount } from "vue";
-import { auth } from "../auth.js";
+import { auth } from "../stores/auth.js";
 
 onBeforeMount(() => {
   console.log("[pat] Auth.vue mounted");
