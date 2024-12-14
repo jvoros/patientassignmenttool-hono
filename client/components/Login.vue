@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { ofetch } from "ofetch";
-import { store } from "../store.js";
+import { auth } from "../auth.js";
 
 const code = ref();
 const site = ref("smh");
@@ -9,17 +9,7 @@ const error = ref();
 
 const login = async (e) => {
   e.preventDefault();
-  const res = await ofetch("/api/auth/login", {
-    method: "POST",
-    body: { site: site.value, code: code.value },
-  })
-    .then(() => {
-      store.logIn();
-    })
-    .catch((e) => {
-      error.value = e.data;
-      console.error(e.data);
-    });
+  auth.login(code.value, site.value);
 };
 </script>
 <template>

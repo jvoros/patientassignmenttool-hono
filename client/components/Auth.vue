@@ -1,13 +1,13 @@
 <script setup>
 import { onBeforeMount } from "vue";
-import { store } from "../store.js";
-import HelloWorld from "./HelloWorld.vue";
+import { auth } from "../auth.js";
 
 onBeforeMount(() => {
-  store.checkLogin();
+  console.log("[pat] Auth.vue mounted");
+  auth.checkLogin();
 });
 </script>
 <template>
-  <slot name="auth" v-if="store.loggedIn"></slot>
+  <slot name="auth" v-if="auth.loggedIn"></slot>
   <slot name="noauth" v-else></slot>
 </template>
