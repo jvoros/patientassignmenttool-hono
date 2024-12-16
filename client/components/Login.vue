@@ -3,7 +3,7 @@ import { ref } from "vue";
 import auth from "../stores/auth.js";
 
 const code = ref();
-const site = ref("smh");
+const site = ref("stmarks");
 const error = ref();
 
 const login = async (e) => {
