@@ -1,9 +1,12 @@
 import { Hono } from "hono";
 import auth from "./auth.js";
+import board from "./board.js";
 
 const api = new Hono();
 
 api.route("/auth", auth);
+
+api.route("/board", board);
 
 // try {
 //   authorize(event);

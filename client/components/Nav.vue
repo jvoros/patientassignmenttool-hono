@@ -1,6 +1,6 @@
 <script setup>
 import { ofetch } from "ofetch";
-import { auth } from "../stores/auth.js";
+import auth from "../stores/auth.js";
 import { useColorMode } from "@vueuse/core";
 
 const mode = useColorMode({ disableTransition: false });
@@ -19,7 +19,7 @@ const logout = async () => {
       <div class="flex gap-2 items-center">
         <img src="/assets/pat.svg" alt="Patient Assignment Tool Logo" class="w-12" />
         <h1 class="font-bold text-2xl">
-          Patient Assignement Tool <span class="text-xs font-light text-slate-500">v0.1.0</span>
+          Patient Assignment Tool <span class="text-xs font-light text-slate-500">v1.0.0</span>
         </h1>
       </div>
       <div class="flex gap-4 items-center">
