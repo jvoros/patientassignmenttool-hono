@@ -24,6 +24,7 @@ declare module 'vue' {
     Input: typeof import('./shadcn-vue/components/input/Input.vue')['default']
     Label: typeof import('./shadcn-vue/components/label/Label.vue')['default']
     Login: typeof import('./components/Login.vue')['default']
+    Main: typeof import('./components/Main.vue')['default']
     Nav: typeof import('./components/Nav.vue')['default']
     Popover: typeof import('./shadcn-vue/components/popover/Popover.vue')['default']
     PopoverAddProvider: typeof import('./components/PopoverAddProvider.vue')['default']

@@ -1,7 +1,7 @@
 import { reactive } from "vue";
 import { ofetch } from "ofetch";
 
-export const auth = reactive({
+const auth = reactive({
   loggedIn: false,
   role: null,
   site: null,
@@ -13,7 +13,6 @@ export const auth = reactive({
     }).catch((e) => {
       console.error("[pat] login error: ", e.data);
       throw new Error(e.data);
-      return;
     });
     if (!user) return;
     this.role = user.role;
@@ -29,7 +28,6 @@ export const auth = reactive({
       return;
     });
     if (!data) return;
-    console.log("[pat] logged out: ", data);
     this.loggedIn = false;
     this.role = null;
     this.site = null;
@@ -45,10 +43,11 @@ export const auth = reactive({
       return;
     });
     if (!data) return;
-    console.log("[pat] logged in: ", data);
     this.loggedIn = true;
     this.site = data.site;
     this.role = data.role;
     return;
   },
 });
+
+export default auth;
