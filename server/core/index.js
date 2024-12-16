@@ -1,9 +1,10 @@
 import Board from "./board.js";
 import createDbConnection from "./db.js";
 // BOARD STORE
-const createBoardStore = (site, mongoUri) => {
+const createBoardStore = (siteName, mongoUri) => {
     const db = createDbConnection(mongoUri);
     let board;
+    const site = siteName ?? "default";
     const getBoard = async () => {
         if (board) {
             return board;
@@ -11,6 +12,14 @@ const createBoardStore = (site, mongoUri) => {
         const result = await db.getBoard(site);
         board = result.board;
         return board;
+    };
+    const getSiteComplete = async () => {
+        const result = await db.getSiteComplete(site);
+        return result;
+    };
+    const getSiteDetails = async () => {
+        const result = await db.getSiteDetails(site);
+        return result.details;
     };
     const boardReset = async () => {
         saveLogs();
@@ -73,8 +82,8 @@ const createBoardStore = (site, mongoUri) => {
         getBoard,
         boardReset,
         saveLogs,
-        getSiteComplete: db.getSiteComplete,
-        getSiteDetails: db.getSiteDetails,
+        getSiteComplete,
+        getSiteDetails,
         ...wrappedBoard,
     };
 };
