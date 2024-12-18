@@ -48,8 +48,10 @@ stream.get("/", async (c) => {
     });
 
     while (SITE_INCLUDES_CLIENT(site, id)) {
+      console.log(clients);
       await stream.writeSSE({
         data: ": keep-alive\n\n",
+        event: "ping",
       });
       await stream.sleep(15000);
     }
