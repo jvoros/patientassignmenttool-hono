@@ -9,16 +9,16 @@ export const sites = {
   stmarks: await createBoardStore("stmarks", process.env.MONGO_URI),
 };
 
-const broadcastBoard = (site) => {
-  broadcast(site, "board", sites[site].getBoard());
+const broadcastBoard = async (site) => {
+  broadcast(site, "board", await sites[site].getBoard());
 };
 
 board.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 
 board.get("/", async (c) => {
   const site = c.get("jwtPayload").site;
-  const data = await sites[site].getBoard();
-  return c.json({ data });
+  broadcastBoard(site);
+  return c.text("board broadcasted");
 });
 
 board.get("/site", async (c) => {

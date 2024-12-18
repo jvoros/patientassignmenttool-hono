@@ -16,6 +16,7 @@ const SITE_INCLUDES_CLIENT = (site, id) => {
 };
 
 export const broadcast = (site, event, data) => {
+  console.log("broadcasting...");
   clients[site].forEach((client) => {
     client.stream.writeSSE({
       data: `${JSON.stringify(data)}\n\n`,
@@ -32,14 +33,19 @@ stream.get("/", async (c) => {
   return streamSSE(c, async (stream) => {
     // add to client list for site
     clients[site].push({ id, stream });
+    console.log(
+      `Client [${id}] connected to stream [${site} - total clients: ${clients[site].length}]`
+    );
     // remove client from list when they disconnect
     stream.onAbort(() => {
       clients[site] = clients[site].filter((c) => c.id !== id);
-      console.log("client disconnected from stream: " + site);
+      console.log(
+        `Client [${id}] disconnected from stream [${site} - total clients: ${clients[site].length}]`
+      );
     });
 
     stream.writeSSE({
-      data: "client connected to " + site,
+      data: `connected to site stream [${site}] with id [${id}]`,
     });
 
     stream.writeSSE({
@@ -48,7 +54,7 @@ stream.get("/", async (c) => {
     });
 
     while (SITE_INCLUDES_CLIENT(site, id)) {
-      console.log(clients);
+      //console.log(clients);
       await stream.writeSSE({
         data: ": keep-alive\n\n",
         event: "ping",

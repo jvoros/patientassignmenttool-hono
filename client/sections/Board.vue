@@ -1,16 +1,16 @@
 <script setup>
 import { ref } from "vue";
-import boardStore from "../stores/board.js";
-import boardStream from "../stores/boardStream.js";
+import api from "../stores/api.js";
+import stream from "../stores/stream.js";
 
-const { board } = boardStream();
+const { board } = stream();
 
 const getBoard = async () => {
-  const res = await boardStore.getBoard();
+  const res = await api.getBoard();
 };
 
 const getSiteDetails = async () => {
-  const res = await boardStore.getSiteDetails();
+  const res = await api.getSiteDetails();
 };
 </script>
 
