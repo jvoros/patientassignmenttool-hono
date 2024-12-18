@@ -38,7 +38,7 @@ const auth = reactive({
     const data = await ofetch("/api/auth/verify", {
       method: "POST",
     }).catch((e) => {
-      console.log("[pat] checkLogin error: ", e.data);
+      console.error("[pat] checkLogin error: ", e.data);
       this.loggedIn = false;
       return;
     });

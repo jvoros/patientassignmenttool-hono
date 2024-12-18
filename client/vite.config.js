@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     vue(),
     Components({
-      dirs: ["./components", "./shadcn-vue"],
+      dirs: ["./sections", "./components", "./shadcn-vue"],
     }),
   ],
   root: "./client",
