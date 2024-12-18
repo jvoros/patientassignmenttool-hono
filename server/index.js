@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
+import { streamSSE } from "hono/streaming";
 import api from "./api.js";
 
 const app = new Hono();
