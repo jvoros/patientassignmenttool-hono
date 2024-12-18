@@ -3,7 +3,8 @@
 <template>
   <Auth>
     <template #auth>
-      <Home />
+      <Nav />
+      <Board />
     </template>
     <template #noauth>
       <Login />

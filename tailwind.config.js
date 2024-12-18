@@ -3,7 +3,11 @@ const animate = require("tailwindcss-animate");
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: ["./client/components/**/*.{js,jsx,vue}", "./client/shadcn-vue/**/*.{js,jsx,vue}"],
+  content: [
+    "./client/sections/**/*.{js,jsx,vue}",
+    "./client/components/**/*.{js,jsx,vue}",
+    "./client/shadcn-vue/**/*.{js,jsx,vue}",
+  ],
   prefix: "",
   theme: {
     container: {
