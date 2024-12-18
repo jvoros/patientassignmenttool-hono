@@ -1,18 +1,19 @@
 import { ref, onMounted, onUnmounted } from "vue";
 
 // Vue composable, not a store
-const boardStream = () => {
+const stream = () => {
   // reactive board
   const board = ref({});
 
   // EventSource
   const source = new EventSource("/api/stream");
-  source.onopen = () => console.log("[pat] stream connected");
-  source.onerror = (e) => console.error("[pat][stream]", e);
-  source.onclose = () => console.log("[pat][stream] closed");
+  source.onopen = () => console.log("[stream] connected");
+  source.onerror = (e) => console.error("[stream]", e);
+  source.onclose = () => console.log("[stream] closed");
   // messages to handle
-  source.onmessage = (e) => console.log("[pat][stream]", e.data);
+  source.onmessage = (e) => console.log("[stream]", e.data);
   source.addEventListener("board", (e) => {
+    console.log("[stream] new board received");
     board.value = e.data;
   });
 
@@ -28,4 +29,4 @@ const boardStream = () => {
   return { board };
 };
 
-export default boardStream;
+export default stream;
