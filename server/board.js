@@ -6,13 +6,15 @@ import { broadcast } from "./stream.js";
 // setup
 const board = new Hono();
 
+const testBoard = await createBoardStore("stmarks", process.env.MONGO_URI);
+// console.log("testBoard: ", await testBoard.getBoard());
 // helpers
 export const sites = {
-  stmarks: await createBoardStore("stmarks", process.env.MONGO_URI),
+  stmarks: { store: await createBoardStore("stmarks", process.env.MONGO_URI), clients: [] },
 };
 
 const broadcastBoard = async (site) => {
-  broadcast(site, "board", await sites[site].getBoard());
+  broadcast(site.clients, "board", await sites[site].store.getBoard());
 };
 
 // middleware
@@ -31,7 +33,7 @@ board.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 
 board.get("/site", async (c) => {
   const site = c.get("jwtPayload").site;
-  const res = await sites[site].getSiteDetails();
+  const res = await sites[site].store.getSiteDetails();
   return c.json({ data: res });
 });
 

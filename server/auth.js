@@ -1,8 +1,10 @@
 import { Hono } from "hono";
 import { sign, verify } from "hono/jwt";
 import { getCookie, setCookie, deleteCookie } from "hono/cookie";
+import ShortUniqueId from "short-unique-id";
 
 const auth = new Hono();
+const uid = new ShortUniqueId({ length: 6 });
 
 // auth routes
 auth.post("/login", async (c) => {
@@ -10,6 +12,7 @@ auth.post("/login", async (c) => {
   if (code && code.toString() === process.env.ACCESS_TOKEN?.toString()) {
     const payload = {
       role: "user",
+      id: uid.rnd(),
       site,
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
     };

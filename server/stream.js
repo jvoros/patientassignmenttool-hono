@@ -1,25 +1,19 @@
 import { Hono } from "hono";
 import { jwt } from "hono/jwt";
 import { streamSSE } from "hono/streaming";
-import ShortUniqueId from "short-unique-id";
 import { sites } from "./board.js";
 
 // setup
 const stream = new Hono();
-const uid = new ShortUniqueId({ length: 6 });
 
 // helpers
-const clients = {
-  stmarks: [],
-};
-
 const SITE_INCLUDES_CLIENT = (site, id) => {
-  return clients[site].findIndex((c) => c.id === id) !== -1;
+  return sites[site].clients.findIndex((c) => c.id === id) !== -1;
 };
 
-export const broadcast = (site, event, data) => {
+export const broadcast = (clients, event, data) => {
   console.log("broadcasting...");
-  clients[site].forEach((client) => {
+  clients.forEach((client) => {
     client.stream.writeSSE({
       data: `${JSON.stringify(data)}\n\n`,
       event,
@@ -32,19 +26,17 @@ stream.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 
 // routes
 stream.get("/", async (c) => {
-  const site = c.get("jwtPayload").site;
-  const id = uid.rnd();
+  const { site, id } = c.get("jwtPayload");
+  const clients = sites[site].clients;
   return streamSSE(c, async (stream) => {
-    // add to client list for site
-    clients[site].push({ id, stream });
-    console.log(
-      `Client [${id}] connected to stream [${site} - total clients: ${clients[site].length}]`
-    );
+    // add to client list for site if not already there
+    if (!SITE_INCLUDES_CLIENT(site, id)) clients.push({ id, stream });
+    console.log(`Client [${id}] connected to stream [${site} - total clients: ${clients.length}]`);
     // remove client from list when they disconnect
     stream.onAbort(() => {
-      clients[site] = clients[site].filter((c) => c.id !== id);
+      sites[site].clients = clients.filter((c) => c.id !== id);
       console.log(
-        `Client [${id}] disconnected from stream [${site} - total clients: ${clients[site].length}]`
+        `Client [${id}] disconnected from stream [${site} - total clients: ${clients.length}]`
       );
     });
 
@@ -53,7 +45,7 @@ stream.get("/", async (c) => {
     });
 
     stream.writeSSE({
-      data: JSON.stringify(await sites[site].getBoard()),
+      data: JSON.stringify(await sites[site].store.getBoard()),
       event: "board",
     });
 
