@@ -4,9 +4,11 @@ import { streamSSE } from "hono/streaming";
 import ShortUniqueId from "short-unique-id";
 import { sites } from "./board.js";
 
+// setup
 const stream = new Hono();
 const uid = new ShortUniqueId({ length: 6 });
 
+// helpers
 const clients = {
   stmarks: [],
 };
@@ -25,8 +27,10 @@ export const broadcast = (site, event, data) => {
   });
 };
 
+// middleware
 stream.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 
+// routes
 stream.get("/", async (c) => {
   const site = c.get("jwtPayload").site;
   const id = uid.rnd();
