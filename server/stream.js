@@ -32,6 +32,7 @@ stream.get("/", async (c) => {
     // add to client list for site if not already there
     if (!SITE_INCLUDES_CLIENT(site, id)) clients.push({ id, stream });
     console.log(`Client [${id}] connected to stream [${site} - total clients: ${clients.length}]`);
+
     // remove client from list when they disconnect
     stream.onAbort(() => {
       sites[site].clients = clients.filter((c) => c.id !== id);
@@ -45,7 +46,7 @@ stream.get("/", async (c) => {
     });
 
     stream.writeSSE({
-      data: JSON.stringify(await sites[site].store.getBoard()),
+      data: JSON.stringify(await sites[site].store.getBoard(), null, 2),
       event: "board",
     });
 

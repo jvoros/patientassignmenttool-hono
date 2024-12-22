@@ -7,6 +7,6 @@ onBeforeMount(() => {
 });
 </script>
 <template>
-  <slot name="auth" v-if="auth.loggedIn"></slot>
+  <slot name="auth" v-if="auth.id"></slot>
   <slot name="noauth" v-else></slot>
 </template>

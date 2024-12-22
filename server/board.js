@@ -37,4 +37,15 @@ board.get("/site", async (c) => {
   return c.json({ data: res });
 });
 
+board.post("/signin", async (c) => {
+  const site = c.get("jwtPayload").site;
+  const { provider, schedule } = await c.req.json();
+  console.log("provider: ", provider);
+  console.log("schedule: ", schedule);
+  return c.text("signin broadcasted");
+  // await sites[site].store.signIn(provider, schedule);
+  // broadcastBoard(site);
+  // return c.text("signin broadcasted");
+});
+
 export default board;

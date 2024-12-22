@@ -1,10 +1,10 @@
 <script setup>
-import { ofetch } from "ofetch";
-import auth from "../stores/auth.js";
+import { ref } from "vue";
 import { useColorMode } from "@vueuse/core";
+import auth from "../stores/auth.js";
 
+// dark mode
 const mode = useColorMode({ disableTransition: false });
-
 const toggleMode = () => {
   mode.value = mode.value === "light" ? "dark" : "light";
 };
@@ -24,7 +24,7 @@ const logout = async () => {
       </div>
       <div class="flex gap-4 items-center">
         <div><a href="#" class="text-sm hover:underline">Quick Reference</a></div>
-        <PopoverAddProvider />
+        <PopoverAddProvider :provider="providers" :schedule="schedule" />
         <Button variant="secondary" @click="logout">Logout <Icon icon="logout" /></Button>
         <Button @click="toggleMode" variant="outline" size="icon">
           <Icon :icon="mode === 'light' ? 'moon' : 'sun'" />

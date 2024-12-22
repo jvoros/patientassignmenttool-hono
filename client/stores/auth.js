@@ -2,9 +2,9 @@ import { reactive } from "vue";
 import { ofetch } from "ofetch";
 
 const auth = reactive({
-  loggedIn: false,
   role: null,
   site: null,
+  id: null,
 
   async login(code, site) {
     const user = await ofetch("/api/auth/login", {
@@ -17,7 +17,7 @@ const auth = reactive({
     if (!user) return;
     this.role = user.role;
     this.site = user.site;
-    this.loggedIn = true;
+    this.id = user.id;
   },
 
   async logout() {
@@ -28,13 +28,12 @@ const auth = reactive({
       return;
     });
     if (!data) return;
-    this.loggedIn = false;
+    this.id = null;
     this.role = null;
     this.site = null;
   },
 
   async checkLogin() {
-    console.log("[pat] checkLogin");
     const data = await ofetch("/api/auth/verify", {
       method: "POST",
     }).catch((e) => {
@@ -43,9 +42,10 @@ const auth = reactive({
       return;
     });
     if (!data) return;
-    this.loggedIn = true;
+    this.id = data.id;
     this.site = data.site;
     this.role = data.role;
+    console.log(`[pat] checkLogin id [${data.id}]`);
     return;
   },
 });

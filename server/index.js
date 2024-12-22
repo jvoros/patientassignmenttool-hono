@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { showRoutes } from "hono/dev";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import api from "./api.js";
@@ -20,6 +21,10 @@ app.get("/assets/*", serveStatic({ root: "./dist/client" }));
 app.get("/*", serveStatic({ root: "./dist/client" }));
 // client/index.html
 app.get("/", serveStatic({ path: "./dist/client" }));
+
+showRoutes(app, {
+  verbose: true,
+});
 
 // start server
 const port = 3000;
