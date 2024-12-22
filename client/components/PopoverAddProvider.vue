@@ -1,36 +1,77 @@
+<script setup>
+import { ref, onMounted, computed } from "vue";
+import api from "../stores/api.js";
+
+const providers = ref([]);
+const schedule = ref([]);
+
+const selectedProvider = ref(null);
+const selectedProviderParsed = computed(() => {
+  return selectedProvider.value ? JSON.parse(selectedProvider.value) : null;
+});
+
+const selectedSchedule = ref(null);
+const selectedScheduleParsed = computed(() => {
+  return selectedSchedule.value ? JSON.parse(selectedSchedule.value) : null;
+});
+
+const formIncomplete = computed(() => {
+  return !selectedProvider.value || !selectedSchedule.value;
+});
+
+const signIn = async () => {
+  api.signIn(selectedProviderParsed.value, selectedScheduleParsed.value);
+};
+
+const reset = () => {
+  selectedProvider.value = null;
+  selectedSchedule.value = null;
+};
+
+onMounted(async () => {
+  const res = await api.getSiteDetails();
+  providers.value = res.providers;
+  schedule.value = res.schedule;
+});
+</script>
+
 <template>
   <Popover>
     <PopoverTrigger>
-      <Button> <Icon icon="provider" />Add Provider</Button>
+      <Button> <Icon icon="provider" />Add Clinician</Button>
     </PopoverTrigger>
-    <PopoverContent class="flex flex-col gap-2">
-      <Select>
+    <PopoverContent @interactOutside="reset" class="flex flex-col gap-2">
+      <Select v-model="selectedProvider">
         <SelectTrigger>
-          <SelectValue placeholder="Select a fruit" />
+          {{
+            selectedProvider
+              ? `${selectedProviderParsed.last}, ${selectedProviderParsed.first}`
+              : "Select a provider"
+          }}
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Fruits</SelectLabel>
-            <SelectItem value="apple"> Apple </SelectItem>
-            <SelectItem value="apple"> Apple </SelectItem>
-            <SelectItem value="apple"> Apple </SelectItem>
+            <SelectItem v-for="provider in providers" :value="JSON.stringify(provider)">
+              {{ provider.last }}, {{ provider.first }}
+            </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
 
-      <Select>
+      <Select v-model="selectedSchedule">
         <SelectTrigger>
-          <SelectValue placeholder="Select a fruit" />
+          {{ selectedSchedule ? selectedScheduleParsed.name : "Select a schedule" }}
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Fruits</SelectLabel>
-            <SelectItem value="apple"> Apple </SelectItem>
+            <SelectItem v-for="shift in schedule" :value="JSON.stringify(shift)">{{
+              shift.name
+            }}</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
 
-      <Button>Add to Board</Button>
+      <Button @click="signIn" :disabled="formIncomplete ?? null">Add to Board</Button>
     </PopoverContent>
   </Popover>
 </template>
