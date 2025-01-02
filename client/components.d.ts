@@ -12,6 +12,7 @@ declare module 'vue' {
     AlertTitle: typeof import('./shadcn-vue/components/alert/AlertTitle.vue')['default']
     Auth: typeof import('./sections/Auth.vue')['default']
     Board: typeof import('./sections/Board.vue')['default']
+    BoardView: typeof import('./sections/BoardView.vue')['default']
     Button: typeof import('./shadcn-vue/components/button/Button.vue')['default']
     Card: typeof import('./shadcn-vue/components/card/Card.vue')['default']
     CardContent: typeof import('./shadcn-vue/components/card/CardContent.vue')['default']
@@ -42,5 +43,6 @@ declare module 'vue' {
     SelectSeparator: typeof import('./shadcn-vue/components/select/SelectSeparator.vue')['default']
     SelectTrigger: typeof import('./shadcn-vue/components/select/SelectTrigger.vue')['default']
     SelectValue: typeof import('./shadcn-vue/components/select/SelectValue.vue')['default']
+    ShiftList: typeof import('./components/ShiftList.vue')['default']
   }
 }

@@ -1,22 +1,25 @@
 import { Hono } from "hono";
 import { jwt } from "hono/jwt";
 import { streamSSE } from "hono/streaming";
+import ShortUniqueId from "short-unique-id";
 import { sites } from "./board.js";
 
 // setup
 const stream = new Hono();
+const uid = new ShortUniqueId({ length: 6 });
 
 // helpers
 const SITE_INCLUDES_CLIENT = (site, id) => {
   return sites[site].clients.findIndex((c) => c.id === id) !== -1;
 };
 
-export const broadcast = (clients, event, data) => {
-  console.log("broadcasting...");
-  clients.forEach((client) => {
+export const broadcast = async (clients, event, data) => {
+  clients.forEach(async (client) => {
+    const id = uid.rnd();
     client.stream.writeSSE({
-      data: `${JSON.stringify(data)}\n\n`,
       event,
+      data: JSON.stringify(data, null, 2),
+      id,
     });
   });
 };
@@ -31,18 +34,17 @@ stream.get("/", async (c) => {
   return streamSSE(c, async (stream) => {
     // add to client list for site if not already there
     if (!SITE_INCLUDES_CLIENT(site, id)) clients.push({ id, stream });
-    console.log(`Client [${id}] connected to stream [${site} - total clients: ${clients.length}]`);
+    console.log(`[${site}](clients: ${clients.length}) ${id} connected to stream`);
 
     // remove client from list when they disconnect
     stream.onAbort(() => {
       sites[site].clients = clients.filter((c) => c.id !== id);
-      console.log(
-        `Client [${id}] disconnected from stream [${site} - total clients: ${clients.length}]`
-      );
+      console.log(`[${site}](clients: ${clients.length}) ${id} disconnected from stream`);
     });
 
     stream.writeSSE({
-      data: `connected to site stream [${site}] with id [${id}]`,
+      data: `connected to stream (${site}) with id (${id})`,
+      event: "message",
     });
 
     stream.writeSSE({
@@ -53,7 +55,7 @@ stream.get("/", async (c) => {
     while (SITE_INCLUDES_CLIENT(site, id)) {
       //console.log(clients);
       await stream.writeSSE({
-        data: ": keep-alive\n\n",
+        data: ": keep-alive",
         event: "ping",
       });
       await stream.sleep(15000);

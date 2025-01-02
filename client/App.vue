@@ -4,7 +4,7 @@
   <Auth>
     <template #auth>
       <Nav />
-      <Board />
+      <BoardView />
     </template>
     <template #noauth>
       <Login />

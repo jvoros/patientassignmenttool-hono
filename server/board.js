@@ -6,15 +6,15 @@ import { broadcast } from "./stream.js";
 // setup
 const board = new Hono();
 
-const testBoard = await createBoardStore("stmarks", process.env.MONGO_URI);
-// console.log("testBoard: ", await testBoard.getBoard());
 // helpers
 export const sites = {
   stmarks: { store: await createBoardStore("stmarks", process.env.MONGO_URI), clients: [] },
 };
 
 const broadcastBoard = async (site) => {
-  broadcast(site.clients, "board", await sites[site].store.getBoard());
+  const board = await sites[site].store.getBoard();
+  console.log(`[${site}] board broadcasted`);
+  broadcast(sites[site].clients, "board", board);
 };
 
 // middleware
@@ -40,12 +40,28 @@ board.get("/site", async (c) => {
 board.post("/signin", async (c) => {
   const site = c.get("jwtPayload").site;
   const { provider, schedule } = await c.req.json();
-  console.log("provider: ", provider);
-  console.log("schedule: ", schedule);
+
+  const newBoard = await sites[site].store.signIn(provider, schedule);
+
+  if (newBoard.error) {
+    return c.json({ error: newBoard.error });
+  }
+
+  broadcastBoard(site);
   return c.text("signin broadcasted");
-  // await sites[site].store.signIn(provider, schedule);
-  // broadcastBoard(site);
-  // return c.text("signin broadcasted");
+});
+
+board.post("/undo", async (c) => {
+  const site = c.get("jwtPayload").site;
+
+  const newBoard = await sites[site].store.undo();
+
+  if (newBoard.error) {
+    return c.json({ error: newBoard.error });
+  }
+
+  broadcastBoard(site);
+  return c.text("undo broadcasted");
 });
 
 export default board;
