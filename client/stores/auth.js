@@ -28,6 +28,7 @@ const auth = reactive({
       return;
     });
     if (!data) return;
+    console.log("[pat] logout success");
     this.id = null;
     this.role = null;
     this.site = null;
@@ -39,14 +40,14 @@ const auth = reactive({
     }).catch((e) => {
       console.error("[pat] checkLogin error: ", e.data);
       this.loggedIn = false;
-      return;
+      return false;
     });
-    if (!data) return;
+    if (!data) return false;
     this.id = data.id;
     this.site = data.site;
     this.role = data.role;
     console.log(`[pat] checkLogin id [${data.id}]`);
-    return;
+    return true;
   },
 });
 

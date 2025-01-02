@@ -24,7 +24,7 @@ const logout = async () => {
       </div>
       <div class="flex gap-4 items-center">
         <div><a href="#" class="text-sm hover:underline">Quick Reference</a></div>
-        <PopoverAddProvider :provider="providers" :schedule="schedule" />
+        <PopoverAddProvider />
         <Button variant="secondary" @click="logout">Logout <Icon icon="logout" /></Button>
         <Button @click="toggleMode" variant="outline" size="icon">
           <Icon :icon="mode === 'light' ? 'moon' : 'sun'" />

@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from "vue";
 import api from "../stores/api.js";
 
+const open = ref(false);
 const providers = ref([]);
 const schedule = ref([]);
 
@@ -20,7 +21,9 @@ const formIncomplete = computed(() => {
 });
 
 const signIn = async () => {
+  open.value = false;
   api.signIn(selectedProviderParsed.value, selectedScheduleParsed.value);
+  reset();
 };
 
 const reset = () => {
@@ -36,7 +39,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Popover>
+  <Popover :open="open" @update:open="open = !open">
     <PopoverTrigger>
       <Button> <Icon icon="provider" />Add Clinician</Button>
     </PopoverTrigger>

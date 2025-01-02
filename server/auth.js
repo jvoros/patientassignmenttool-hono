@@ -19,7 +19,7 @@ auth.post("/login", async (c) => {
     const token = await sign(payload, process.env.JWT_SECRET);
     setCookie(c, "auth", token, {
       httpOnly: true,
-      sameSite: "Lax",
+      sameSite: "Strict",
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
     return c.json(payload);

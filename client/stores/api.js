@@ -1,9 +1,11 @@
-import { reactive } from "vue";
 import { ofetch } from "ofetch";
 
-const api = reactive({
+const postFetch = ofetch.create({ method: "POST" });
+
+const api = {
   error: null,
 
+  // SETUP & SIGNIN
   async getSiteDetails() {
     const res = await ofetch("/api/board/site").catch((e) => {
       console.error("[pat] getSiteDetails error: ", e.data);
@@ -17,17 +19,8 @@ const api = reactive({
     };
   },
 
-  async getBoard() {
-    await ofetch("/api/board").catch((e) => {
-      console.error("[pat] getBoard error: ", e.data);
-      this.error = e.data;
-    });
-    return;
-  },
-
   async signIn(provider, schedule) {
-    const res = await ofetch("/api/board/signin", {
-      method: "POST",
+    const res = await postFetch("/api/board/signin", {
       body: { provider: provider, schedule: schedule },
     }).catch((e) => {
       console.error("[pat] signIn error: ", e.data);
@@ -35,6 +28,14 @@ const api = reactive({
     });
     return;
   },
-});
+
+  // TIMELINE
+  async undo() {
+    const res = await postFetch("/api/board/undo").catch((e) => {
+      console.error("[pat] undo error: ", e.data);
+      this.error = e.data;
+    });
+  },
+};
 
 export default api;
