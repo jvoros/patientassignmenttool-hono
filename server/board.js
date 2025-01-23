@@ -33,6 +33,7 @@ board.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 
 board.get("/site", async (c) => {
   const site = c.get("jwtPayload").site;
+  console.log("site: ", site);
   const res = await sites[site].store.getSiteDetails();
   return c.json({ data: res });
 });

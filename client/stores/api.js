@@ -5,6 +5,14 @@ const postFetch = ofetch.create({ method: "POST" });
 const api = {
   error: null,
 
+  async postApi(endpoint, payload = {}) {
+    const res = await postFetch(`/api/board/${endpoint}`, { body: payload }).catch((e) => {
+      console.error(`[pat] ${endpoint} error: `, e.data);
+      this.error = e.data;
+    });
+    return res;
+  },
+
   // SETUP & SIGNIN
   async getSiteDetails() {
     const res = await ofetch("/api/board/site").catch((e) => {
@@ -20,21 +28,14 @@ const api = {
   },
 
   async signIn(provider, schedule) {
-    const res = await postFetch("/api/board/signin", {
-      body: { provider: provider, schedule: schedule },
-    }).catch((e) => {
-      console.error("[pat] signIn error: ", e.data);
-      this.error = e.data;
-    });
+    await this.postApi("signin", { provider, schedule });
     return;
   },
 
   // TIMELINE
   async undo() {
-    const res = await postFetch("/api/board/undo").catch((e) => {
-      console.error("[pat] undo error: ", e.data);
-      this.error = e.data;
-    });
+    await this.postApi("undo");
+    return;
   },
 };
 
