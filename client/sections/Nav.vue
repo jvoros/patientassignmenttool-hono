@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from "vue";
 import { useColorMode } from "@vueuse/core";
 import auth from "../stores/auth.js";
 
@@ -14,20 +13,20 @@ const logout = async () => {
 };
 </script>
 <template>
-  <Container class="border-b">
-    <nav class="flex justify-between items-center py-4">
-      <div class="flex gap-2 items-center">
+  <Container class="py-4">
+    <nav class="flex items-center justify-between py-4">
+      <div class="flex items-center gap-2">
         <img src="/assets/pat.svg" alt="Patient Assignment Tool Logo" class="w-12" />
-        <h1 class="font-bold text-2xl">
+        <h1 class="text-2xl font-bold">
           Patient Assignment Tool <span class="text-xs font-light text-slate-500">v1.0.0</span>
         </h1>
       </div>
-      <div class="flex gap-4 items-center">
+      <div class="flex items-center gap-4">
         <div><a href="#" class="text-sm hover:underline">Quick Reference</a></div>
         <PopoverAddProvider />
         <Button variant="secondary" @click="logout">Logout <Icon icon="logout" /></Button>
         <Button @click="toggleMode" variant="outline" size="icon">
-          <Icon :icon="mode === 'light' ? 'moon' : 'sun'" />
+          <Icon :icon="darkMode === false ? 'moon' : 'sun'" />
         </Button>
       </div>
     </nav>
