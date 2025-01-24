@@ -13,6 +13,7 @@ declare module 'vue' {
     Auth: typeof import('./sections/Auth.vue')['default']
     Board: typeof import('./sections/Board.vue')['default']
     BoardHeader: typeof import('./components/BoardHeader.vue')['default']
+    BoardLayout: typeof import('./components/BoardLayout.vue')['default']
     BoardSection: typeof import('./components/BoardSection.vue')['default']
     BoardShift: typeof import('./components/BoardShift.vue')['default']
     BoardView: typeof import('./sections/BoardView.vue')['default']

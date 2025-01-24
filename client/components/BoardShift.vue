@@ -37,9 +37,12 @@ const supervisorTotal = computed(() => props.shift.counts.supervisor ?? 0);
       <div class="flex items-start justify-between">
         <div>
           <h4 class="text-2xl font-bold">{{ shift.provider.first }} {{ shift.provider.last }}</h4>
-          <span v-if="isSup" class="px-2 py-1 text-xs text-white rounded-md bg-amber-300"
-            >NEXT SUP</span
-          >
+          <div v-if="isSup" class="mt-1">
+            <span class="px-2 py-1 text-xs font-light text-white bg-purple-400 rounded-xl"
+              >NEXT SUP</span
+            >
+          </div>
+
           <div class="my-2 font-mono text-xs text-slate-500">
             Total: {{ patientTotal }} &#x2022; Supervisor: {{ supervisorTotal }}
           </div>
