@@ -3,7 +3,6 @@
 <template>
   <Auth>
     <template #auth>
-      <Nav />
       <BoardView />
     </template>
     <template #noauth>

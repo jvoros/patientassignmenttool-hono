@@ -39,31 +39,28 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <Container class="mt-4">
-    <div class="sm:grid sm:grid-cols-2 sm:gap-4 md:grid-cols-10">
-      <div class="p-4 rounded-sm sm:row-span-2 md:col-span-3 bg-slate-100">
-        <BoardHeader>Timeline</BoardHeader>
-        <ul>
-          <li v-for="(eventId, index) in board.timeline">
-            <small class="mr-2">{{ board.events[eventId].time }}</small>
-            {{ board.events[eventId].message }}
-            <Button v-if="index === 0" variant="link" @click="undo">(undo)</Button>
-          </li>
-        </ul>
+  <Nav />
+  <BoardLayout>
+    <template v-slot:timeline>
+      <BoardHeader>Timeline</BoardHeader>
+      <ul>
+        <li v-for="(eventId, index) in board.timeline">
+          <small class="mr-2">{{ board.events[eventId].time }}</small>
+          {{ board.events[eventId].message }}
+          <Button v-if="index === 0" variant="link" @click="undo">(undo)</Button>
+        </li>
+      </ul>
+    </template>
+    <template v-slot:main>
+      <div v-for="zone in getZoneGroup(1)">
+        <BoardZone :zone="zone" />
       </div>
-
-      <div class="p-4 md:col-span-4">
-        <div v-for="zone in getZoneGroup(1)">
-          <BoardZone :zone="zone" />
-        </div>
+    </template>
+    <template v-slot:secondary>
+      <div v-for="zone in getZoneGroup(2)">
+        <BoardZone :zone="zone" />
       </div>
-
-      <div class="p-4 sm:col-start-2 md:col-span-3">
-        <div v-for="zone in getZoneGroup(2)">
-          <BoardZone :zone="zone" />
-        </div>
-        <BoardZone v-if="board.zones" :zone="board.zones.off" />
-      </div>
-    </div>
-  </Container>
+      <BoardZone v-if="board.zones" :zone="board.zones.off" />
+    </template>
+  </BoardLayout>
 </template>
