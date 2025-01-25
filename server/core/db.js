@@ -47,7 +47,7 @@ const createDbConnection = (mongoUri) => {
             console.error(err);
         }
         finally {
-            await client.close();
+            //await client.close();
         }
     };
     return {

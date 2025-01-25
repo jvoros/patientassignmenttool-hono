@@ -1,4 +1,5 @@
 import { ofetch } from "ofetch";
+import { useThrottleFn } from "@vueuse/core";
 
 const postFetch = ofetch.create({ method: "POST" });
 
@@ -20,7 +21,7 @@ const api = {
       this.error = e.data;
     });
     if (!res) return;
-    const providers = res.data.providers.sort((a, b) => a.last.localeCompare(b.last));
+    const providers = res.data.providers;
     return {
       providers,
       schedule: res.data.schedule,
@@ -36,6 +37,11 @@ const api = {
   async undo() {
     await this.postApi("undo");
     return;
+  },
+
+  // SHIFT MOVEMENT
+  async signOut(shiftId) {
+    await this.postApi("signOut", { shiftId });
   },
 };
 

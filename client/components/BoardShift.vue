@@ -1,6 +1,6 @@
 <script setup>
 import { computed, reactive } from "vue";
-const props = defineProps(["shift", "isSup", "isNext", "zoneType"]);
+const props = defineProps(["shift", "isSup", "isNext", "zoneId", "zoneType"]);
 
 const classObject = reactive({
   "bg-white": !props.isNext,
@@ -26,12 +26,12 @@ const supervisorTotal = computed(() => props.shift.counts.supervisor ?? 0);
   <div class="my-4 border rounded-md" :class="getConditionalClasses()">
     <!-- <div class="p-1 text-xs font-bold text-white rounded-t-md bg-slate-900">flag</div> -->
     <div
-      class="flex items-start items-center justify-between px-2 py-1 rounded-md text-slate-600 bg-slate-100"
+      class="flex items-start items-center justify-between px-2 py-1 rounded-t-md text-slate-600 bg-slate-100"
     >
       <div>
         <h3 class="text-sm font-light">{{ shift.name }}</h3>
       </div>
-      <div><Icon icon="menu" /></div>
+      <ShiftMenu :shiftId="shift.id" :zoneId="zoneId" />
     </div>
     <div class="px-2 mt-2">
       <div class="flex items-start justify-between">
