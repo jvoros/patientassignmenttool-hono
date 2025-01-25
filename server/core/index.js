@@ -13,6 +13,11 @@ const createBoardStore = (siteName, mongoUri) => {
         board = result.board;
         return board;
     };
+    const refreshBoard = async () => {
+        const result = await db.getBoard(site);
+        board = result.board;
+        return board;
+    };
     const getSiteComplete = async () => {
         const result = await db.getSiteComplete(site);
         return result;
@@ -81,6 +86,7 @@ const createBoardStore = (siteName, mongoUri) => {
     }
     return {
         getBoard,
+        refreshBoard,
         boardReset,
         saveLogs,
         getSiteComplete,

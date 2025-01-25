@@ -20,6 +20,8 @@ const broadcastBoard = async (site) => {
 // middleware
 board.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 
+board.post("/", async (c) => {});
+
 // don't need to get board
 // it goes out to all clients on connect
 // board.get("/", async (c) => {
@@ -63,6 +65,18 @@ board.post("/undo", async (c) => {
 
   broadcastBoard(site);
   return c.text("undo broadcasted");
+});
+
+board.post("/signOut", async (c) => {
+  const site = c.get("jwtPayload").site;
+  const { shiftId } = await c.req.json();
+  const newBoard = await sites[site].store.signOut(shiftId);
+  if (newBoard.error) {
+    return c.json({ error: newBoard.error });
+  }
+
+  broadcastBoard(site);
+  return c.text("signOut broadcasted");
 });
 
 export default board;
