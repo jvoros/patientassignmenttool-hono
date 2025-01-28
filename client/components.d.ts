@@ -60,6 +60,7 @@ declare module 'vue' {
     DropdownMenuTrigger: typeof import('./shadcn-vue/components/dropdown-menu/DropdownMenuTrigger.vue')['default']
     Home: typeof import('./components/Home.vue')['default']
     Icon: typeof import('./components/Icon.vue')['default']
+    IconBAK: typeof import('./components/IconBAK.vue')['default']
     Input: typeof import('./shadcn-vue/components/input/Input.vue')['default']
     Label: typeof import('./shadcn-vue/components/label/Label.vue')['default']
     Login: typeof import('./sections/Login.vue')['default']

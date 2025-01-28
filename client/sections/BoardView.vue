@@ -1,6 +1,5 @@
 <script setup>
 import { computed, onBeforeMount, onUnmounted } from "vue";
-import { useThrottleFn } from "@vueuse/core";
 import { board, updateBoard } from "../stores/board.js";
 import api from "../stores/api.js";
 

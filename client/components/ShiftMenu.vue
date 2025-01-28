@@ -1,13 +1,36 @@
 <script setup>
 import { ref } from "vue";
+import {
+  Menu,
+  UserPlus,
+  ArrowRightLeft,
+  SquarePlus,
+  SquareArrowOutUpLeft,
+  RedoDot,
+  CirclePause,
+  RotateCcw,
+  Smile,
+  X,
+} from "lucide-vue-next";
 import api from "../stores/api.js";
 import { board } from "../stores/board.js";
 
-const props = defineProps(["shiftId", "zoneId"]);
+const props = defineProps(["shift", "zoneId"]);
+const isApp = () => props.shift.role === "app";
+const isSkipped = props.shift.skip === 1;
+const isPaused = props.shift.skip > 1;
 
 const otherZones = Object.keys(board.value.zones).filter(
   (key) => key !== props.zoneId && key !== "off"
 );
+
+const numberOfZones = () => {
+  let count = 0;
+  Object.keys(board.value.zones).forEach((zone) => {
+    if (board.value.zones[zone].shifts.includes(props.shift.id)) count++;
+  });
+  return count;
+};
 
 const deleteDialogOpen = ref(false);
 const assignDialogOpen = ref(false);
@@ -21,53 +44,119 @@ const assignDialogToggle = () => {
 };
 
 const signOut = () => {
-  console.log("SHIFTID: ", props.shiftId);
-  api.signOut(props.shiftId);
+  api.signOut(props.shift.id);
 };
 </script>
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger>
-      <div class="flex items-center">
-        <div class="mr-2 text-xs">TOOLS</div>
-        <Icon icon="menu" />
-      </div>
+      <Menu size="18" />
     </DropdownMenuTrigger>
 
-    <DropdownMenuContent class="bg-slate-100">
-      <DropdownMenuLabel>Shift Tools</DropdownMenuLabel>
-      <DropdownMenuItem @click="assignDialogToggle" class="data-[highlighted]:bg-slate-200">
-        <Icon icon="walkin" />Assign Patient
+    <DropdownMenuContent
+      class="bg-slate-100 dark:bg-slate-800 dark:data-[highlighted]:bg-slate-600"
+    >
+      <!-- <DropdownMenuLabel>Shift Tools</DropdownMenuLabel> -->
+
+      <DropdownMenuItem
+        @click="assignDialogToggle"
+        class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+      >
+        <UserPlus />Assign Patient
       </DropdownMenuItem>
 
-      <DropdownMenuSeparator />
+      <DropdownMenuSeparator class="bg-slate-200" />
 
-      <DropdownMenuItem class="data-[highlighted]:bg-slate-200">&uarr; Move Up</DropdownMenuItem>
-      <DropdownMenuItem class="data-[highlighted]:bg-slate-200">&darr; Move Down</DropdownMenuItem>
+      <template v-if="isApp()">
+        <DropdownMenuItem
+          class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+          v-if="!isSkipped && !isPaused"
+        >
+          <RedoDot />Skip Next Turn
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+          v-if="!isSkipped && !isPaused"
+        >
+          <CirclePause />Pause Shift
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+          v-if="isPaused"
+        >
+          <RotateCcw />Unpause Shift
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+          v-if="isSkipped"
+        >
+          <RotateCcw />Cancel Skip
+        </DropdownMenuItem>
+        <DropdownMenuSeparator class="bg-slate-200" />
+      </template>
 
-      <DropdownMenuSeparator />
+      <DropdownMenuItem
+        class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+        v-if="numberOfZones() > 1"
+      >
+        <SquareArrowOutUpLeft />Leave this Zone
+      </DropdownMenuItem>
 
       <DropdownMenuSub>
-        <DropdownMenuSubTrigger class="data-[highlighted]:bg-slate-200">
-          <Icon icon="switch" />&nbsp;Switch Zones&nbsp;&nbsp;
+        <DropdownMenuSubTrigger
+          class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+        >
+          <ArrowRightLeft size="14" class="mr-2" />Switch Zones
         </DropdownMenuSubTrigger>
-        <DropdownMenuSubContent class="bg-slate-100">
-          <DropdownMenuItem v-for="zoneId in otherZones" class="data-[highlighted]:bg-slate-200">
+        <DropdownMenuSubContent class="bg-slate-100 dark:bg-slate-800">
+          <DropdownMenuItem
+            v-for="zoneId in otherZones"
+            class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+          >
             {{ board.zones[zoneId].name }}
           </DropdownMenuItem>
         </DropdownMenuSubContent>
       </DropdownMenuSub>
-      <DropdownMenuItem @click="signOut" class="data-[highlighted]:bg-slate-200"
-        ><Icon icon="exit" />Sign Out</DropdownMenuItem
+
+      <DropdownMenuSub>
+        <DropdownMenuSubTrigger
+          class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+        >
+          <SquarePlus size="16" class="mr-2" />Join Additional Zone
+        </DropdownMenuSubTrigger>
+        <DropdownMenuSubContent class="bg-slate-100 dark:bg-slate-800">
+          <DropdownMenuItem
+            v-for="zoneId in otherZones"
+            class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+          >
+            {{ board.zones[zoneId].name }}
+          </DropdownMenuItem>
+        </DropdownMenuSubContent>
+      </DropdownMenuSub>
+
+      <DropdownMenuSeparator class="bg-slate-200" />
+
+      <DropdownMenuItem class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+        >&uarr; &nbsp;Move Up</DropdownMenuItem
+      >
+      <DropdownMenuItem class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+        >&darr; &nbsp;Move Down</DropdownMenuItem
       >
 
-      <DropdownMenuSeparator />
+      <DropdownMenuSeparator class="bg-slate-200" />
 
       <DropdownMenuItem
-        class="text-red-400 data-[highlighted]:bg-slate-200"
+        class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
         @click="deleteDialogToggle"
       >
-        &otimes; Delete
+        <X />Delete Shift
+      </DropdownMenuItem>
+
+      <DropdownMenuItem
+        @click="signOut"
+        class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+      >
+        <Smile />Sign Out
       </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
@@ -83,9 +172,7 @@ const signOut = () => {
       </DialogHeader>
       <DialogFooter>
         <DialogClose asChild><Button variant="outline">Cancel Delete</Button></DialogClose>
-        <Button @click="deleteDialogToggle" class="bg-red-500 hover:bg-red-400"
-          >Confirm Delete</Button
-        >
+        <Button @click="deleteDialogToggle" variant="destructive">Confirm Delete</Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>

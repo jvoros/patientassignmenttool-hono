@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { Icon } from "@iconify/vue";
 import api from "../stores/api.js";
 
 const open = ref(false);
@@ -41,7 +42,7 @@ onMounted(async () => {
 <template>
   <Popover :open="open" @update:open="open = !open">
     <PopoverTrigger>
-      <Button> <Icon icon="provider" />Add Clinician</Button>
+      <Button><Icon icon="lucide:stethoscope" />Add Clinician</Button>
     </PopoverTrigger>
     <PopoverContent @interactOutside="reset" class="flex flex-col gap-2">
       <Select v-model="selectedProvider">
