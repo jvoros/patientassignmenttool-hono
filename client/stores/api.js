@@ -6,6 +6,9 @@ const postFetch = ofetch.create({ method: "POST" });
 const api = {
   error: null,
 
+  // HELPERS
+  // this will just pass through the payload to the endpoint
+  // another HOF on server passes that to core on server
   async postApi(endpoint, payload = {}) {
     const res = await postFetch(`/api/board/${endpoint}`, { body: payload }).catch((e) => {
       console.error(`[pat] ${endpoint} error: `, e.data);
@@ -37,11 +40,6 @@ const api = {
   async undo() {
     await this.postApi("undo");
     return;
-  },
-
-  // SHIFT MOVEMENT
-  async signOut(shiftId) {
-    await this.postApi("signOut", { shiftId });
   },
 };
 
