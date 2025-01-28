@@ -23,7 +23,10 @@ const formIncomplete = computed(() => {
 
 const signIn = async () => {
   open.value = false;
-  api.signIn(selectedProviderParsed.value, selectedScheduleParsed.value);
+  api.postApi("signIn", {
+    provider: selectedProviderParsed.value,
+    schedule: selectedScheduleParsed.value,
+  });
   reset();
 };
 
