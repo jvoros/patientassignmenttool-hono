@@ -22,7 +22,15 @@ board.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 
 board.post("/", async (c) => {});
 
-// API ROUTE WRAPPER
+// ROUTES
+
+board.get("/site", async (c) => {
+  const site = c.get("jwtPayload").site;
+  const res = await sites[site].store.getSiteDetails();
+  return c.json({ data: res });
+});
+
+// PROGRAMMATIC ROUTES
 
 // all the functions are just passed through to core
 // same JWT and payload extraction
@@ -41,17 +49,6 @@ const apiFn = (method) => async (c) => {
   broadcastBoard(site);
   return c.text(method + " broadcasted");
 };
-
-// ROUTES
-
-board.get("/site", async (c) => {
-  const site = c.get("jwtPayload").site;
-  console.log("site: ", site);
-  const res = await sites[site].store.getSiteDetails();
-  return c.json({ data: res });
-});
-
-// PROGRAMMATIC ROUTES
 
 // just list the methods for which we need endpoints
 const methods = [

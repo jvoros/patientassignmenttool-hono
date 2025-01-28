@@ -47,7 +47,8 @@ const apiFn = (method, payload) => {
   api.postApi(method, payload);
 };
 
-const apiCall = (method) => {
+// generic fn for any actions that just take shiftId
+const shiftAction = (method) => {
   apiFn(method, { shiftId: props.shift.id });
 };
 
@@ -101,21 +102,21 @@ const leaveZone = (leaveZoneId) => {
         <DropdownMenuItem
           class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
           v-if="!isSkipped && !isPaused"
-          @click="apiCall('pauseShift')"
+          @click="shiftAction('pauseShift')"
         >
           <CirclePause />Pause Shift
         </DropdownMenuItem>
         <DropdownMenuItem
           class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
           v-if="isPaused"
-          @click="apiCall('unpauseShift')"
+          @click="shiftAction('unpauseShift')"
         >
           <RotateCcw />Unpause Shift
         </DropdownMenuItem>
         <DropdownMenuItem
           class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
           v-if="isSkipped"
-          @click="apiCall('unpauseShift')"
+          @click="shiftAction('unpauseShift')"
         >
           <RotateCcw />Cancel Skip
         </DropdownMenuItem>
@@ -187,7 +188,7 @@ const leaveZone = (leaveZoneId) => {
       </DropdownMenuItem>
 
       <DropdownMenuItem
-        @click="apiCall('signOut')"
+        @click="shiftAction('signOut')"
         class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
       >
         <Smile />Sign Out

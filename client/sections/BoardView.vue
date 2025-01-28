@@ -10,7 +10,7 @@ let stream;
 // }, 3000);
 
 const undo = () => {
-  api.undo();
+  api.postApi("undo");
 };
 
 const getZoneGroup = (group) => {
