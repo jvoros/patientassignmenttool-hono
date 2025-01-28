@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import { SelectIcon, SelectTrigger, useForwardProps } from "radix-vue";
 import { computed } from "vue";
+import { ChevronDown } from "lucide-vue-next";
 
 const props = defineProps({
   disabled: { type: Boolean, required: false },
@@ -31,7 +32,7 @@ const forwardedProps = useForwardProps(delegatedProps);
   >
     <slot />
     <SelectIcon as-child>
-      <Icon icon="chevron-down" class="opacity-50 shrink-0" />
+      <ChevronDown size="16" class="opacity-50 shrink-0" />
     </SelectIcon>
   </SelectTrigger>
 </template>

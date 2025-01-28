@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { Icon } from "@iconify/vue";
+import { Stethoscope } from "lucide-vue-next";
 import api from "../stores/api.js";
 
 const open = ref(false);
@@ -42,7 +42,7 @@ onMounted(async () => {
 <template>
   <Popover :open="open" @update:open="open = !open">
     <PopoverTrigger>
-      <Button><Icon icon="lucide:stethoscope" />Add Clinician</Button>
+      <Button><Stethoscope />Add Clinician</Button>
     </PopoverTrigger>
     <PopoverContent @interactOutside="reset" class="flex flex-col gap-2">
       <Select v-model="selectedProvider">

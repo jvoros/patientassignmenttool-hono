@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import {
   Menu,
   UserPlus,
@@ -17,8 +17,8 @@ import { board } from "../stores/board.js";
 
 const props = defineProps(["shift", "zoneId"]);
 const isApp = () => props.shift.role === "app";
-const isSkipped = props.shift.skip === 1;
-const isPaused = props.shift.skip > 1;
+const isSkipped = computed(() => props.shift.skip === 1);
+const isPaused = computed(() => props.shift.skip > 1);
 
 const otherZones = Object.keys(board.value.zones).filter(
   (key) => key !== props.zoneId && key !== "off"
@@ -43,8 +43,38 @@ const assignDialogToggle = () => {
   assignDialogOpen.value = !assignDialogOpen.value;
 };
 
-const signOut = () => {
-  api.signOut(props.shift.id);
+const apiFn = (method, payload) => {
+  api.postApi(method, payload);
+};
+
+const apiCall = (method) => {
+  apiFn(method, { shiftId: props.shift.id });
+};
+
+const changePosition = (dir) => {
+  apiFn("changePosition", { zoneId: props.zoneId, shiftId: props.shift.id, direction: dir });
+};
+
+const switchZone = (joinZoneId) => {
+  apiFn("switchZone", {
+    leaveZoneId: props.zoneId,
+    joinZoneId: joinZoneId,
+    shiftId: props.shift.id,
+  });
+};
+
+const joinZone = (joinZoneId) => {
+  apiFn("joinZone", {
+    joinZoneId,
+    shiftId: props.shift.id,
+  });
+};
+
+const leaveZone = (leaveZoneId) => {
+  apiFn("leaveZone", {
+    leaveZoneId: props.zoneId,
+    shiftId: props.shift.id,
+  });
 };
 </script>
 <template>
@@ -71,24 +101,21 @@ const signOut = () => {
         <DropdownMenuItem
           class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
           v-if="!isSkipped && !isPaused"
-        >
-          <RedoDot />Skip Next Turn
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
-          v-if="!isSkipped && !isPaused"
+          @click="apiCall('pauseShift')"
         >
           <CirclePause />Pause Shift
         </DropdownMenuItem>
         <DropdownMenuItem
           class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
           v-if="isPaused"
+          @click="apiCall('unpauseShift')"
         >
           <RotateCcw />Unpause Shift
         </DropdownMenuItem>
         <DropdownMenuItem
           class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
           v-if="isSkipped"
+          @click="apiCall('unpauseShift')"
         >
           <RotateCcw />Cancel Skip
         </DropdownMenuItem>
@@ -98,6 +125,7 @@ const signOut = () => {
       <DropdownMenuItem
         class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
         v-if="numberOfZones() > 1"
+        @click="leaveZone"
       >
         <SquareArrowOutUpLeft />Leave this Zone
       </DropdownMenuItem>
@@ -111,6 +139,7 @@ const signOut = () => {
         <DropdownMenuSubContent class="bg-slate-100 dark:bg-slate-800">
           <DropdownMenuItem
             v-for="zoneId in otherZones"
+            @click="switchZone(zoneId)"
             class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
           >
             {{ board.zones[zoneId].name }}
@@ -127,6 +156,7 @@ const signOut = () => {
         <DropdownMenuSubContent class="bg-slate-100 dark:bg-slate-800">
           <DropdownMenuItem
             v-for="zoneId in otherZones"
+            @click="joinZone(zoneId)"
             class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
           >
             {{ board.zones[zoneId].name }}
@@ -136,10 +166,14 @@ const signOut = () => {
 
       <DropdownMenuSeparator class="bg-slate-200" />
 
-      <DropdownMenuItem class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+      <DropdownMenuItem
+        class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+        @click="changePosition(-1)"
         >&uarr; &nbsp;Move Up</DropdownMenuItem
       >
-      <DropdownMenuItem class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+      <DropdownMenuItem
+        class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+        @click="changePosition(1)"
         >&darr; &nbsp;Move Down</DropdownMenuItem
       >
 
@@ -153,7 +187,7 @@ const signOut = () => {
       </DropdownMenuItem>
 
       <DropdownMenuItem
-        @click="signOut"
+        @click="apiCall('signOut')"
         class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
       >
         <Smile />Sign Out
