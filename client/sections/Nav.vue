@@ -1,5 +1,6 @@
 <script setup>
 import { useColorMode } from "@vueuse/core";
+import { Sun, Moon, LogOut } from "lucide-vue-next";
 import auth from "../stores/auth.js";
 
 // dark mode
@@ -24,9 +25,10 @@ const logout = async () => {
       <div class="flex items-center gap-4">
         <div><a href="#" class="text-sm hover:underline">Quick Reference</a></div>
         <PopoverAddProvider />
-        <Button variant="secondary" @click="logout">Logout <Icon icon="logout" /></Button>
+        <Button variant="secondary" @click="logout">Logout <LogOut /></Button>
         <Button @click="toggleMode" variant="outline" size="icon">
-          <Icon :icon="darkMode === false ? 'moon' : 'sun'" />
+          <Moon v-if="mode === 'light'" />
+          <Sun v-if="mode === 'dark'" />
         </Button>
       </div>
     </nav>
