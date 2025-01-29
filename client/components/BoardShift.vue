@@ -37,21 +37,24 @@ const tags = computed(() => {
 // CLASSES
 const getClasses = () => {
   if (tags.value.includes("off")) {
-    return { box: "bg-slate-100 border-slate-200 dark:bg-slate-800", content: "text-slate-500" };
+    return {
+      box: "bg-slate-100 border-slate-200 dark:border-slate-600 dark:bg-slate-900",
+      content: "text-slate-600",
+    };
   }
   if (tags.value.includes("rotation") && tags.value.includes("next")) {
     return {
-      box: "border-amber-300 ring-amber-100 ring-0 bg-amber-50 dark:bg-black dark:border-amber-300",
+      box: "border-amber-300 bg-amber-50 dark:bg-slate-800 dark:border-amber-200",
       content: "",
     };
   }
   if (tags.value.includes("ft")) {
     return {
-      box: "bg-green-50 border-green-600 dark:bg-black dark:border-green-400",
+      box: "bg-green-50 border-green-600 dark:bg-slate-800 dark:border-green-100",
       content: "text-green-800 dark:text-green-300",
     };
   }
-  return { box: "", content: "" };
+  return { box: "", content: "dark:bg-slate-800" };
 };
 
 // COUNTS
@@ -88,7 +91,7 @@ const supervisorTotal = () => props.shift.counts.supervisor ?? 0;
       <div class="rounded-b-md">
         <h4 class="text-2xl font-bold">{{ shift.provider.first }} {{ shift.provider.last }}</h4>
 
-        <div class="my-2 font-mono text-xs text-slate-500 dark:text-slate-300">
+        <div class="my-2 font-mono text-xs text-slate-500 dark:text-slate-400">
           Total: {{ patientTotal() }} &#x2022; Supervisor: {{ supervisorTotal() }}
         </div>
       </div>

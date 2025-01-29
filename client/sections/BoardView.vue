@@ -1,17 +1,9 @@
 <script setup>
-import { computed, onBeforeMount, onUnmounted } from "vue";
+import { onBeforeMount, onUnmounted } from "vue";
 import { board, updateBoard } from "../stores/board.js";
 import api from "../stores/api.js";
 
 let stream;
-
-// const undo = useThrottleFn(() => {
-//   api.undo();
-// }, 3000);
-
-const undo = () => {
-  api.postApi("undo");
-};
 
 const getZoneGroup = (group) => {
   if (board.value.zones) {
@@ -46,13 +38,7 @@ onUnmounted(() => {
   <BoardLayout>
     <template v-slot:timeline>
       <BoardHeader>Timeline</BoardHeader>
-      <ul>
-        <li v-for="(eventId, index) in board.timeline">
-          <small class="mr-2">{{ board.events[eventId].time }}</small>
-          {{ board.events[eventId].message }}
-          <Button v-if="index === 0" variant="link" @click="undo">(undo)</Button>
-        </li>
-      </ul>
+      <Timeline />
     </template>
     <template v-slot:main>
       <div v-for="zone in getZoneGroup(1)">

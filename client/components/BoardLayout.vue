@@ -1,7 +1,7 @@
 <template>
   <Container class="mt-4">
     <div class="sm:grid sm:grid-cols-2 sm:gap-4 md:grid-cols-10">
-      <div class="p-4 rounded-sm sm:row-span-2 md:col-span-3 bg-slate-100">
+      <div class="p-4 sm:row-span-2 md:col-span-3">
         <slot name="timeline"></slot>
       </div>
 

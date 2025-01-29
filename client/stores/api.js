@@ -1,5 +1,4 @@
 import { ofetch } from "ofetch";
-import { useThrottleFn } from "@vueuse/core";
 
 const postFetch = ofetch.create({ method: "POST" });
 
