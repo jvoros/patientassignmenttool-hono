@@ -1,6 +1,6 @@
 <script setup>
-import { cn } from '@/lib/utils';
-import { SelectLabel } from 'radix-vue';
+import { cn } from "@/lib/utils";
+import { SelectLabel } from "radix-vue";
 
 const props = defineProps({
   for: { type: String, required: false },
@@ -11,9 +11,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <SelectLabel
-    :class="cn('py-1.5 pl-8 pr-2 text-sm font-semibold', props.class)"
-  >
+  <SelectLabel :class="cn('py-1.5 pr-2 text-center text-sm font-semibold', props.class)">
     <slot />
   </SelectLabel>
 </template>
