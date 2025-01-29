@@ -12,7 +12,7 @@ const advanceRotation = (which, dir) => {
   <div v-if="board.loading">Loading...</div>
   <div v-else>
     <template v-for="shiftId in zone.shifts">
-      <BoardShift :shift="board.shifts[shiftId]" :zone="zone" />
+      <Shift :shift="board.shifts[shiftId]" :zone="zone" />
     </template>
   </div>
 

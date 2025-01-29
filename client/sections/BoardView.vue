@@ -42,14 +42,14 @@ onUnmounted(() => {
     </template>
     <template v-slot:main>
       <div v-for="zone in getZoneGroup(1)">
-        <BoardZone :zone="zone" />
+        <Zone :zone="zone" />
       </div>
     </template>
     <template v-slot:secondary>
       <div v-for="zone in getZoneGroup(2)">
-        <BoardZone :zone="zone" />
+        <Zone :zone="zone" />
       </div>
-      <BoardZone v-if="board.zones" :zone="board.zones.off" />
+      <Zone v-if="board.zones" :zone="board.zones.off" />
     </template>
   </BoardLayout>
 </template>

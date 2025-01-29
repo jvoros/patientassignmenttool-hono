@@ -1,4 +1,5 @@
 import { ofetch } from "ofetch";
+import { updateDetails } from "./board.js";
 
 const postFetch = ofetch.create({ method: "POST" });
 
@@ -24,9 +25,9 @@ const api = {
       this.error = e.data;
     });
     if (!res) return;
-    const providers = res.data.providers;
+    updateDetails(res.data);
     return {
-      providers,
+      providers: res.data.providers,
       schedule: res.data.schedule,
     };
   },
