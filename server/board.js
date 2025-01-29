@@ -61,6 +61,7 @@ const methods = [
   "switchZone",
   "joinZone",
   "leaveZone",
+  "advanceRotation",
 ];
 // spit out endpoint for each method
 methods.forEach((method) => board.post(`/${method}`, apiFn(method)));
@@ -68,5 +69,21 @@ methods.forEach((method) => board.post(`/${method}`, apiFn(method)));
 // e.g.
 // board.post("/pauseShift", apiFn("pauseShift"));
 // board.post("/unpauseShift", apiFn("unpauseShift"));
+// board.post("/signIn", apiFn("signIn"));
+
+// which is same as:
+
+// board.post("/unpauseShift", async (c) => {
+//   const site = c.get("jwtPayload").site;
+//   const payload = await c.req.json();
+//   const newBoard = await sites[site].store['unpause'](
+//     ...Object.keys(payload).map((key) => payload[key])
+//   );
+//   if (newBoard.error) {
+//     return c.json({ error: newBoard.error });
+//   }
+//   broadcastBoard(site);
+//   return c.text("unpause" + " broadcasted");
+// });
 
 export default board;
