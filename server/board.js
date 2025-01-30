@@ -44,7 +44,7 @@ const apiFn = (method) => async (c) => {
     ...Object.keys(payload).map((key) => payload[key])
   );
   if (newBoard.error) {
-    return c.json({ error: newBoard.error });
+    return c.json({ error: newBoard.error.message });
   }
   broadcastBoard(site);
   return c.text(method + " broadcasted");
@@ -64,6 +64,8 @@ const methods = [
   "advanceRotation",
   "reassignPatient",
   "assignToZone",
+  "assignToShift",
+  "boardReset",
 ];
 // spit out endpoint for each method
 methods.forEach((method) => board.post(`/${method}`, apiFn(method)));

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { Stethoscope, ChevronDown } from "lucide-vue-next";
+import { Stethoscope, ChevronDown, TriangleAlert } from "lucide-vue-next";
 import api from "../stores/api.js";
 
 const open = ref(false);
@@ -21,8 +21,17 @@ const formIncomplete = computed(() => {
   return !selectedProvider.value || !selectedSchedule.value;
 });
 
+const resetShiftSelected = computed(() => {
+  return selectedSchedule.value
+    ? selectedSchedule.value === JSON.stringify(schedule.value[0])
+    : false;
+});
+
 const signIn = async () => {
   open.value = false;
+  if (resetShiftSelected.value) {
+    await api.postApi("boardReset");
+  }
   api.postApi("signIn", {
     provider: selectedProviderParsed.value,
     schedule: selectedScheduleParsed.value,
@@ -53,7 +62,7 @@ onMounted(async () => {
       align="end"
     >
       <Select v-model="selectedProvider">
-        <SelectTrigger class="bg-white focus:ring-accent">
+        <SelectTrigger class="focus:ring-accent">
           {{
             selectedProvider
               ? `${selectedProviderParsed.last}, ${selectedProviderParsed.first}`
@@ -62,9 +71,12 @@ onMounted(async () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem v-for="provider in providers" :value="JSON.stringify(provider)">
-              {{ provider.last }}, {{ provider.first }}
-            </SelectItem>
+            <div v-for="provider in providers">
+              <SelectItem :value="JSON.stringify(provider)">
+                {{ provider.last }}, {{ provider.first }}
+              </SelectItem>
+              <SelectSeparator />
+            </div>
           </SelectGroup>
         </SelectContent>
       </Select>
@@ -75,12 +87,23 @@ onMounted(async () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem v-for="shift in schedule" :value="JSON.stringify(shift)">{{
-              shift.name
-            }}</SelectItem>
+            <div v-for="shift in schedule">
+              <SelectItem :value="JSON.stringify(shift)">{{ shift.name }}</SelectItem>
+              <SelectSeparator />
+            </div>
           </SelectGroup>
         </SelectContent>
       </Select>
+
+      <div v-if="resetShiftSelected">
+        <Alert variant="warn">
+          <AlertDescription>
+            <div>
+              Assigning <b>{{ schedule[0].name }}</b> shift will reset the board.<br />
+            </div>
+          </AlertDescription>
+        </Alert>
+      </div>
 
       <Button @click="signIn" :disabled="formIncomplete ?? null">Add to Board</Button>
     </PopoverContent>

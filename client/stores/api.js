@@ -15,6 +15,9 @@ const api = {
       console.error(`[pat] ${endpoint} error: `, e.data);
       this.error = e.data;
     });
+    if (res.error) {
+      this.error = res.error;
+    }
     return res;
   },
 
