@@ -3,7 +3,7 @@ import { computed } from "vue";
 import { UserPlus, Users } from "lucide-vue-next";
 const props = defineProps(["shift", "zone"]);
 
-// TAGS
+// tags
 const tags = computed(() => {
   const { shift, zone } = props;
   const tags = [];
@@ -34,7 +34,7 @@ const tags = computed(() => {
   return tags;
 });
 
-// CLASSES
+// classes
 const getClasses = () => {
   if (tags.value.includes("off")) {
     return {
@@ -57,7 +57,7 @@ const getClasses = () => {
   return { box: "bg-white dark:bg-slate-800", content: "dark:bg-slate-800" };
 };
 
-// COUNTS
+// counts
 const patientTotal = () =>
   Object.keys(props.shift.counts).reduce((acc, curr) => acc + props.shift.counts[curr], 0);
 const supervisorTotal = () => props.shift.counts.supervisor ?? 0;
@@ -72,7 +72,7 @@ const supervisorTotal = () => props.shift.counts.supervisor ?? 0;
     >
       next
     </div>
-    <!-- SHIFT NAME & MENU -->
+    <!-- SHIFT NAME & MENU BAR -->
     <div
       class="flex items-start items-center justify-between px-2 py-1 bg-slate-500/10 dark:bg-white/10 dark:text-slate-400 first:rounded-t-md text-slate-500"
     >

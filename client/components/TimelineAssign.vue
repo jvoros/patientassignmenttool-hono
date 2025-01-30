@@ -4,7 +4,6 @@ import { board } from "../stores/board.js";
 const props = defineProps(["event"]);
 
 const shift = computed(() => board.value.shifts[props.event.shift]);
-const provider = computed(() => board.value.shifts[props.event.shift]?.provider);
 const supervisor = computed(() => board.value.shifts[props.event.supervisorShift]?.provider);
 </script>
 <template>
@@ -15,11 +14,11 @@ const supervisor = computed(() => board.value.shifts[props.event.supervisorShift
     <div
       class="flex items-center justify-between w-full px-4 py-2 bg-white border rounded-md dark:bg-slate-800 dark:border-slate-600 border-slate-300"
     >
-      <!-- NAME & SUPER -->
+      <!-- NAME & MESSAGES -->
       <div>
         <div class="font-mono text-xs">{{ event.time }}</div>
 
-        <TimelineReassignPopover :eventId="event.id" :shift="shift" />
+        <TimelineReassignProvider :eventId="event.id" :shift="shift" />
         <div v-if="supervisor" class="text-sm text-slate-400">
           Super: {{ supervisor.first }} {{ supervisor.last }}
         </div>
@@ -27,8 +26,9 @@ const supervisor = computed(() => board.value.shifts[props.event.supervisorShift
           {{ event.message }}
         </div>
       </div>
+
       <!-- ROOM -->
-      <TimelineReassignPopover :eventId="event.id" :room="event.patient.room" />
+      <TimelineReassignRoom :eventId="event.id" :room="event.patient.room" />
     </div>
   </div>
 </template>

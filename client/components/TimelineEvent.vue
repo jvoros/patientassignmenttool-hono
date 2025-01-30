@@ -7,7 +7,7 @@ const props = defineProps(["event"]);
     <TimelineIcon icon="event" />
     <div>
       <div class="font-mono text-xs">{{ event.time }}</div>
-      <div class="font-mono text-sm">{{ event.message }}</div>
+      <div class="font-mono text-xs">{{ event.message }}</div>
     </div>
   </div>
 </template>
