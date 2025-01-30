@@ -99,7 +99,7 @@ onMounted(async () => {
         <Alert variant="warn">
           <AlertDescription>
             <div>
-              Assigning <b>{{ schedule[0].name }}</b> shift will reset the board.<br />
+              Assigning <b>{{ schedule[0].name }}</b> shift will restart the board for a new day.<br />
             </div>
           </AlertDescription>
         </Alert>

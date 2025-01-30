@@ -6,7 +6,6 @@ import {
   ArrowRightLeft,
   SquarePlus,
   SquareArrowOutUpLeft,
-  RedoDot,
   CirclePause,
   RotateCcw,
   Smile,

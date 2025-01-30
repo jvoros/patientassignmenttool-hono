@@ -104,6 +104,8 @@ declare module 'vue' {
     TimelineEvent: typeof import('./components/TimelineEvent.vue')['default']
     TimelineIcon: typeof import('./components/TimelineIcon.vue')['default']
     TimelineReassignPopover: typeof import('./components/TimelineReassignPopover.vue')['default']
+    TimelineReassignProvider: typeof import('./components/TimelineReassignProvider.vue')['default']
+    TimelineReassignRoom: typeof import('./components/TimelineReassignRoom.vue')['default']
     Toggle: typeof import('./shadcn-vue/components/toggle/Toggle.vue')['default']
     ToggleGroup: typeof import('./shadcn-vue/components/toggle-group/ToggleGroup.vue')['default']
     ToggleGroupItem: typeof import('./shadcn-vue/components/toggle-group/ToggleGroupItem.vue')['default']

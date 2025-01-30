@@ -1,9 +1,9 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { ChevronDown } from "lucide-vue-next";
-import { board, details } from "../stores/board.js";
+import { board } from "../stores/board.js";
 import api from "../stores/api.js";
-const props = defineProps(["eventId", "shift", "room"]);
+const props = defineProps(["eventId", "shift"]);
 
 const otherShifts = computed(() =>
   Object.keys(board.value.shifts)
@@ -18,12 +18,8 @@ const reassignPatient = (newShiftId) => {
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger class="group">
-      <div class="text-xl font-bold" v-if="shift">
+      <div class="text-xl font-bold">
         {{ shift?.provider.first }} {{ shift?.provider.last }}
-        <ChevronDown class="invisible inline group-hover:visible" size="14" />
-      </div>
-      <div class="text-xl font-bold" v-if="room">
-        {{ room }}
         <ChevronDown class="invisible inline group-hover:visible" size="14" />
       </div>
     </DropdownMenuTrigger>
@@ -38,22 +34,6 @@ const reassignPatient = (newShiftId) => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
       </div>
-    </DropdownMenuContent>
-
-    <!-- ROOM -->
-    <DropdownMenuContent align="end" v-if="room" class="w-4">
-      <DropdownMenuLabel>New room:</DropdownMenuLabel>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem class="p-0 focus:bg-white dark:focus:bg-background">
-        <ScrollArea class="w-full h-44">
-          <div v-for="room in details.rooms" :key="tag">
-            <div class="py-1 pl-6 text-sm hover:bg-secondary hover:cursor-pointer">
-              {{ room }}
-            </div>
-            <DropdownMenuSeparator />
-          </div>
-        </ScrollArea>
-      </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>
