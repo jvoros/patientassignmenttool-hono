@@ -38,7 +38,7 @@ const tags = computed(() => {
 const getClasses = () => {
   if (tags.value.includes("off")) {
     return {
-      box: "bg-slate-100 border-slate-200 dark:border-slate-600 dark:bg-slate-900",
+      box: "bg-slate-100 border-slate-200 dark:border-slate-600 dark:bg-slate-800",
       content: "text-slate-600",
     };
   }
@@ -54,7 +54,7 @@ const getClasses = () => {
       content: "text-green-800 dark:text-green-300",
     };
   }
-  return { box: "", content: "dark:bg-slate-800" };
+  return { box: "bg-white dark:bg-slate-800", content: "dark:bg-slate-800" };
 };
 
 // COUNTS
@@ -74,7 +74,7 @@ const supervisorTotal = () => props.shift.counts.supervisor ?? 0;
     </div>
     <!-- SHIFT NAME & MENU -->
     <div
-      class="flex items-start items-center justify-between px-2 py-1 bg-slate-500/10 dark:bg-white/20 dark:text-slate-400 first:rounded-t-md text-slate-500"
+      class="flex items-start items-center justify-between px-2 py-1 bg-slate-500/10 dark:bg-white/10 dark:text-slate-400 first:rounded-t-md text-slate-500"
     >
       <div class="text-[.8rem] font-bold uppercase">
         {{ shift.name }}
@@ -88,7 +88,7 @@ const supervisorTotal = () => props.shift.counts.supervisor ?? 0;
       :class="getClasses().content"
     >
       <!-- PROVIDER NAME & COUNT -->
-      <div class="rounded-b-md">
+      <div>
         <h4 class="text-2xl font-bold">{{ shift.provider.first }} {{ shift.provider.last }}</h4>
 
         <div class="my-2 font-mono text-xs text-slate-500 dark:text-slate-400">

@@ -1,7 +1,7 @@
 <script setup>
-import { cn } from '@/lib/utils';
-import { DropdownMenuSeparator } from 'radix-vue';
-import { computed } from 'vue';
+import { cn } from "@/lib/utils";
+import { DropdownMenuSeparator } from "radix-vue";
+import { computed } from "vue";
 
 const props = defineProps({
   asChild: { type: Boolean, required: false },
@@ -17,8 +17,5 @@ const delegatedProps = computed(() => {
 </script>
 
 <template>
-  <DropdownMenuSeparator
-    v-bind="delegatedProps"
-    :class="cn('-mx-1 my-1 h-px bg-muted', props.class)"
-  />
+  <DropdownMenuSeparator v-bind="delegatedProps" :class="cn('-mx-1 h-px bg-muted', props.class)" />
 </template>

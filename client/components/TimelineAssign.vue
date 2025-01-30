@@ -18,6 +18,7 @@ const supervisor = computed(() => board.value.shifts[props.event.supervisorShift
       <!-- NAME & SUPER -->
       <div>
         <div class="font-mono text-xs">{{ event.time }}</div>
+
         <TimelineReassignPopover :eventId="event.id" :shift="shift" />
         <div v-if="supervisor" class="text-sm text-slate-400">
           Super: {{ supervisor.first }} {{ supervisor.last }}

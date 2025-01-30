@@ -86,6 +86,8 @@ const leaveZone = (leaveZoneId) => {
 
     <DropdownMenuContent align="end" class="bg-white shadow-lg dark:bg-background border-slate-200">
       <DropdownMenuLabel>Shift Tools</DropdownMenuLabel>
+      <DropdownMenuSeparator class="bg-secondary" />
+
       <DropdownMenuItem class="data-[highlighted]:bg-accent" @click="changePosition(-1)"
         >&uarr; &nbsp;Move Up</DropdownMenuItem
       >
@@ -193,17 +195,14 @@ const leaveZone = (leaveZoneId) => {
   </Dialog>
 
   <Dialog v-model:open="assignDialogOpen">
-    <DialogContent>
+    <DialogContent class="w-80">
       <DialogHeader>
         <DialogTitle>Assign Patient Out of Rotation</DialogTitle>
-        <DialogDescription
-          >Assigning the patient here will not affect the rotation.</DialogDescription
-        >
+        <DialogDescription>
+          Assigning the patient here will not affect the rotation.
+        </DialogDescription>
       </DialogHeader>
-      <DialogFooter>
-        <DialogClose asChild><Button variant="outline">Cancel Delete</Button></DialogClose>
-        <Button @click="assignDialogToggle">Confirm Delete</Button>
-      </DialogFooter>
+      <AssignForm :zoneId="zoneId" :shiftId="shift.id" @assignFired="assignDialogToggle" />
     </DialogContent>
   </Dialog>
 </template>
