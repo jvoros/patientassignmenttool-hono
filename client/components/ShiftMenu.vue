@@ -81,50 +81,53 @@ const leaveZone = (leaveZoneId) => {
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger>
-      <Menu size="18" />
+      <div class="px-1"><Menu size="16" /></div>
     </DropdownMenuTrigger>
 
-    <DropdownMenuContent
-      class="bg-slate-100 dark:bg-slate-800 dark:data-[highlighted]:bg-slate-600"
-    >
-      <!-- <DropdownMenuLabel>Shift Tools</DropdownMenuLabel> -->
-
-      <DropdownMenuItem
-        @click="assignDialogToggle"
-        class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+    <DropdownMenuContent align="end" class="bg-white shadow-lg dark:bg-background border-slate-200">
+      <DropdownMenuLabel>Shift Tools</DropdownMenuLabel>
+      <DropdownMenuItem class="data-[highlighted]:bg-accent" @click="changePosition(-1)"
+        >&uarr; &nbsp;Move Up</DropdownMenuItem
       >
+      <DropdownMenuItem class="data-[highlighted]:bg-accent" @click="changePosition(1)"
+        >&darr; &nbsp;Move Down</DropdownMenuItem
+      >
+
+      <DropdownMenuSeparator class="bg-secondary" />
+
+      <DropdownMenuItem @click="assignDialogToggle" class="data-[highlighted]:bg-accent">
         <UserPlus />Assign Patient
       </DropdownMenuItem>
 
-      <DropdownMenuSeparator class="bg-slate-200" />
+      <DropdownMenuSeparator class="bg-secondary" />
 
       <template v-if="isApp()">
         <DropdownMenuItem
-          class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+          class="data-[highlighted]:bg-accent"
           v-if="!isSkipped && !isPaused"
           @click="shiftAction('pauseShift')"
         >
           <CirclePause />Pause Shift
         </DropdownMenuItem>
         <DropdownMenuItem
-          class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+          class="data-[highlighted]:bg-accent"
           v-if="isPaused"
           @click="shiftAction('unpauseShift')"
         >
           <RotateCcw />Unpause Shift
         </DropdownMenuItem>
         <DropdownMenuItem
-          class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+          class="data-[highlighted]:bg-accent"
           v-if="isSkipped"
           @click="shiftAction('unpauseShift')"
         >
           <RotateCcw />Cancel Skip
         </DropdownMenuItem>
-        <DropdownMenuSeparator class="bg-slate-200" />
+        <DropdownMenuSeparator class="bg-secondary" />
       </template>
 
       <DropdownMenuItem
-        class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+        class="data-[highlighted]:bg-accent"
         v-if="numberOfZones() > 1"
         @click="leaveZone"
       >
@@ -132,16 +135,14 @@ const leaveZone = (leaveZoneId) => {
       </DropdownMenuItem>
 
       <DropdownMenuSub>
-        <DropdownMenuSubTrigger
-          class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
-        >
+        <DropdownMenuSubTrigger class="data-[highlighted]:bg-accent">
           <ArrowRightLeft size="14" class="mr-2" />Switch Zones
         </DropdownMenuSubTrigger>
-        <DropdownMenuSubContent class="bg-slate-100 dark:bg-slate-800">
+        <DropdownMenuSubContent class="bg-white dark:bg-background">
           <DropdownMenuItem
             v-for="zoneId in otherZones"
             @click="switchZone(zoneId)"
-            class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+            class="data-[highlighted]:bg-accent"
           >
             {{ board.zones[zoneId].name }}
           </DropdownMenuItem>
@@ -149,48 +150,27 @@ const leaveZone = (leaveZoneId) => {
       </DropdownMenuSub>
 
       <DropdownMenuSub>
-        <DropdownMenuSubTrigger
-          class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
-        >
+        <DropdownMenuSubTrigger class="data-[highlighted]:bg-accent">
           <SquarePlus size="16" class="mr-2" />Join Additional Zone
         </DropdownMenuSubTrigger>
-        <DropdownMenuSubContent class="bg-slate-100 dark:bg-slate-800">
+        <DropdownMenuSubContent class="bg-white dark:bg-background">
           <DropdownMenuItem
             v-for="zoneId in otherZones"
             @click="joinZone(zoneId)"
-            class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
+            class="data-[highlighted]:bg-accent"
           >
             {{ board.zones[zoneId].name }}
           </DropdownMenuItem>
         </DropdownMenuSubContent>
       </DropdownMenuSub>
 
-      <DropdownMenuSeparator class="bg-slate-200" />
+      <DropdownMenuSeparator class="bg-secondary" />
 
-      <DropdownMenuItem
-        class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
-        @click="changePosition(-1)"
-        >&uarr; &nbsp;Move Up</DropdownMenuItem
-      >
-      <DropdownMenuItem
-        class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
-        @click="changePosition(1)"
-        >&darr; &nbsp;Move Down</DropdownMenuItem
-      >
-
-      <DropdownMenuSeparator class="bg-slate-200" />
-
-      <DropdownMenuItem
-        class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
-        @click="deleteDialogToggle"
-      >
+      <DropdownMenuItem class="data-[highlighted]:bg-accent" @click="deleteDialogToggle">
         <X />Delete Shift
       </DropdownMenuItem>
 
-      <DropdownMenuItem
-        @click="shiftAction('signOut')"
-        class="data-[highlighted]:bg-slate-200 dark:data-[highlighted]:bg-slate-600"
-      >
+      <DropdownMenuItem @click="shiftAction('signOut')" class="data-[highlighted]:bg-accent">
         <Smile />Sign Out
       </DropdownMenuItem>
     </DropdownMenuContent>

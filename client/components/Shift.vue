@@ -116,7 +116,7 @@ const supervisorTotal = () => props.shift.counts.supervisor ?? 0;
           SKIP NEXT
         </div>
         <div v-if="tags.includes('next')">
-          <Button><UserPlus />Assign</Button>
+          <AssignPopover :zoneId="zone.id" />
         </div>
       </div>
     </div>
