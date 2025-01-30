@@ -42,12 +42,22 @@ onUnmounted(() => {
     </template>
     <template v-slot:main>
       <div v-for="zone in getZoneGroup(1)">
-        <Zone :zone="zone" />
+        <Zone :zone="zone">
+          <template #instruction>
+            <InstructionBox
+              >Stroke, Trauma or Critical patients should be given to a doctor.
+            </InstructionBox>
+          </template>
+        </Zone>
       </div>
     </template>
     <template v-slot:secondary>
       <div v-for="zone in getZoneGroup(2)">
-        <Zone :zone="zone" />
+        <Zone :zone="zone">
+          <template #instruction>
+            <InstructionBox>Taking ESI 4s & 5s.</InstructionBox>
+          </template>
+        </Zone>
       </div>
       <Zone v-if="board.zones" :zone="board.zones.off" />
     </template>

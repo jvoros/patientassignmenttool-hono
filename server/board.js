@@ -63,6 +63,7 @@ const methods = [
   "leaveZone",
   "advanceRotation",
   "reassignPatient",
+  "assignToZone",
 ];
 // spit out endpoint for each method
 methods.forEach((method) => board.post(`/${method}`, apiFn(method)));

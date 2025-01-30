@@ -9,6 +9,7 @@ const advanceRotation = (which, dir) => {
 <template>
   <!-- ZONE SHIFTS -->
   <BoardHeader>{{ zone.name }}</BoardHeader>
+  <slot name="instruction" />
   <div v-if="board.loading">Loading...</div>
   <div v-else>
     <template v-for="shiftId in zone.shifts">
@@ -18,19 +19,11 @@ const advanceRotation = (which, dir) => {
 
   <!-- ROTATION CONTROLS -->
   <div v-if="zone.type.includes('rotation')" class="flex justify-between mb-2">
-    <Button variant="outline" @click="advanceRotation('patient', -1)"
-      ><span class="font-light">&larr; Rotation back</span></Button
-    >
-    <Button variant="outline" @click="advanceRotation('patient', 1)"
-      ><span class="font-light">Rotation skip &rarr;</span></Button
-    >
+    <Button variant="outline" @click="advanceRotation('patient', -1)">&larr; Rotation back</Button>
+    <Button variant="outline" @click="advanceRotation('patient', 1)">Rotation skip &rarr;</Button>
   </div>
   <div v-if="zone.type.includes('super')" class="flex justify-between">
-    <Button variant="outline" @click="advanceRotation('supervisor', -1)"
-      ><span class="font-light">&larr; Super back</span></Button
-    >
-    <Button variant="outline" @click="advanceRotation('supervisor', 1)"
-      ><span class="font-light">Super skip &rarr;</span></Button
-    >
+    <Button variant="outline" @click="advanceRotation('supervisor', -1)">&larr; Super back</Button>
+    <Button variant="outline" @click="advanceRotation('supervisor', 1)">Super skip &rarr;</Button>
   </div>
 </template>

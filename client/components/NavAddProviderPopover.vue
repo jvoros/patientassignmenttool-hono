@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { Stethoscope } from "lucide-vue-next";
+import { Stethoscope, ChevronDown } from "lucide-vue-next";
 import api from "../stores/api.js";
 
 const open = ref(false);
@@ -45,15 +45,19 @@ onMounted(async () => {
 <template>
   <Popover :open="open" @update:open="open = !open">
     <PopoverTrigger>
-      <Button><Stethoscope />Add Clinician</Button>
+      <Button><Stethoscope />Add Clinician <ChevronDown /></Button>
     </PopoverTrigger>
-    <PopoverContent @interactOutside="reset" class="flex flex-col gap-2">
+    <PopoverContent
+      @interactOutside="reset"
+      class="flex flex-col gap-2 p-4 shadow-lg border-slate-200"
+      align="end"
+    >
       <Select v-model="selectedProvider">
-        <SelectTrigger>
+        <SelectTrigger class="bg-white focus:ring-accent">
           {{
             selectedProvider
               ? `${selectedProviderParsed.last}, ${selectedProviderParsed.first}`
-              : "Select a provider"
+              : "Clinician:"
           }}
         </SelectTrigger>
         <SelectContent>
@@ -66,8 +70,8 @@ onMounted(async () => {
       </Select>
 
       <Select v-model="selectedSchedule">
-        <SelectTrigger>
-          {{ selectedSchedule ? selectedScheduleParsed.name : "Select a schedule" }}
+        <SelectTrigger class="bg-white focus:ring-accent">
+          {{ selectedSchedule ? selectedScheduleParsed.name : "Shift:" }}
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
