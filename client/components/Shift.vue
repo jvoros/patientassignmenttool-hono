@@ -74,7 +74,7 @@ const supervisorTotal = () => props.shift.counts.supervisor ?? 0;
     </div>
     <!-- SHIFT NAME & MENU BAR -->
     <div
-      class="flex items-start items-center justify-between px-2 py-1 bg-slate-500/10 dark:bg-white/10 dark:text-slate-400 first:rounded-t-md text-slate-500"
+      class="flex items-center justify-between px-2 py-1 bg-slate-500/10 dark:bg-white/10 dark:text-slate-400 first:rounded-t-md text-slate-500"
     >
       <div class="text-[.8rem] font-bold uppercase">
         {{ shift.name }}
