@@ -4,8 +4,8 @@ import { details } from "../stores/board.js";
 import api from "../stores/api.js";
 const props = defineProps(["eventId", "shift", "room"]);
 
-const reassignPatient = (newShiftId) => {
-  api.postApi("/reassignPatient", { eventId: props.eventId, newShiftId });
+const changeRoom = (newRoom) => {
+  api.postApi("/changeRoom", { eventId: props.eventId, newRoom });
 };
 </script>
 <template>
@@ -22,8 +22,11 @@ const reassignPatient = (newShiftId) => {
       <DropdownMenuSeparator />
       <DropdownMenuItem class="p-0 focus:bg-white dark:focus:bg-background">
         <ScrollArea class="w-full h-44">
-          <div v-for="room in details.rooms" :key="tag">
-            <div class="py-1 pl-6 text-sm hover:bg-secondary hover:cursor-pointer">
+          <div v-for="room in details.rooms">
+            <div
+              class="py-1 pl-6 text-sm hover:bg-secondary hover:cursor-pointer"
+              @click="changeRoom(room)"
+            >
               {{ room }}
             </div>
             <DropdownMenuSeparator />

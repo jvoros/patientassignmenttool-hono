@@ -15,48 +15,56 @@ import api from "../stores/api.js";
 import { board } from "../stores/board.js";
 
 const props = defineProps(["shift", "zoneId"]);
-const isApp = () => props.shift.role === "app";
-const isSkipped = computed(() => props.shift.skip === 1);
-const isPaused = computed(() => props.shift.skip > 1);
+const zones = board.value.zones;
 
-const otherZones = Object.keys(board.value.zones).filter(
-  (key) => key !== props.zoneId && key !== "off"
-);
+// FLAGS
+const isApp = props.shift.role === "app";
+const isSkipped = props.shift.skip === 1;
+const isPaused = props.shift.skip > 1;
+const hasPatients = Object.values(props.shift.counts).length > 0;
+const isInOtherZones =
+  Object.keys(zones).filter((zoneId) => zones[zoneId].shifts.includes(props.shift.id)).length > 1;
 
-const numberOfZones = () => {
-  let count = 0;
-  Object.keys(board.value.zones).forEach((zone) => {
-    if (board.value.zones[zone].shifts.includes(props.shift.id)) count++;
-  });
-  return count;
-};
+const cannotLeave = computed(() => {
+  const zone = zones[props.zoneId];
+  const docCount = zone.shifts.filter(
+    (shiftId) => board.value.shifts[shiftId].role === "physician"
+  ).length;
+  return !isApp && zone.type.includes("super") && docCount < 2;
+});
 
+const otherZones = Object.keys(zones).filter((key) => key !== props.zoneId && key !== "off");
+
+// DIALOGS
 const deleteDialogOpen = ref(false);
 const assignDialogOpen = ref(false);
-
 const deleteDialogToggle = () => {
   deleteDialogOpen.value = !deleteDialogOpen.value;
 };
-
 const assignDialogToggle = () => {
   assignDialogOpen.value = !assignDialogOpen.value;
 };
 
-const apiFn = (method, payload) => {
-  api.postApi(method, payload);
-};
+// HANDLERS
 
-// generic fn for any actions that just take shiftId
-const shiftAction = (method) => {
-  apiFn(method, { shiftId: props.shift.id });
+const togglePause = () => {
+  const payload = { shiftId: props.shift.id };
+  if (isPaused || isSkipped) {
+    api.postApi("unpauseShift", payload);
+  } else {
+    api.postApi("pauseShift", payload);
+  }
 };
 
 const changePosition = (dir) => {
-  apiFn("changePosition", { zoneId: props.zoneId, shiftId: props.shift.id, direction: dir });
+  api.postApi("changePosition", { zoneId: props.zoneId, shiftId: props.shift.id, direction: dir });
 };
 
 const switchZone = (joinZoneId) => {
-  apiFn("switchZone", {
+  if (cannotLeave.value) {
+    throw Error("Cannot leave zone. There must be at least one doctor in this zone.");
+  }
+  api.postApi("switchZone", {
     leaveZoneId: props.zoneId,
     joinZoneId: joinZoneId,
     shiftId: props.shift.id,
@@ -64,17 +72,42 @@ const switchZone = (joinZoneId) => {
 };
 
 const joinZone = (joinZoneId) => {
-  apiFn("joinZone", {
+  api.postApi("joinZone", {
     joinZoneId,
     shiftId: props.shift.id,
   });
 };
 
-const leaveZone = (leaveZoneId) => {
-  apiFn("leaveZone", {
+const leaveZone = () => {
+  if (cannotLeave.value) {
+    throw Error("Cannot leave zone. There must be at least one doctor in this zone.");
+  }
+  api.postApi("leaveZone", {
     leaveZoneId: props.zoneId,
     shiftId: props.shift.id,
   });
+};
+
+const signOut = () => {
+  if (cannotLeave.value) {
+    throw Error("Cannot leave zone. There must be at least one doctor in this zone.");
+  }
+  api.postApi("signOut", { shiftId: props.shift.id });
+};
+
+const deleteDialogMenuClick = () => {
+  if (cannotLeave.value) {
+    throw Error("Cannot leave zone. There must be at least one doctor in this zone.");
+  }
+  if (hasPatients) {
+    throw Error("Cannot Delete shift. Already has patients assigned");
+  }
+  deleteDialogToggle();
+};
+
+const deleteShiftConfirm = () => {
+  api.postApi("deleteShift", { shiftId: props.shift.id });
+  deleteDialogToggle();
 };
 </script>
 <template>
@@ -87,79 +120,49 @@ const leaveZone = (leaveZoneId) => {
       <DropdownMenuLabel>Shift Tools</DropdownMenuLabel>
       <DropdownMenuSeparator class="bg-secondary" />
 
-      <DropdownMenuItem class="data-[highlighted]:bg-accent" @click="changePosition(-1)"
-        >&uarr; &nbsp;Move Up</DropdownMenuItem
-      >
-      <DropdownMenuItem class="data-[highlighted]:bg-accent" @click="changePosition(1)"
-        >&darr; &nbsp;Move Down</DropdownMenuItem
-      >
+      <DropdownMenuItem @click="changePosition(-1)">&uarr; &nbsp;Move Up</DropdownMenuItem>
+      <DropdownMenuItem @click="changePosition(1)">&darr; &nbsp;Move Down</DropdownMenuItem>
 
       <DropdownMenuSeparator class="bg-secondary" />
 
-      <DropdownMenuItem @click="assignDialogToggle" class="data-[highlighted]:bg-accent">
-        <UserPlus />Assign Patient
-      </DropdownMenuItem>
+      <DropdownMenuItem @click="assignDialogToggle"> <UserPlus />Assign Patient </DropdownMenuItem>
 
       <DropdownMenuSeparator class="bg-secondary" />
 
-      <template v-if="isApp()">
-        <DropdownMenuItem
-          class="data-[highlighted]:bg-accent"
-          v-if="!isSkipped && !isPaused"
-          @click="shiftAction('pauseShift')"
-        >
+      <template v-if="isApp">
+        <DropdownMenuItem v-if="!isSkipped && !isPaused" @click="togglePause">
           <CirclePause />Pause Shift
         </DropdownMenuItem>
-        <DropdownMenuItem
-          class="data-[highlighted]:bg-accent"
-          v-if="isPaused"
-          @click="shiftAction('unpauseShift')"
-        >
+        <DropdownMenuItem v-if="isPaused" @click="togglePause">
           <RotateCcw />Unpause Shift
         </DropdownMenuItem>
-        <DropdownMenuItem
-          class="data-[highlighted]:bg-accent"
-          v-if="isSkipped"
-          @click="shiftAction('unpauseShift')"
-        >
+        <DropdownMenuItem v-if="isSkipped" @click="togglePause">
           <RotateCcw />Cancel Skip
         </DropdownMenuItem>
         <DropdownMenuSeparator class="bg-secondary" />
       </template>
 
-      <DropdownMenuItem
-        class="data-[highlighted]:bg-accent"
-        v-if="numberOfZones() > 1"
-        @click="leaveZone"
-      >
+      <DropdownMenuItem v-if="isInOtherZones" @click="leaveZone">
         <SquareArrowOutUpLeft />Leave this Zone
       </DropdownMenuItem>
 
       <DropdownMenuSub>
-        <DropdownMenuSubTrigger class="data-[highlighted]:bg-accent">
+        <DropdownMenuSubTrigger>
           <ArrowRightLeft size="14" class="mr-2" />Switch Zones
         </DropdownMenuSubTrigger>
         <DropdownMenuSubContent class="bg-white dark:bg-background">
-          <DropdownMenuItem
-            v-for="zoneId in otherZones"
-            @click="switchZone(zoneId)"
-            class="data-[highlighted]:bg-accent"
-          >
+          <DropdownMenuItem v-for="zoneId in otherZones" @click="switchZone(zoneId)">
             {{ board.zones[zoneId].name }}
           </DropdownMenuItem>
         </DropdownMenuSubContent>
       </DropdownMenuSub>
 
       <DropdownMenuSub>
-        <DropdownMenuSubTrigger class="data-[highlighted]:bg-accent">
+        <DropdownMenuSubTrigger>
           <SquarePlus size="16" class="mr-2" />Join Additional Zone
         </DropdownMenuSubTrigger>
         <DropdownMenuSubContent class="bg-white dark:bg-background">
-          <DropdownMenuItem
-            v-for="zoneId in otherZones"
-            @click="joinZone(zoneId)"
-            class="data-[highlighted]:bg-accent"
-          >
+          <DropdownMenuItem v-for="zoneId in otherZones" @click="joinZone(zoneId)">
             {{ board.zones[zoneId].name }}
           </DropdownMenuItem>
         </DropdownMenuSubContent>
@@ -167,13 +170,9 @@ const leaveZone = (leaveZoneId) => {
 
       <DropdownMenuSeparator class="bg-secondary" />
 
-      <DropdownMenuItem class="data-[highlighted]:bg-accent" @click="deleteDialogToggle">
-        <X />Delete Shift
-      </DropdownMenuItem>
+      <DropdownMenuItem @click.stop="deleteDialogMenuClick"> <X />Delete Shift </DropdownMenuItem>
 
-      <DropdownMenuItem @click="shiftAction('signOut')" class="data-[highlighted]:bg-accent">
-        <Smile />Sign Out
-      </DropdownMenuItem>
+      <DropdownMenuItem @click="signOut"> <Smile />Sign Out </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 
@@ -181,14 +180,19 @@ const leaveZone = (leaveZoneId) => {
     <DialogContent>
       <DialogHeader>
         <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogDescription>
-          <p>This will <b>delete</b> the shift from the board.</p>
-          <p>If you just want to leave the rotation, use Sign Out.</p>
-        </DialogDescription>
+        <DialogDescription> This will erase the shift from the board. </DialogDescription>
       </DialogHeader>
+
+      <Alert variant="warn" v-if="hasPatients">
+        <AlertDescription>
+          <div>Cannot delete shift. Already has patients assigned.</div>
+        </AlertDescription>
+      </Alert>
       <DialogFooter>
         <DialogClose asChild><Button variant="outline">Cancel Delete</Button></DialogClose>
-        <Button @click="deleteDialogToggle" variant="destructive">Confirm Delete</Button>
+        <Button @click="deleteShiftConfirm" variant="destructive" :disabled="hasPatients"
+          >Confirm Delete</Button
+        >
       </DialogFooter>
     </DialogContent>
   </Dialog>

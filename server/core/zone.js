@@ -20,7 +20,8 @@ const checkForNotSupervisorShiftError = (draft, zoneId, shiftId) => {
     const isNoDoctorInZone = noDoctorsInZone(draft, zoneId);
     const isNotDoctorShift = draft.shifts[shiftId].role !== "physician";
     if (isSupervisorZone && isNoDoctorInZone && isNotDoctorShift) {
-        throw new Error(`Error adding shift ${shiftId}. Must be at least one doctor in zone: ${zoneId}`);
+        console.error(`[checkForNotSupervisorShiftError] Shift [${shiftId}] is not a doctor. Must be at least one doctor in zone [${zoneId}].`);
+        throw new Error(`There must be at least one doctor in zone.`);
     }
 };
 const setActivesAndGetIndex = (draft, zone, shiftId) => {
@@ -46,7 +47,8 @@ const checkForLastSupervisorError = (draft, zoneId, shiftId) => {
     const { type } = draft.zones[zoneId];
     const isLastDocInSuperZone = type.includes("super") && numberDoctorsInZone(draft, zoneId) < 2;
     if (isLastDocInSuperZone) {
-        throw new Error(`Error leaving zone. Shift ${shiftId} is last doctor in zone ${zoneId}.`);
+        console.error(`[checkForLastSupervisorError] There must be at least one doctor in zone [${zoneId}]. Shift [${shiftId}] is last doctor in zone .`);
+        throw new Error("There must be at least one doctor in this zone.");
     }
 };
 const setActivesOnLeave = (draft, zoneId, shiftId) => {
@@ -61,10 +63,14 @@ const setActivesOnLeave = (draft, zoneId, shiftId) => {
 const provideSupervisor = (draft, zoneId) => {
     const zone = draft.zones[zoneId];
     const { type, active } = zone;
-    if (type !== "rotation_super")
-        throw new Error(`Zone ${zoneId} is not a Supervisor Rotation`);
-    if (!active.supervisor)
-        throw new Error(`Zone ${zoneId} does not have an active supervisor.`);
+    if (type !== "rotation_super") {
+        console.error(`[provideSupervisor]: Zone [${zoneId}] is not a Supervisor Rotation`);
+        throw new Error(`Zone is not a Supervisor Rotation`);
+    }
+    if (!active.supervisor) {
+        console.error(`[provideSupervisor]: Zone [${zoneId}] does not have an active supervisor.`);
+        throw new Error(`Zone does not have an active supervisor.`);
+    }
     const supervisor = active.supervisor;
     advanceRotation(draft, zoneId, "supervisor");
     return supervisor;
@@ -104,7 +110,8 @@ const getCurrentActiveId = (zone, whichActive, zoneId) => {
         activeId = zone.active.patient;
     }
     if (!activeId) {
-        throw new Error(`No active ${whichActive} in Zone ${zoneId}`);
+        console.error(`[getCurrentActiveId]: No active:${whichActive} set in Zone [${zoneId}]`);
+        throw new Error(`No next-${whichActive} set in Zone [${zoneId}]`);
     }
     return activeId;
 };
@@ -120,10 +127,12 @@ const getNextSupervisor = (draft, zoneId, offset = 1) => {
 };
 const checkForNoSupervisorError = (board, zoneId) => {
     if (noDoctorsInZone(board, zoneId)) {
-        throw new Error(`No doctors in Zone ${zoneId}. Can't get next supervisor. Prevent infinite recursion.`);
+        console.error(`[checkForNoSupervisorError]: No doctors in zone [${zoneId}]. Can't get next supervisor. Prevent infinite recursion.`);
+        throw new Error(`No doctors in zone. Can't get next supervisor.`);
     }
     if (!board.zones[zoneId].active.supervisor) {
-        throw new Error(`No active supervisor in Zone ${zoneId}.`);
+        console.error(`[checkForNoSupervisorError]: No active supervisor in Zone [${zoneId}].`);
+        throw new Error(`No active supervisor in zone.`);
     }
 };
 // HELPERS
@@ -133,7 +142,8 @@ const findIndex = (zone, shiftId) => {
 const findIndexAndNeighbor = (zone, shiftId, offset) => {
     const index = findIndex(zone, shiftId);
     if (index < 0) {
-        throw new Error(`Zone does not contain ${shiftId}`);
+        console.error(`[findIndexAndNeighbor]: Zone does not contain shift with id: [${shiftId}]`);
+        throw new Error(`Zone does not contain shift with id: [${shiftId}]`);
     }
     const length = zone.shifts.length;
     const nextIndex = (index + offset + length) % length;
