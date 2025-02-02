@@ -11,6 +11,9 @@ const advanceRotation = (which, dir) => {
   <BoardHeader>{{ zone.name }}</BoardHeader>
   <slot name="instruction" />
   <div v-if="board.loading">Loading...</div>
+  <InstructionBox variant="blank" v-else-if="zone.shifts.length === 0">
+    No shifts in zone.
+  </InstructionBox>
   <div v-else>
     <template v-for="shiftId in zone.shifts">
       <Shift :shift="board.shifts[shiftId]" :zone="zone" />

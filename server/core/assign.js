@@ -29,7 +29,8 @@ const assignSupervisorIfNeeded = (draft, zoneId, role) => {
 };
 const getSuperZoneAndShift = (draft, zone) => {
     if (!zone.superFrom && !zone.active.supervisor) {
-        throw new Error(`Assign Error: zoneId ${zone.id} has no 'superFrom:' property and no active.supervisor is set.`);
+        console.error(`[getSuperZoneAndShift]: zoneId [${zone.id}] has no 'superFrom:' property and no active.supervisor is set.`);
+        throw new Error(`Zone has no 'superFrom:' property and no active.supervisor is set.`);
     }
     // use ! non-null assertion because already checked at least one exists
     const superShiftId = zone.superFrom
@@ -53,7 +54,8 @@ const getActiveShift = (draft, zoneId) => {
     const zone = draft.zones[zoneId];
     const shiftId = zone.type.includes("rotation") ? zone.active.patient : zone.shifts[0];
     if (!shiftId) {
-        throw new Error(`No shift in zone or active.patient for zone ${zoneId}`);
+        console.error(`[getActiveShift]: No shift in zone or active.patient for zone [${zoneId}]`);
+        throw new Error(`No shift in zone or next-patient for zone`);
     }
     return draft.shifts[shiftId];
 };
@@ -78,10 +80,12 @@ const reassignPatient = Undo.produce((draft, eventId, newShiftId) => {
 });
 function validateEvent(event) {
     if (!event.patient) {
-        throw new Error(`Error: event: ${event.id} has no patient property.`);
+        console.error(`[validateEvent]: Event [${event.id}] has no patient property.`);
+        throw new Error(`Event [${event.id}] has no patient property.`);
     }
     if (!event.shift) {
-        throw new Error(`Error: event: ${event.id} has no shift property.`);
+        console.error(`[validateEvent]: Event [${event.id}] has no shift property.`);
+        throw new Error(`Event [${event.id}] has no shift property.`);
     }
 }
 const updateEventTypeAndMessage = (event, newShift) => {
@@ -99,8 +103,24 @@ const handleSupervisorOnReassign = (newShift, shift, event) => {
     }
     return undefined;
 };
+const changeRoom = Undo.produce((draft, eventId, newRoom) => {
+    const event = draft.events[eventId];
+    validateEvent(event);
+    const oldRoom = event.patient.room;
+    event.patient.room = newRoom;
+    event.type = "reassign";
+    event.message = `Changed room from ${oldRoom}`;
+    // event
+    const eventParams = {
+        type: "changeRoom",
+        shift: event.shift,
+        message: `Room changed from ${oldRoom} to ${newRoom}`,
+    };
+    return eventParams;
+});
 export default {
     assignToShift,
     assignToZone,
     reassignPatient,
+    changeRoom,
 };

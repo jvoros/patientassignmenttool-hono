@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from "vue";
-import { UserPlus, Users } from "lucide-vue-next";
+import { Users } from "lucide-vue-next";
 const props = defineProps(["shift", "zone"]);
 
 // tags
@@ -38,8 +38,8 @@ const tags = computed(() => {
 const getClasses = () => {
   if (tags.value.includes("off")) {
     return {
-      box: "bg-slate-100 border-slate-200 dark:border-slate-600 dark:bg-slate-800",
-      content: "text-slate-600",
+      box: "bg-muted border-slate-200 dark:border-slate-600 dark:bg-slate-800",
+      content: "text-muted-foreground",
     };
   }
   if (tags.value.includes("rotation") && tags.value.includes("next")) {

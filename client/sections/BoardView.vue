@@ -1,9 +1,14 @@
 <script setup>
-import { onBeforeMount, onUnmounted } from "vue";
+import { onBeforeMount, onUnmounted, onErrorCaptured, watch } from "vue";
+import { toast } from "vue-sonner";
 import { board, updateBoard } from "../stores/board.js";
 import api from "../stores/api.js";
 
 let stream;
+
+watch(api.error, () => {
+  toast.error("Error", { description: api.error.value.message });
+});
 
 const getZoneGroup = (group) => {
   if (board.value.zones) {
@@ -30,6 +35,12 @@ onBeforeMount(() => {
 
 onUnmounted(() => {
   stream.close();
+});
+
+onErrorCaptured((error) => {
+  console.error("onErrorCapture: " + error.message);
+  toast.error("Error", { description: error.message });
+  return false; // stop error propagation
 });
 </script>
 
