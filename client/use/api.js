@@ -13,7 +13,7 @@ export const useApi = () => {
       console.error("[api] error:", error);
       globalError.value = { message: error, time: Date.now() };
     }
-    return data;
+    return { data, error };
   };
 
   return {

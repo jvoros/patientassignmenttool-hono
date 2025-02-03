@@ -45,7 +45,9 @@ const leave = (draft, zoneId, shiftId) => {
 };
 const checkForLastSupervisorError = (draft, zoneId, shiftId) => {
     const { type } = draft.zones[zoneId];
-    const isLastDocInSuperZone = type.includes("super") && numberDoctorsInZone(draft, zoneId) < 2;
+    const isLastDocInSuperZone = type.includes("super") &&
+        numberDoctorsInZone(draft, zoneId) < 2 &&
+        draft.shifts[shiftId].role === "physician";
     if (isLastDocInSuperZone) {
         console.error(`[checkForLastSupervisorError] There must be at least one doctor in zone [${zoneId}]. Shift [${shiftId}] is last doctor in zone .`);
         throw new Error("There must be at least one doctor in this zone.");

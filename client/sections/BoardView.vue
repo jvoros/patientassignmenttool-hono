@@ -1,14 +1,11 @@
 <script setup>
 import { useSite } from "../use/site.js";
 import { useErrorBoundary } from "../use/errorBoundary.js";
-import { useApi } from "../use/api.js";
-
-const api = useApi();
 
 const site = useSite();
 site.fetchBoard();
 site.fetchDetails();
-site.withStream();
+site.useStream();
 
 useErrorBoundary();
 

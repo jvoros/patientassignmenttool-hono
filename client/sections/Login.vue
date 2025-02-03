@@ -8,9 +8,9 @@ const site = "stmarks";
 const codeFromForm = ref();
 const { error } = useAuth();
 
-const login = async (e) => {
-  e.preventDefault();
+const login = async () => {
   auth.login(codeFromForm.value, site);
+  codeFromForm.value = "";
 };
 </script>
 <template>
@@ -30,7 +30,7 @@ const login = async (e) => {
         </div>
       </CardContent>
       <CardFooter>
-        <Button class="w-full" type="submit" @click="login">Login</Button>
+        <Button class="w-full" @click.prevent="login">Login</Button>
       </CardFooter>
     </Card>
   </form>
