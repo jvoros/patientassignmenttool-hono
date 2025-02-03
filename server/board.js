@@ -24,13 +24,13 @@ board.post("/", async (c) => {});
 
 // ROUTES
 
-board.get("/state", async (c) => {
+board.get("/getBoard", async (c) => {
   const site = c.get("jwtPayload").site;
   const res = await sites[site].store.getBoard();
   return c.json({ data: res });
 });
 
-board.get("/site", async (c) => {
+board.get("/getSiteDetails", async (c) => {
   const site = c.get("jwtPayload").site;
   const res = await sites[site].store.getSiteDetails();
   return c.json({ data: res });

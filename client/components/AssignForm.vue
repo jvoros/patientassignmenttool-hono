@@ -1,12 +1,13 @@
 <script setup>
 import { ref, computed, onUnmounted } from "vue";
-import { details } from "../stores/board.js";
-import api from "../stores/api.js";
+import { useSite } from "../use/site.js";
+import { useApi } from "../use/api.js";
 import { UserPlus, Activity, Zap, Siren } from "lucide-vue-next";
 
 const props = defineProps(["zoneId", "shiftId"]);
 const emit = defineEmits(["assignFired"]);
 
+const site = useSite();
 const selectedType = ref();
 const selectedRoom = ref();
 
@@ -14,14 +15,15 @@ const formIncomplete = computed(() => {
   return !selectedType.value || !selectedRoom.value;
 });
 
+const api = useApi();
 const assign = () => {
   if (!props.shiftId) {
-    api.postApi("assignToZone", {
+    api.post("/api/board/assignToZone", {
       zoneId: props.zoneId,
       patient: { mode: selectedType.value, room: selectedRoom.value },
     });
   } else {
-    api.postApi("assignToShift", {
+    api.post("/api/board/assignToShift", {
       zoneId: props.zoneId,
       shiftId: props.shiftId,
       patient: { mode: selectedType.value, room: selectedRoom.value },
@@ -60,7 +62,7 @@ onUnmounted(() => {
     <SelectTrigger class="bg-white">{{ selectedRoom ? selectedRoom : "Room:" }}</SelectTrigger>
     <SelectContent class="max-h-80">
       <SelectGroup>
-        <div v-for="room in details.rooms">
+        <div v-for="room in site.store.details.rooms">
           <SelectItem :value="room">{{ room }}</SelectItem>
           <SelectSeparator />
         </div>

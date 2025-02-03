@@ -11,29 +11,37 @@ import {
   Smile,
   X,
 } from "lucide-vue-next";
-import api from "../stores/api.js";
-import { board } from "../stores/board.js";
+import { useApi } from "../use/api.js";
+import { useSite } from "../use/site.js";
+
+const api = useApi();
+const site = useSite();
 
 const props = defineProps(["shift", "zoneId"]);
-const zones = board.value.zones;
 
 // FLAGS
 const isApp = props.shift.role === "app";
 const isSkipped = props.shift.skip === 1;
 const isPaused = props.shift.skip > 1;
 const hasPatients = Object.values(props.shift.counts).length > 0;
-const isInOtherZones =
-  Object.keys(zones).filter((zoneId) => zones[zoneId].shifts.includes(props.shift.id)).length > 1;
+const isInOtherZones = computed(() => {
+  const zones = site.store.board.zones;
+  return (
+    Object.keys(zones).filter((zoneId) => zones[zoneId].shifts.includes(props.shift.id)).length > 1
+  );
+});
 
 const cannotLeave = computed(() => {
-  const zone = zones[props.zoneId];
+  const zone = site.store.board.zones[props.zoneId];
   const docCount = zone.shifts.filter(
-    (shiftId) => board.value.shifts[shiftId].role === "physician"
+    (shiftId) => site.store.board.shifts[shiftId].role === "physician"
   ).length;
   return !isApp && zone.type.includes("super") && docCount < 2;
 });
 
-const otherZones = Object.keys(zones).filter((key) => key !== props.zoneId && key !== "off");
+const otherZones = Object.keys(site.store.board.zones).filter(
+  (key) => key !== props.zoneId && key !== "off"
+);
 
 // DIALOGS
 const deleteDialogOpen = ref(false);
@@ -50,21 +58,28 @@ const assignDialogToggle = () => {
 const togglePause = () => {
   const payload = { shiftId: props.shift.id };
   if (isPaused || isSkipped) {
-    api.postApi("unpauseShift", payload);
+    api.post("/api/board/unpauseShift", payload);
   } else {
-    api.postApi("pauseShift", payload);
+    api.post("/api/board/pauseShift", payload);
   }
 };
 
 const changePosition = (dir) => {
-  api.postApi("changePosition", { zoneId: props.zoneId, shiftId: props.shift.id, direction: dir });
+  api.post("/api/board/changePosition", {
+    zoneId: props.zoneId,
+    shiftId: props.shift.id,
+    direction: dir,
+  });
 };
 
 const switchZone = (joinZoneId) => {
   if (cannotLeave.value) {
-    throw Error("Cannot leave zone. There must be at least one doctor in this zone.");
+    const error = "Cannot leave zone. There must be at least one doctor in this zone.";
+    console.warn("[ShiftMenu.switchZone]", error);
+    site.setError(error);
+    return;
   }
-  api.postApi("switchZone", {
+  api.post("/api/board/switchZone", {
     leaveZoneId: props.zoneId,
     joinZoneId: joinZoneId,
     shiftId: props.shift.id,
@@ -72,7 +87,7 @@ const switchZone = (joinZoneId) => {
 };
 
 const joinZone = (joinZoneId) => {
-  api.postApi("joinZone", {
+  api.post("/api/board/joinZone", {
     joinZoneId,
     shiftId: props.shift.id,
   });
@@ -80,9 +95,12 @@ const joinZone = (joinZoneId) => {
 
 const leaveZone = () => {
   if (cannotLeave.value) {
-    throw Error("Cannot leave zone. There must be at least one doctor in this zone.");
+    const error = "Cannot leave zone. There must be at least one doctor in this zone.";
+    console.warn("[ShiftMenu.leaveZone]", error);
+    site.setError(error);
+    return;
   }
-  api.postApi("leaveZone", {
+  api.post("/api/board/leaveZone", {
     leaveZoneId: props.zoneId,
     shiftId: props.shift.id,
   });
@@ -90,23 +108,32 @@ const leaveZone = () => {
 
 const signOut = () => {
   if (cannotLeave.value) {
-    throw Error("Cannot leave zone. There must be at least one doctor in this zone.");
+    const error = "Cannot leave zone. There must be at least one doctor in this zone.";
+    console.warn("[ShiftMenu.signOut]", error);
+    site.setError(error);
+    return;
   }
-  api.postApi("signOut", { shiftId: props.shift.id });
+  api.post("/api/board/signOut", { shiftId: props.shift.id });
 };
 
 const deleteDialogMenuClick = () => {
   if (cannotLeave.value) {
-    throw Error("Cannot leave zone. There must be at least one doctor in this zone.");
+    const error = "Cannot leave zone. There must be at least one doctor in this zone.";
+    console.warn("[ShiftMenu.deleteMenu]", error);
+    site.setError(error);
+    return;
   }
   if (hasPatients) {
-    throw Error("Cannot Delete shift. Already has patients assigned");
+    const error = "Cannot Delete shift. Already has patients assigned";
+    console.warn("[ShiftMenu.deleteMenu]", error);
+    site.setError(error);
+    return;
   }
   deleteDialogToggle();
 };
 
 const deleteShiftConfirm = () => {
-  api.postApi("deleteShift", { shiftId: props.shift.id });
+  api.post("/api/board/deleteShift", { shiftId: props.shift.id });
   deleteDialogToggle();
 };
 </script>
@@ -152,7 +179,7 @@ const deleteShiftConfirm = () => {
         </DropdownMenuSubTrigger>
         <DropdownMenuSubContent class="bg-white dark:bg-background">
           <DropdownMenuItem v-for="zoneId in otherZones" @click="switchZone(zoneId)">
-            {{ board.zones[zoneId].name }}
+            {{ site.store.board.zones[zoneId].name }}
           </DropdownMenuItem>
         </DropdownMenuSubContent>
       </DropdownMenuSub>
@@ -163,7 +190,7 @@ const deleteShiftConfirm = () => {
         </DropdownMenuSubTrigger>
         <DropdownMenuSubContent class="bg-white dark:bg-background">
           <DropdownMenuItem v-for="zoneId in otherZones" @click="joinZone(zoneId)">
-            {{ board.zones[zoneId].name }}
+            {{ site.store.board.zones[zoneId].name }}
           </DropdownMenuItem>
         </DropdownMenuSubContent>
       </DropdownMenuSub>
