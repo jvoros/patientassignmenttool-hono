@@ -1,8 +1,8 @@
 <script setup>
 import { computed } from "vue";
 import { ChevronDown } from "lucide-vue-next";
-import { useSite } from "../use/site";
-import { useApi } from "../use/api";
+import { useSite, useApi } from "../use";
+
 const props = defineProps(["eventId", "shift", "room"]);
 const site = useSite();
 const api = useApi();

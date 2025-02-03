@@ -70,6 +70,7 @@ declare module 'vue' {
     Login: typeof import('./sections/Login.vue')['default']
     Main: typeof import('./components/Main.vue')['default']
     Nav: typeof import('./components/Nav.vue')['default']
+    NavAddClinician: typeof import('./components/NavAddClinician.vue')['default']
     NavAddProviderPopover: typeof import('./components/NavAddProviderPopover.vue')['default']
     NavigationMenu: typeof import('./shadcn-vue/components/navigation-menu/NavigationMenu.vue')['default']
     NavigationMenuContent: typeof import('./shadcn-vue/components/navigation-menu/NavigationMenuContent.vue')['default']

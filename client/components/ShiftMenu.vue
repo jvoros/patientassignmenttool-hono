@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed } from "vue";
-import { useApi } from "../use/api.js";
-import { useSite } from "../use/site.js";
+import { useApi, useSite } from "../use";
 import { Menu, UserPlus, Smile, X } from "lucide-vue-next";
 
 const props = defineProps(["shift", "zoneId"]);
