@@ -7,7 +7,7 @@ export const useErrorBoundary = () => {
   //catch api errors that are outside eventHandlers
   const api = useApi();
   watch(api.error, () => {
-    toast.error("Error", { description: api.error.value.message });
+    toast.error("[api error]: " + api.error.value.message);
   });
 
   // watch site errors
@@ -21,7 +21,7 @@ export const useErrorBoundary = () => {
     console.error("[errorBoundary]", error.message);
     console.error("[errorBoundary]", error.stack);
     console.error("[errorBoundary]", info);
-    toast.error("Error: " + error.message);
+    toast.error("[error captured]: " + error.message);
     return false; // stop error propagation
   });
   return;
