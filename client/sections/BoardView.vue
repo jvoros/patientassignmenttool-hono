@@ -1,6 +1,5 @@
 <script setup>
-import { useSite } from "../use/site.js";
-import { useErrorBoundary } from "../use/errorBoundary.js";
+import { useSite, useErrorBoundary } from "/use";
 
 const site = useSite();
 site.fetchBoard();

@@ -1,7 +1,7 @@
 <script setup>
 import { useColorMode } from "@vueuse/core";
 import { Sun, Moon, LogOut } from "lucide-vue-next";
-import { useAuth } from "../use/auth.js";
+import { useAuth } from "../use";
 
 const auth = useAuth();
 
@@ -26,7 +26,7 @@ const logout = async () => {
       </div>
       <div class="flex items-center gap-4">
         <div><a href="#" class="text-sm hover:underline">Quick Reference</a></div>
-        <NavAddProviderPopover />
+        <NavAddClinician />
         <Button variant="secondary" @click="logout">Logout <LogOut /></Button>
         <Button @click="toggleMode" variant="outline" size="icon">
           <Moon v-if="mode === 'light'" />

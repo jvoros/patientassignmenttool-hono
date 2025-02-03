@@ -1,8 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import { ChevronDown } from "lucide-vue-next";
-import { useSite } from "../use/site.js";
-import { useApi } from "../use/api.js";
+import { useSite, useApi } from "../use";
 
 const site = useSite();
 const api = useApi();

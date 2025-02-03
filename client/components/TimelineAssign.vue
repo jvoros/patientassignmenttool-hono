@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from "vue";
-import { useSite } from "../use/site.js";
+import { useSite } from "../use";
 
 const site = useSite();
 

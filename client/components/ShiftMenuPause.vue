@@ -1,8 +1,8 @@
 <script setup>
 import { computed } from "vue";
 import { CirclePause, RotateCcw } from "lucide-vue-next";
-import { useApi } from "../use/api.js";
-import { useSite } from "../use/site.js";
+import { useApi, useSite } from "../use";
+
 const props = defineProps(["shiftId"]);
 const site = useSite();
 const shift = computed(() => site.store.board.shifts[props.shiftId]);

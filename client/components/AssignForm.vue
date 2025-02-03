@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed, onUnmounted } from "vue";
-import { useSite } from "../use/site.js";
-import { useApi } from "../use/api.js";
+import { useApi, useSite } from "../use";
 import { UserPlus, Activity, Zap, Siren } from "lucide-vue-next";
 
 const props = defineProps(["zoneId", "shiftId"]);
