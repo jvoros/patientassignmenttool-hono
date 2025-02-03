@@ -1,7 +1,9 @@
 <script setup>
 import { useColorMode } from "@vueuse/core";
 import { Sun, Moon, LogOut } from "lucide-vue-next";
-import auth from "../stores/auth.js";
+import { useAuth } from "../use/auth.js";
+
+const auth = useAuth();
 
 // dark mode
 const mode = useColorMode({ disableTransition: false });

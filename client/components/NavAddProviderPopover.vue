@@ -1,54 +1,52 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
-import { Stethoscope, ChevronDown, TriangleAlert } from "lucide-vue-next";
-import api from "../stores/api.js";
+import { ref, computed } from "vue";
+import { Stethoscope, ChevronDown } from "lucide-vue-next";
+import { useSite } from "../use/site.js";
+import { useApi } from "../use/api.js";
 
+const api = useApi();
+const site = useSite();
+const details = computed(() => site.state.details);
 const open = ref(false);
-const providers = ref([]);
-const schedule = ref([]);
 
 const selectedProvider = ref(null);
-const selectedProviderParsed = computed(() => {
-  return selectedProvider.value ? JSON.parse(selectedProvider.value) : null;
+const activeProvider = computed(() => {
+  if (!selectedProvider.value) return null;
+  const provider = JSON.parse(selectedProvider.value);
+  return `${provider.last}, ${provider.first}`;
 });
 
 const selectedSchedule = ref(null);
-const selectedScheduleParsed = computed(() => {
-  return selectedSchedule.value ? JSON.parse(selectedSchedule.value) : null;
+const activeSchedule = computed(() => {
+  if (!selectedSchedule.value) return null;
+  const schedule = JSON.parse(selectedSchedule.value);
+  return schedule.name;
 });
 
-const formIncomplete = computed(() => {
-  return !selectedProvider.value || !selectedSchedule.value;
-});
-
-const resetShiftSelected = computed(() => {
-  return selectedSchedule.value
-    ? selectedSchedule.value === JSON.stringify(schedule.value[0])
-    : false;
-});
-
-const signIn = async () => {
-  open.value = false;
-  if (resetShiftSelected.value) {
-    await api.postApi("boardReset");
-  }
-  api.postApi("signIn", {
-    provider: selectedProviderParsed.value,
-    schedule: selectedScheduleParsed.value,
-  });
-  reset();
-};
+const resetShiftSelected = computed(
+  () => selectedSchedule.value === JSON.stringify(site.state.details.schedule[0])
+);
 
 const reset = () => {
   selectedProvider.value = null;
   selectedSchedule.value = null;
 };
 
-onMounted(async () => {
-  const res = await api.getSiteDetails();
-  providers.value = res.providers;
-  schedule.value = res.schedule;
+const formIncomplete = computed(() => {
+  return !selectedProvider.value || !selectedSchedule.value;
 });
+
+const signIn = async () => {
+  open.value = false;
+  if (resetShiftSelected.value) {
+    await api.post("/api/board/boardReset");
+  }
+  api.post("/api/board/signIn", {
+    provider: JSON.parse(selectedProvider.value),
+    schedule: JSON.parse(selectedSchedule.value),
+  });
+  reset();
+};
 </script>
 
 <template>
@@ -63,15 +61,11 @@ onMounted(async () => {
     >
       <Select v-model="selectedProvider">
         <SelectTrigger class="focus:ring-accent">
-          {{
-            selectedProvider
-              ? `${selectedProviderParsed.last}, ${selectedProviderParsed.first}`
-              : "Clinician:"
-          }}
+          {{ selectedProvider ? activeProvider : "Clinician:" }}
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <div v-for="provider in providers">
+            <div v-for="provider in details.providers">
               <SelectItem :value="JSON.stringify(provider)">
                 {{ provider.last }}, {{ provider.first }}
               </SelectItem>
@@ -83,11 +77,11 @@ onMounted(async () => {
 
       <Select v-model="selectedSchedule">
         <SelectTrigger class="bg-white focus:ring-accent">
-          {{ selectedSchedule ? selectedScheduleParsed.name : "Shift:" }}
+          {{ selectedSchedule ? activeSchedule : "Shift:" }}
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <div v-for="shift in schedule">
+            <div v-for="shift in details.schedule">
               <SelectItem :value="JSON.stringify(shift)">{{ shift.name }}</SelectItem>
               <SelectSeparator />
             </div>
@@ -99,7 +93,8 @@ onMounted(async () => {
         <Alert variant="warn">
           <AlertDescription>
             <div>
-              Assigning <b>{{ schedule[0].name }}</b> shift will restart the board for a new day.<br />
+              Assigning <b>{{ details.schedule[0].name }}</b> shift will restart the board for a new
+              day.<br />
             </div>
           </AlertDescription>
         </Alert>

@@ -24,6 +24,12 @@ board.post("/", async (c) => {});
 
 // ROUTES
 
+board.get("/state", async (c) => {
+  const site = c.get("jwtPayload").site;
+  const res = await sites[site].store.getBoard();
+  return c.json({ data: res });
+});
+
 board.get("/site", async (c) => {
   const site = c.get("jwtPayload").site;
   const res = await sites[site].store.getSiteDetails();
@@ -47,7 +53,7 @@ const apiFn = (method) => async (c) => {
     return c.json({ error: newBoard.error.message });
   }
   broadcastBoard(site);
-  return c.text(method + " broadcasted");
+  return c.json({ message: method + " broadcasted" });
 };
 
 // just list the methods for which we need endpoints

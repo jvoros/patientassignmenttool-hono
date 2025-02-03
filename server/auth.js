@@ -24,27 +24,29 @@ auth.post("/login", async (c) => {
     });
     return c.json(payload);
   } else {
-    return c.text("Invalid access code", 401);
+    return c.json({ message: "Invalid access code" }, 401);
   }
 });
 
 auth.post("/logout", async (c) => {
   deleteCookie(c, "auth");
-  return c.text("Logged out");
+  return c.json({ message: "Logged out" });
 });
 
-auth.post("/verify", async (c) => {
+auth.post("/checkLogin", async (c) => {
   const token = getCookie(c, "auth");
   if (token) {
     try {
       const payload = await verify(token, process.env.JWT_SECRET);
       return c.json(payload);
     } catch {
-      return c.text("Invalid token", 400);
+      return c.json({ message: "Invalid token" }, 400);
     }
-  } else {
-    return c.text("No token", 400);
   }
+  if (!token) {
+    return c.json({ message: "No token" }, 401);
+  }
+  return;
 });
 
 export default auth;

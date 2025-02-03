@@ -1,11 +1,14 @@
 <script setup>
+import { computed } from "vue";
 import { ChevronDown } from "lucide-vue-next";
-import { details } from "../stores/board.js";
-import api from "../stores/api.js";
+import { useSite } from "../use/site";
+import { useApi } from "../use/api";
 const props = defineProps(["eventId", "shift", "room"]);
-
+const site = useSite();
+const api = useApi();
+const details = computed(() => site.state.details);
 const changeRoom = (newRoom) => {
-  api.postApi("/changeRoom", { eventId: props.eventId, newRoom });
+  api.post("/api/board/changeRoom", { eventId: props.eventId, newRoom });
 };
 </script>
 <template>
