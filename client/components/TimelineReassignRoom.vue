@@ -6,7 +6,7 @@ import { useApi } from "../use/api";
 const props = defineProps(["eventId", "shift", "room"]);
 const site = useSite();
 const api = useApi();
-const details = computed(() => site.state.details);
+const details = computed(() => site.store.details);
 const changeRoom = (newRoom) => {
   api.post("/api/board/changeRoom", { eventId: props.eventId, newRoom });
 };

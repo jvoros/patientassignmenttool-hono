@@ -1,4 +1,4 @@
-import { ref, reactive } from "vue";
+import { reactive } from "vue";
 import { useApi } from "./api.js";
 
 const api = useApi();

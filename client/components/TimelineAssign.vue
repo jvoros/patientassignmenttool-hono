@@ -6,8 +6,8 @@ const site = useSite();
 
 const props = defineProps(["event"]);
 
-const shift = computed(() => site.state.board.shifts[props.event.shift]);
-const supervisor = computed(() => site.state.board.shifts[props.event.supervisorShift]?.provider);
+const shift = computed(() => site.store.board.shifts[props.event.shift]);
+const supervisor = computed(() => site.store.board.shifts[props.event.supervisorShift]?.provider);
 </script>
 <template>
   <div class="flex items-center gap-4 py-2 -ml-[22px] text-slate-500 dark:text-slate-400">

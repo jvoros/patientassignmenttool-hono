@@ -8,7 +8,7 @@ const site = useSite();
 const api = useApi();
 
 const events = computed(() =>
-  site.state.board.timeline.map((eventId) => site.state.board.events[eventId])
+  site.store.board.timeline.map((eventId) => site.store.board.events[eventId])
 );
 
 const undo = () => {
@@ -16,6 +16,7 @@ const undo = () => {
 };
 </script>
 <template>
+  <BoardHeader>Timeline</BoardHeader>
   <InstructionBox> Click provider or room number to change. </InstructionBox>
   <div
     v-for="(event, index) in events"

@@ -4,9 +4,7 @@ import { Stethoscope, ChevronDown } from "lucide-vue-next";
 import { useSite } from "../use/site.js";
 import { useApi } from "../use/api.js";
 
-const api = useApi();
 const site = useSite();
-const details = computed(() => site.state.details);
 const open = ref(false);
 
 const selectedProvider = ref(null);
@@ -24,7 +22,7 @@ const activeSchedule = computed(() => {
 });
 
 const resetShiftSelected = computed(
-  () => selectedSchedule.value === JSON.stringify(site.state.details.schedule[0])
+  () => selectedSchedule.value === JSON.stringify(site.store.details.schedule[0])
 );
 
 const reset = () => {
@@ -36,6 +34,7 @@ const formIncomplete = computed(() => {
   return !selectedProvider.value || !selectedSchedule.value;
 });
 
+const api = useApi();
 const signIn = async () => {
   open.value = false;
   if (resetShiftSelected.value) {
@@ -65,7 +64,7 @@ const signIn = async () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <div v-for="provider in details.providers">
+            <div v-for="provider in site.store.details.providers">
               <SelectItem :value="JSON.stringify(provider)">
                 {{ provider.last }}, {{ provider.first }}
               </SelectItem>
@@ -81,7 +80,7 @@ const signIn = async () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <div v-for="shift in details.schedule">
+            <div v-for="shift in site.store.details.schedule">
               <SelectItem :value="JSON.stringify(shift)">{{ shift.name }}</SelectItem>
               <SelectSeparator />
             </div>
@@ -93,8 +92,8 @@ const signIn = async () => {
         <Alert variant="warn">
           <AlertDescription>
             <div>
-              Assigning <b>{{ details.schedule[0].name }}</b> shift will restart the board for a new
-              day.<br />
+              Assigning <b>{{ site.store.details.schedule[0].name }}</b> shift will restart the
+              board for a new day.<br />
             </div>
           </AlertDescription>
         </Alert>

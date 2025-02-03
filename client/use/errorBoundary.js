@@ -1,12 +1,19 @@
 import { onErrorCaptured, watch } from "vue";
 import { toast } from "vue-sonner";
 import { useApi } from "./api.js";
+import { useSite } from "./site.js";
 
 export const useErrorBoundary = () => {
   //catch api errors that are outside eventHandlers
   const api = useApi();
   watch(api.error, () => {
-    toast.error("Error", { description: apiError.value.message });
+    toast.error("Error", { description: api.error.value.message });
+  });
+
+  // watch site errors
+  const site = useSite();
+  watch(site.error, () => {
+    toast.warning(site.error.value.message);
   });
 
   // catch all

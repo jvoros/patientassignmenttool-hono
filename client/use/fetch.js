@@ -6,11 +6,13 @@ export const useFetch = async (url, payload = {}, method) => {
     method === "POST"
       ? await fetch(url, { method, body: JSON.stringify(payload) })
       : await fetch(url);
+  const json = await response.json();
   if (!response.ok) {
-    const json = await response.json();
     error = json.message;
+  } else if (json.error) {
+    error = json.error;
   } else {
-    data = await response.json();
+    data = json;
   }
 
   return { data, error };

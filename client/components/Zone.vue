@@ -1,11 +1,14 @@
 <script setup>
-import { useBoard } from "../use/site.js/index.js";
-import { usePost } from "../use/api.js";
+import { useSite } from "../use/site.js";
+import { useApi } from "../use/api.js";
 
 const props = defineProps(["zone", "loading"]);
-const board = useBoard();
+
+const site = useSite();
+
+const api = useApi();
 const advanceRotation = (which, dir) => {
-  usePost("/api/board/advanceRotation", {
+  api.post("/api/board/advanceRotation", {
     zoneId: props.zone.id,
     whichActive: which,
     direction: dir,
@@ -16,13 +19,13 @@ const advanceRotation = (which, dir) => {
   <!-- ZONE SHIFTS -->
   <BoardHeader>{{ zone.name }}</BoardHeader>
   <slot name="instruction" />
-  <div v-if="board.value?.loading">Loading...</div>
+  <div v-if="site.store.board.loading">Loading...</div>
   <InstructionBox variant="blank" v-else-if="zone.shifts.length === 0">
     No shifts in zone.
   </InstructionBox>
   <div v-else>
     <template v-for="shiftId in zone.shifts">
-      <Shift :shift="board.value?.shifts[shiftId]" :zone="zone" />
+      <Shift :shift="site.store.board.shifts[shiftId]" :zone="zone" />
     </template>
   </div>
 

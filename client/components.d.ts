@@ -123,5 +123,6 @@ declare module 'vue' {
     TooltipProvider: typeof import('./shadcn-vue/components/tooltip/TooltipProvider.vue')['default']
     TooltipTrigger: typeof import('./shadcn-vue/components/tooltip/TooltipTrigger.vue')['default']
     Zone: typeof import('./components/Zone.vue')['default']
+    ZoneList: typeof import('./components/ZoneList.vue')['default']
   }
 }

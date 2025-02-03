@@ -10,7 +10,7 @@ const api = useApi();
 const props = defineProps(["eventId", "shift"]);
 
 const otherShifts = computed(() => {
-  const shifts = site.state.board.shifts;
+  const shifts = site.store.board.shifts;
   return Object.keys(shifts)
     .filter((key) => shifts[key].id !== props.shift.id)
     .map((key) => shifts[key]);

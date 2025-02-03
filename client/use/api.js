@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { useFetch } from "./fetch.js";
 
-const error = ref(null);
+const globalError = ref("no error");
 
 export const useApi = () => {
   const post = (endpoint, payload = {}) => baseApi(endpoint, payload, "POST");
@@ -11,13 +11,13 @@ export const useApi = () => {
     const { data, error } = await useFetch(endpoint, payload, method);
     if (error) {
       console.error("[api] error:", error);
-      error.value = { message: error, time: Date.now() };
+      globalError.value = { message: error, time: Date.now() };
     }
     return data;
   };
 
   return {
-    error,
+    error: globalError,
     post,
     get,
   };

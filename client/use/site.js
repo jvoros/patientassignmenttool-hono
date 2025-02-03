@@ -1,32 +1,40 @@
-import { reactive, onBeforeMount, onUnmounted } from "vue";
+import { reactive, onBeforeMount, onUnmounted, ref } from "vue";
 import { useApi } from "./api.js";
 
 const api = useApi();
 
-const site = reactive({
+const store = reactive({
   board: {
     timeline: [],
+    zones: {},
+    shifts: {},
+    events: {},
   },
-  details: {},
+  details: {
+    providers: [],
+    schedule: [],
+  },
 });
+
+const globalError = ref();
 
 export const useSite = () => {
   const fetchBoard = async () => {
-    const response = await api.get("/api/board/state");
+    const response = await api.get("/api/board/getBoard");
     if (!response) return;
-    site.board = response.data;
+    store.board = response.data;
     console.log("[useSite] fetched board");
   };
 
   const updateBoard = (data) => {
     data.loading = false;
-    site.board = data;
+    store.board = data;
   };
 
   const fetchDetails = async () => {
-    const response = await api.get("/api/board/site");
+    const response = await api.get("/api/board/getSiteDetails");
     if (!response) return;
-    site.details = response.data;
+    store.details = response.data;
     console.log("[useSite] fetched details");
   };
 
@@ -48,11 +56,17 @@ export const useSite = () => {
     });
   };
 
+  const setError = (message) => {
+    globalError.value = { message };
+  };
+
   return {
-    state: site,
+    store,
     fetchBoard,
     updateBoard,
     fetchDetails,
     withStream,
+    error: globalError,
+    setError,
   };
 };
