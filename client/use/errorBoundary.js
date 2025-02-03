@@ -18,9 +18,9 @@ export const useErrorBoundary = () => {
 
   // catch all
   onErrorCaptured((error, vm, info) => {
-    console.error("[errorBoundary]", error.message);
-    console.error("[errorBoundary]", error.stack);
-    console.error("[errorBoundary]", info);
+    console.error("[error captured]", error.message);
+    console.error("[error captured]", error.stack);
+    console.error("[error captured]", info);
     toast.error("[error captured]: " + error.message);
     return false; // stop error propagation
   });

@@ -20,10 +20,17 @@ const globalError = ref();
 
 export const useSite = () => {
   const fetchBoard = async () => {
-    const response = await api.get("/api/board/getBoard");
-    if (!response) return;
-    store.board = response.data;
-    console.log("[useSite] fetched board");
+    const { data, error } = await api.get("/api/board/getBoard");
+    if (!data) return;
+    store.board = data.data;
+    console.log("[site] fetched board");
+  };
+
+  const fetchDetails = async () => {
+    const { data, error } = await api.get("/api/board/getSiteDetails");
+    if (!data) return;
+    store.details = data.data;
+    console.log("[site] fetched details");
   };
 
   const updateBoard = (data) => {
@@ -31,14 +38,7 @@ export const useSite = () => {
     store.board = data;
   };
 
-  const fetchDetails = async () => {
-    const response = await api.get("/api/board/getSiteDetails");
-    if (!response) return;
-    store.details = response.data;
-    console.log("[useSite] fetched details");
-  };
-
-  const withStream = () => {
+  const useStream = () => {
     let stream;
     onBeforeMount(() => {
       stream = new EventSource("/api/stream");
@@ -63,9 +63,8 @@ export const useSite = () => {
   return {
     store,
     fetchBoard,
-    updateBoard,
     fetchDetails,
-    withStream,
+    useStream,
     error: globalError,
     setError,
   };
