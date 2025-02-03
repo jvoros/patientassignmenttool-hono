@@ -1,6 +1,12 @@
 import { reactive } from "vue";
 import { ofetch } from "ofetch";
 
+const state = reactive({
+  role: null,
+  site: null,
+  id: null,
+});
+
 const auth = reactive({
   role: null,
   site: null,

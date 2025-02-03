@@ -1,18 +1,23 @@
 <script setup>
 import { computed } from "vue";
 import { ChevronDown } from "lucide-vue-next";
-import { board } from "../stores/board.js";
-import api from "../stores/api.js";
+import { useSite } from "../use/site.js";
+import { useApi } from "../use/api.js";
+
+const site = useSite();
+const api = useApi();
+
 const props = defineProps(["eventId", "shift"]);
 
-const otherShifts = computed(() =>
-  Object.keys(board.value.shifts)
-    .filter((key) => board.value.shifts[key].id !== props.shift.id)
-    .map((key) => board.value.shifts[key])
-);
+const otherShifts = computed(() => {
+  const shifts = site.state.board.shifts;
+  return Object.keys(shifts)
+    .filter((key) => shifts[key].id !== props.shift.id)
+    .map((key) => shifts[key]);
+});
 
 const reassignPatient = (newShiftId) => {
-  api.postApi("/reassignPatient", { eventId: props.eventId, newShiftId });
+  api.post("/api/board/reassignPatient", { eventId: props.eventId, newShiftId });
 };
 </script>
 <template>

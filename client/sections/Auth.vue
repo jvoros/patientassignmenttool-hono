@@ -1,12 +1,14 @@
 <script setup>
 import { onBeforeMount } from "vue";
-import auth from "../stores/auth.js";
+import { useAuth } from "../use/auth.js";
+
+const auth = useAuth();
 
 onBeforeMount(() => {
   auth.checkLogin();
 });
 </script>
 <template>
-  <slot name="auth" v-if="auth.id"></slot>
-  <slot name="noauth" v-else></slot>
+  <slot name="noauth" v-if="auth.details.id === null"></slot>
+  <slot name="auth" v-else></slot>
 </template>

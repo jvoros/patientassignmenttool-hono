@@ -1,16 +1,16 @@
 <script setup>
 import { ref } from "vue";
-import auth from "../stores/auth.js";
+import { useAuth } from "../use/auth.js";
 
-const code = ref();
-const site = ref("stmarks");
-const error = ref();
+const auth = useAuth();
+
+const site = "stmarks";
+const codeFromForm = ref();
+const { error } = useAuth();
 
 const login = async (e) => {
   e.preventDefault();
-  const data = await auth.login(code.value, site.value).catch((e) => {
-    error.value = e.message;
-  });
+  auth.login(codeFromForm.value, site);
 };
 </script>
 <template>
@@ -24,9 +24,9 @@ const login = async (e) => {
         <div class="grid gap-2">
           <Label for="code"
             >Access Code
-            <span v-if="error" class="text-red-500 text-sm float-right">{{ error }}</span>
+            <span v-if="error" class="float-right text-sm text-red-500">{{ error }}</span>
           </Label>
-          <Input id="code" type="password" v-model="code" />
+          <Input id="code" type="password" v-model="codeFromForm" />
         </div>
       </CardContent>
       <CardFooter>

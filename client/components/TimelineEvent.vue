@@ -1,5 +1,4 @@
 <script setup>
-import { Info } from "lucide-vue-next";
 const props = defineProps(["event"]);
 </script>
 <template>

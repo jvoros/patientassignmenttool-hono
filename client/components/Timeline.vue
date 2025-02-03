@@ -1,15 +1,18 @@
 <script setup>
 import { computed } from "vue";
-import { board } from "../stores/board.js";
-import api from "../stores/api.js";
+import { useSite } from "../use/site.js";
+import { useApi } from "../use/api.js";
 import { Undo2 } from "lucide-vue-next";
 
-const events = computed(() => {
-  return board.value.timeline?.map((eventId) => board.value.events[eventId]);
-});
+const site = useSite();
+const api = useApi();
+
+const events = computed(() =>
+  site.state.board.timeline.map((eventId) => site.state.board.events[eventId])
+);
 
 const undo = () => {
-  api.postApi("undo");
+  api.post("/api/board/undo");
 };
 </script>
 <template>
