@@ -5,7 +5,7 @@ import { useApi, useSite } from "../use";
 
 const props = defineProps(["shiftId"]);
 const site = useSite();
-const shift = computed(() => site.store.board.shifts[props.shiftId]);
+const shift = computed(() => site.getShift(props.shiftId));
 const isSkipped = computed(() => shift.value.skip === 1);
 const isPaused = computed(() => shift.value.skip > 1);
 

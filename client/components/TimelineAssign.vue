@@ -6,7 +6,7 @@ const site = useSite();
 
 const props = defineProps(["event"]);
 
-const shift = computed(() => site.store.board.shifts[props.event.shift]);
+const shift = computed(() => site.getShift(props.event.shift));
 const supervisor = computed(() => site.store.board.shifts[props.event.supervisorShift]?.provider);
 </script>
 <template>

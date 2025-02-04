@@ -43,16 +43,32 @@ onUnmounted(() => {
 </script>
 <template>
   <ToggleGroup type="single" variant="outline" class="justify-left" v-model="selectedType">
-    <ToggleGroupItem value="walkin" aria-label="walkin" class="bg-white dark:bg-background">
+    <ToggleGroupItem
+      value="walkin"
+      aria-label="walkin"
+      class="bg-white dark:bg-background dark:data-[state=on]:bg-slate-800"
+    >
       <UserPlus class="w-4 h-4" />
     </ToggleGroupItem>
-    <ToggleGroupItem value="ambo" aria-label="ambulance" class="bg-white dark:bg-background">
+    <ToggleGroupItem
+      value="ambo"
+      aria-label="ambulance"
+      class="bg-white dark:bg-background dark:data-[state=on]:bg-slate-800"
+    >
       <Activity class="w-4 h-4" />
     </ToggleGroupItem>
-    <ToggleGroupItem value="police" aria-label="police" class="bg-white dark:bg-background">
+    <ToggleGroupItem
+      value="police"
+      aria-label="police"
+      class="bg-white dark:bg-background dark:data-[state=on]:bg-slate-800"
+    >
       <Siren class="w-4 h-4" />
     </ToggleGroupItem>
-    <ToggleGroupItem value="ft" aria-label="fast track" class="bg-white dark:bg-background">
+    <ToggleGroupItem
+      value="ft"
+      aria-label="fast track"
+      class="bg-white dark:bg-background dark:data-[state=on]:bg-slate-800"
+    >
       <Zap class="w-4 h-4" />
     </ToggleGroupItem>
   </ToggleGroup>

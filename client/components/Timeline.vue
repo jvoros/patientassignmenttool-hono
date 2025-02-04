@@ -6,9 +6,7 @@ import { Undo2 } from "lucide-vue-next";
 const site = useSite();
 const api = useApi();
 
-const events = computed(() =>
-  site.store.board.timeline.map((eventId) => site.store.board.events[eventId])
-);
+const events = computed(() => site.store.board.timeline.map((eventId) => site.getEvent(eventId)));
 
 const undo = () => {
   api.post("/api/board/undo");

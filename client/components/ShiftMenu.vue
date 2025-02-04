@@ -12,9 +12,9 @@ const site = useSite();
 const isApp = computed(() => props.shift.role === "app");
 const hasPatients = computed(() => Object.values(props.shift.counts).length > 0);
 const cannotLeave = computed(() => {
-  const zone = site.store.board.zones[props.zoneId];
+  const zone = site.getZone(props.zoneId);
   const docCount = zone.shifts.filter(
-    (shiftId) => site.store.board.shifts[shiftId].role === "physician"
+    (shiftId) => site.getShift(shiftId).role === "physician"
   ).length;
   return !isApp.value && zone.type.includes("super") && docCount < 2;
 });
