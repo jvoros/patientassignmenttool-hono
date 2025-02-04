@@ -101,6 +101,7 @@ declare module 'vue' {
     ShiftList: typeof import('./components/ShiftList.vue')['default']
     ShiftMenu: typeof import('./components/ShiftMenu.vue')['default']
     ShiftMenuAssignDialog: typeof import('./components/ShiftMenuAssignDialog.vue')['default']
+    ShiftMenuChangePosition: typeof import('./components/ShiftMenuChangePosition.vue')['default']
     ShiftMenuDeleteDialog: typeof import('./components/ShiftMenuDeleteDialog.vue')['default']
     ShiftMenuDialog: typeof import('./components/ShiftMenuDialog.vue')['default']
     ShiftMenuOtherZones: typeof import('./components/ShiftMenuOtherZones.vue')['default']
