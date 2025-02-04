@@ -19,6 +19,22 @@ const store = reactive({
 const globalError = ref();
 
 export const useSite = () => {
+  // BOARD ITEMS
+  const getBoardItem = (item, id) => {
+    const found = store.board[item][id];
+    if (!found) {
+      const error = `${item} [${id}] not found`;
+      console.error(error);
+      throw Error(error);
+    }
+    return found;
+  };
+
+  const getShift = (id) => getBoardItem("shifts", id);
+  const getZone = (id) => getBoardItem("zones", id);
+  const getEvent = (id) => getBoardItem("events", id);
+
+  // FETCH FROM DB
   const fetchBoard = async () => {
     const { data, error } = await api.get("/api/board/getBoard");
     if (!data) return;
@@ -38,6 +54,7 @@ export const useSite = () => {
     store.board = data;
   };
 
+  // STREAM
   const useStream = () => {
     let stream;
     onBeforeMount(() => {
@@ -62,6 +79,9 @@ export const useSite = () => {
 
   return {
     store,
+    getShift,
+    getZone,
+    getEvent,
     fetchBoard,
     fetchDetails,
     useStream,

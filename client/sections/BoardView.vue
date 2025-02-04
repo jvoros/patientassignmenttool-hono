@@ -27,7 +27,7 @@ const getZoneGroup = (group) => {
     </template>
     <template v-slot:secondary>
       <ZoneList :zones="getZoneGroup(2)" />
-      <Zone v-if="site.store.board.zones.off" :zone="site.store.board.zones.off" />
+      <Zone v-if="site.store.board.zones.off" :zone="site.getZone('off')" />
     </template>
   </BoardLayout>
 </template>

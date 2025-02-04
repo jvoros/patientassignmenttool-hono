@@ -24,7 +24,7 @@ const advanceRotation = (which, dir) => {
       No shifts in zone.
     </InstructionBox>
     <template v-for="shiftId in zone.shifts">
-      <Shift :shift="site.store.board.shifts[shiftId]" :zone="zone" />
+      <Shift :shift="site.getShift(shiftId)" :zone="zone" />
     </template>
   </div>
 
