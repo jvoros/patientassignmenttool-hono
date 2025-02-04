@@ -31,14 +31,6 @@ const assignDialogToggle = () => {
 };
 
 // HANDLERS
-const changePosition = (dir) => {
-  api.post("/api/board/changePosition", {
-    zoneId: props.zoneId,
-    shiftId: props.shift.id,
-    direction: dir,
-  });
-};
-
 const signOut = () => {
   if (cannotLeave.value) {
     const error = "Cannot leave zone. There must be at least one doctor in this zone.";
@@ -76,17 +68,11 @@ const deleteDialogMenuClick = () => {
       class="w-56 bg-white shadow-lg dark:bg-background border-slate-200"
     >
       <DropdownMenuLabel>Shift Tools</DropdownMenuLabel>
-
       <DropdownMenuSeparator class="bg-secondary" />
 
-      <DropdownMenuItem @click="changePosition(-1)">&uarr; &nbsp;Move Up</DropdownMenuItem>
-
-      <DropdownMenuItem @click="changePosition(1)">&darr; &nbsp;Move Down</DropdownMenuItem>
-
-      <DropdownMenuSeparator class="bg-secondary" />
+      <ShiftMenuChangePosition :zoneId="props.zoneId" :shiftId="props.shift.id" />
 
       <DropdownMenuItem @click="assignDialogToggle"> <UserPlus />Assign Patient </DropdownMenuItem>
-
       <DropdownMenuSeparator class="bg-secondary" />
 
       <ShiftMenuPause v-if="isApp" :shiftId="props.shift.id" />
@@ -99,7 +85,6 @@ const deleteDialogMenuClick = () => {
       />
 
       <DropdownMenuItem @click.stop="deleteDialogMenuClick"><X />Delete Shift </DropdownMenuItem>
-
       <DropdownMenuItem @click="signOut"> <Smile />Sign Out </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
