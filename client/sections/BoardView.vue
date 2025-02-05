@@ -22,10 +22,10 @@ const getZoneGroup = (group) => {
     <template #timeline>
       <Timeline :timeline="site.store.board.timeline" />
     </template>
-    <!-- <template #main>
-      <ZoneList :zones="getZoneGroup(1)" />
+    <template #main>
+      <ZoneList :zones="site.store.board.zoneList1" />
     </template>
-    <template #secondary>
+    <!-- <template #secondary>
       <ZoneList :zones="getZoneGroup(2)" />
 
       <BoardHeader>Off Rotation</BoardHeader>
