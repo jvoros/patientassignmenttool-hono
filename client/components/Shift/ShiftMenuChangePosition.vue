@@ -1,5 +1,5 @@
 <script setup>
-import { useApi } from "../use";
+import { useApi } from "&";
 const props = defineProps(["zoneId", "shiftId"]);
 
 const api = useApi();

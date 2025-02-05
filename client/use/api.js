@@ -13,8 +13,49 @@ export const useApi = () => {
     return { data, error };
   };
 
-  const post = (endpoint, payload = {}) => baseApi(endpoint, payload, "POST");
-  const get = (endpoint) => baseApi(endpoint, null, "GET");
+  const post = (endpoint, payload = {}) => {
+    return baseApi(endpoint, payload, "POST");
+  };
+
+  const get = (endpoint) => {
+    return baseApi(endpoint, null, "GET");
+  };
+
+  // SHIFT
+  const pauseShift = ({ shiftId }) => {
+    return post("/api/board/pauseShift", { shiftId });
+  };
+
+  const unpauseShift = ({ shiftId }) => {
+    return post("/api/board/unpauseShift", { shiftId });
+  };
+
+  const leaveZone = ({ leaveZoneId, shiftId }) => {
+    return post("/api/board/leaveZone", {
+      leaveZoneId,
+      shiftId,
+    });
+  };
+
+  const switchZone = ({ leaveZoneId, joinZoneId, shiftId }) => {
+    return post("/api/board/switchZone", {
+      leaveZoneId,
+      joinZoneId,
+      shiftId,
+    });
+  };
+
+  const joinZone = ({ joinZoneId, shiftId }) => {
+    return post("/api/board/joinZone", {
+      joinZoneId,
+      shiftId,
+    });
+  };
+
+  const deleteShift = ({ shiftId }) => {
+    return post("/api/board/deleteShift", { shiftId });
+  };
+
   // ZONE
   const advanceRotation = ({ zoneId, whichActive, direction }) =>
     post("/api/board/advanceRotation", {
@@ -22,19 +63,51 @@ export const useApi = () => {
       whichActive,
       direction,
     });
+
   // TIMELINE
-  const undo = () => post("/api/board/undo");
-  const reassign = ({ eventId, newShiftId }) =>
-    post("/api/board/reassignPatient", { eventId, newShiftId });
-  const changeRoom = ({ eventId, newRoom }) => post("/api/board/changeRoom", { eventId, newRoom });
+  const undo = () => {
+    return post("/api/board/undo");
+  };
+
+  const reassign = ({ eventId, newShiftId }) => {
+    return post("/api/board/reassignPatient", { eventId, newShiftId });
+  };
+
+  const changeRoom = ({ eventId, newRoom }) => {
+    return post("/api/board/changeRoom", { eventId, newRoom });
+  };
+
+  // ASSIGN
+  const assignToZone = ({ zoneId, patient: { mode, room } }) => {
+    return post("/api/board/assignToZone", {
+      zoneId,
+      patient: { mode, room },
+    });
+  };
+
+  const assignToShift = ({ zoneId, shiftId, patient: { mode, room } }) => {
+    return post("/api/board/assignToShift", {
+      zoneId,
+      shiftId,
+      patient: { mode, room },
+    });
+  };
 
   return {
     error: globalError,
     post,
     get,
+    pauseShift,
+    unpauseShift,
+    leaveZone,
+    switchZone,
+    joinZone,
+    deleteShift,
     advanceRotation,
     undo,
     reassign,
     changeRoom,
+    assignToZone,
+    assignToShift,
   };
 };

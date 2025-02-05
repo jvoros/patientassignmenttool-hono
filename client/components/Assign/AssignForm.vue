@@ -17,7 +17,7 @@ const formIncomplete = computed(() => {
 const api = useApi();
 const assign = () => {
   if (!props.shiftId) {
-    api.post("/api/board/assignToZone", {
+    api.assignToZone({
       zoneId: props.zoneId,
       patient: { mode: selectedType.value, room: selectedRoom.value },
     });

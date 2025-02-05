@@ -1,21 +1,19 @@
 <script setup>
 import { computed } from "vue";
 import { CirclePause, RotateCcw } from "lucide-vue-next";
-import { useApi, useSite } from "../use";
+import { useApi } from "&";
 
-const props = defineProps(["shiftId"]);
-const site = useSite();
-const shift = computed(() => site.getShift(props.shiftId));
-const isSkipped = computed(() => shift.value.skip === 1);
-const isPaused = computed(() => shift.value.skip > 1);
+const props = defineProps(["shift"]);
+const isSkipped = computed(() => props.shift.skip === 1);
+const isPaused = computed(() => props.shift.skip > 1);
 
 const api = useApi();
 const togglePause = () => {
-  const payload = { shiftId: props.shiftId };
+  const payload = { shiftId: props.shift.id };
   if (isPaused.value || isSkipped.value) {
-    api.post("/api/board/unpauseShift", payload);
+    api.unpauseShift(payload);
   } else {
-    api.post("/api/board/pauseShift", payload);
+    api.pauseShift(payload);
   }
 };
 </script>

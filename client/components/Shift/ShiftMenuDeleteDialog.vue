@@ -1,11 +1,11 @@
 <script setup>
-import { useApi } from "../use/api.js";
-const props = defineProps(["open", "shiftId", "hasPatients", "clickHandler"]);
+import { useApi } from "&";
+const props = defineProps(["open", "shiftId", "hasPatients"]);
 const emit = defineEmits(["close"]);
 
 const api = useApi();
 const deleteShiftConfirm = () => {
-  api.post("/api/board/deleteShift", { shiftId: props.shiftId });
+  api.deleteShift({ shiftId: props.shiftId });
   emit("close");
 };
 </script>
