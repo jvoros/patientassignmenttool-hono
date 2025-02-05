@@ -48,7 +48,7 @@ stream.get("/", async (c) => {
     });
 
     stream.writeSSE({
-      data: JSON.stringify(await sites[site].store.getBoard(), null, 2),
+      data: JSON.stringify(await sites[site].store.getBoardHydrated(), null, 2),
       event: "board",
     });
 

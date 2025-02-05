@@ -1,5 +1,6 @@
 import Board from "./board.js";
 import createDbConnection from "./db.js";
+import { hydrate } from "./hydrate.js";
 // BOARD STORE
 const createBoardStore = (siteName, mongoUri) => {
     const db = createDbConnection(mongoUri);
@@ -12,6 +13,10 @@ const createBoardStore = (siteName, mongoUri) => {
         const result = await db.getBoard(site);
         board = result.board;
         return board;
+    };
+    const getBoardHydrated = async () => {
+        const board = await getBoard();
+        return hydrate(board);
     };
     const refreshBoard = async () => {
         const result = await db.getBoard(site);
@@ -92,6 +97,7 @@ const createBoardStore = (siteName, mongoUri) => {
     }
     return {
         getBoard,
+        getBoardHydrated,
         refreshBoard,
         boardReset,
         saveLogs,

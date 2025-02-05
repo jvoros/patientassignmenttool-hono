@@ -5,10 +5,10 @@ const api = useApi();
 
 const store = reactive({
   board: {
+    date: "",
     timeline: [],
-    zones: {},
-    shifts: {},
-    events: {},
+    zoneList1: [],
+    zoneList2: [],
   },
   details: {
     providers: [],
@@ -19,39 +19,15 @@ const store = reactive({
 const globalError = ref();
 
 export const useSite = () => {
-  // BOARD ITEMS
-  const getBoardItem = (item, id) => {
-    const found = store.board[item][id];
-    if (!found) {
-      const error = `${item} [${id}] not found`;
-      console.error(error);
-      throw Error(error);
-    }
-    return found;
+  const getShifts = () => {
+    const allShifts = [
+      ...store.board.zoneList1.map((zone) => zone.shifts),
+      ...store.board.zoneList2.map((zone) => zone.shifts),
+    ].flat();
+    const set = new Set(allShifts);
+    return [...set];
   };
 
-  const getShift = (id) => getBoardItem("shifts", id);
-  const getZone = (id) => getBoardItem("zones", id);
-
-  // TIMELINE/EVENTS
-  const getEvent = (id) => {
-    return getBoardItem("events", id);
-  };
-  const getTimeline = () => {
-    return store.board.timeline.map((id) => getEvent(id));
-  };
-  const getSupervisor = (event) => {
-    if (!event.supervisorShift) return null;
-    return store.board.shifts[event.supervisorShift].provider;
-  };
-  const getOtherShifts = (shiftId) => {
-    const shifts = store.board.shifts;
-    return Object.keys(shifts)
-      .filter((key) => shifts[key].id !== shiftId)
-      .map((key) => shifts[key]);
-  };
-
-  // FETCH FROM DB
   const fetchBoard = async () => {
     const { data, error } = await api.get("/api/board/getBoard");
     if (!data) return;
@@ -69,6 +45,10 @@ export const useSite = () => {
   const updateBoard = (data) => {
     data.loading = false;
     store.board = data;
+  };
+
+  const setError = (message) => {
+    globalError.value = { message };
   };
 
   // STREAM
@@ -90,25 +70,14 @@ export const useSite = () => {
     });
   };
 
-  const setError = (message) => {
-    globalError.value = { message };
-  };
-
   return {
     // top level
     store,
     fetchBoard,
     fetchDetails,
-    useStream,
     error: globalError,
     setError,
-    // board items
-    getShift,
-    getZone,
-    getEvent,
-    getTimeline,
-    // other
-    getSupervisor,
-    getOtherShifts,
+    useStream,
+    getShifts,
   };
 };

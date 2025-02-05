@@ -1,12 +1,5 @@
 <script setup>
-import { computed } from "vue";
-import { useSite } from "&";
-
 const props = defineProps(["event"]);
-const site = useSite();
-
-const shift = computed(() => site.getShift(props.event.shift));
-const supervisor = computed(() => site.getSupervisor(props.event));
 </script>
 <template>
   <div
@@ -17,16 +10,16 @@ const supervisor = computed(() => site.getSupervisor(props.event));
         {{ event.time }}
       </div>
 
-      <TimelineProvider :eventId="event.id" :shift="shift" />
+      <TimelineProvider :event="event" />
 
-      <div v-if="supervisor" class="text-sm text-slate-400">
-        Super: {{ supervisor.first }} {{ supervisor.last }}
+      <div v-if="event.supervisorShift" class="text-sm text-slate-400">
+        Super: {{ event.supervisorShift.provider.first }} {{ event.supervisorShift.provider.last }}
       </div>
       <div v-if="event.type === 'reassign'" class="text-sm text-slate-400">
         {{ event.message }}
       </div>
     </div>
 
-    <TimelineRoom :eventId="event.id" :room="event.patient.room" />
+    <TimelineRoom :event="event" />
   </div>
 </template>
