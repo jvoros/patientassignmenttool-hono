@@ -32,9 +32,18 @@ export const useSite = () => {
 
   const getShift = (id) => getBoardItem("shifts", id);
   const getZone = (id) => getBoardItem("zones", id);
-  const getEvent = (id) => getBoardItem("events", id);
-  const getTimeline = () => store.board.timeline.map((id) => getEvent(id));
 
+  // TIMELINE/EVENTS
+  const getEvent = (id) => {
+    return getBoardItem("events", id);
+  };
+  const getTimeline = () => {
+    return store.board.timeline.map((id) => getEvent(id));
+  };
+  const getSupervisor = (event) => {
+    if (!event.supervisorShift) return null;
+    return store.board.shifts[event.supervisorShift].provider;
+  };
   const getOtherShifts = (shiftId) => {
     const shifts = store.board.shifts;
     return Object.keys(shifts)
@@ -99,6 +108,7 @@ export const useSite = () => {
     getEvent,
     getTimeline,
     // other
+    getSupervisor,
     getOtherShifts,
   };
 };

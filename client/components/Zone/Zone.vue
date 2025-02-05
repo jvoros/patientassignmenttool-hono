@@ -7,6 +7,6 @@ const site = useSite();
   <Loading v-if="site.store.board.loading" />
   <ZoneEmpty v-if="zone.shifts.length === 0" />
   <Shift v-for="shiftId in zone.shifts" :shift="site.getShift(shiftId)" :zone="zone" />
-  <ZoneControls :zoneType="zone.type" />
+  <ZoneControls :zone="zone" />
   <div class="mb-12"></div>
 </template>

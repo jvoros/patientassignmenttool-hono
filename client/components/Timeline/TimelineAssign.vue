@@ -6,7 +6,7 @@ const props = defineProps(["event"]);
 const site = useSite();
 
 const shift = computed(() => site.getShift(props.event.shift));
-const supervisor = computed(() => site.store.board.shifts[props.event.supervisorShift]?.provider);
+const supervisor = computed(() => site.getSupervisor(props.event));
 </script>
 <template>
   <div
@@ -16,7 +16,9 @@ const supervisor = computed(() => site.store.board.shifts[props.event.supervisor
       <div class="font-mono text-xs">
         {{ event.time }}
       </div>
+
       <TimelineProvider :eventId="event.id" :shift="shift" />
+
       <div v-if="supervisor" class="text-sm text-slate-400">
         Super: {{ supervisor.first }} {{ supervisor.last }}
       </div>
