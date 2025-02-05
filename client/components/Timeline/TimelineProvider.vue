@@ -26,7 +26,7 @@ const reassignPatient = (newShiftId) => {
       </div>
     </DropdownMenuTrigger>
 
-    <DropdownMenuContent align="start" v-if="event.shift">
+    <DropdownMenuContent align="start" v-if="event.shift" class="min-w-52">
       <DropdownMenuLabel>Reassign to:</DropdownMenuLabel>
       <DropdownMenuSeparator />
       <div v-for="shift in otherShifts">
