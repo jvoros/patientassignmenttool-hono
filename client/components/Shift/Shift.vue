@@ -15,7 +15,7 @@ const tags = computed(() => {
   }
   if (
     (zone.active.patient === shift.id && zone.type.includes("rotation")) ||
-    (zone.shifts[0] === shift.id && zone.type.includes("zone_patient"))
+    (zone.shifts[0].id === shift.id && zone.type.includes("zone_patient"))
   ) {
     tags.push("next");
   }
