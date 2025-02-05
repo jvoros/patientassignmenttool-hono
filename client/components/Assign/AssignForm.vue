@@ -22,7 +22,7 @@ const assign = () => {
       patient: { mode: selectedType.value, room: selectedRoom.value },
     });
   } else {
-    api.post("/api/board/assignToShift", {
+    api.assignToShift({
       zoneId: props.zoneId,
       shiftId: props.shiftId,
       patient: { mode: selectedType.value, room: selectedRoom.value },
