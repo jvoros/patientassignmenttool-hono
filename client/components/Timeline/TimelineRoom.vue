@@ -2,23 +2,23 @@
 import { ChevronDown } from "lucide-vue-next";
 import { useSite, useApi } from "&";
 
-const props = defineProps(["eventId", "shift", "room"]);
+const props = defineProps(["event"]);
 const site = useSite();
 const api = useApi();
 const changeRoom = (newRoom) => {
-  api.changeRoom({ eventId: props.eventId, newRoom });
+  api.changeRoom({ eventId: props.event.id, newRoom });
 };
 </script>
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger class="group">
       <div class="text-xl font-bold">
-        {{ room }}
+        {{ event.patient.room }}
         <ChevronDown class="invisible inline group-hover:visible" size="14" />
       </div>
     </DropdownMenuTrigger>
 
-    <DropdownMenuContent align="end" v-if="room" class="w-4">
+    <DropdownMenuContent align="end" v-if="event.patient.room" class="w-4">
       <DropdownMenuLabel>New room:</DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuItem class="p-0 focus:bg-white dark:focus:bg-background">

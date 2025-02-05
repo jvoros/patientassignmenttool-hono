@@ -12,7 +12,7 @@ export const sites = {
 };
 
 const broadcastBoard = async (site) => {
-  const board = await sites[site].store.getBoard();
+  const board = await sites[site].store.getBoardHydrated();
   console.log(`[${site}] board broadcasted`);
   broadcast(sites[site].clients, "board", board);
 };

@@ -1,12 +1,11 @@
 <script setup>
-import { useSite } from "&";
-const site = useSite();
+defineProps(["timeline"]);
 </script>
 <template>
   <BoardHeader>Timeline</BoardHeader>
   <InstructionBox> Click provider or room number to change. </InstructionBox>
   <TimelineLine>
-    <template v-for="(event, index) in site.getTimeline()">
+    <template v-for="(event, index) in timeline">
       <TimelineNode :event="event" />
       <TimelineUndo v-if="index === 0" />
     </template>

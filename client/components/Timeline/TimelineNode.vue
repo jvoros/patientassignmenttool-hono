@@ -2,7 +2,7 @@
 import { computed } from "vue";
 
 const props = defineProps(["event"]);
-const type = computed(() => (props.event.type.includes("assign") ? "assign" : "info"));
+const type = computed(() => (props.event.type?.includes("assign") ? "assign" : "info"));
 const icon = computed(() => (type.value === "assign" ? props.event.patient.mode : "event"));
 
 const styles = {
@@ -16,7 +16,7 @@ const classes = computed(() => styles.base + " " + styles[type.value]);
   <div :class="classes">
     <TimelineIcon :icon="icon" />
     <div class="w-full">
-      <TimelineAssign :event="props.event" v-if="type.includes('assign')" />
+      <TimelineAssign :event="props.event" v-if="type === 'assign'" />
       <TimelineInfo :event="props.event" v-else />
     </div>
   </div>
