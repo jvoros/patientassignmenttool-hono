@@ -25,11 +25,8 @@ const getZoneGroup = (group) => {
     <template #main>
       <ZoneList :zones="site.store.board.zoneList1" />
     </template>
-    <!-- <template #secondary>
-      <ZoneList :zones="getZoneGroup(2)" />
-
-      <BoardHeader>Off Rotation</BoardHeader>
-      <Zone v-if="site.store.board.zones.off" :zone="site.getZone('off')" />
-    </template> -->
+    <template #secondary>
+      <ZoneList :zones="site.store.board.zoneList2" />
+    </template>
   </BoardLayout>
 </template>
