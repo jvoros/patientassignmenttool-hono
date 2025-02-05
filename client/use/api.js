@@ -15,6 +15,14 @@ export const useApi = () => {
 
   const post = (endpoint, payload = {}) => baseApi(endpoint, payload, "POST");
   const get = (endpoint) => baseApi(endpoint, null, "GET");
+  // ZONE
+  const advanceRotation = ({ zoneId, whichActive, direction }) =>
+    post("/api/board/advanceRotation", {
+      zoneId,
+      whichActive,
+      direction,
+    });
+  // TIMELINE
   const undo = () => post("/api/board/undo");
   const reassign = ({ eventId, newShiftId }) =>
     post("/api/board/reassignPatient", { eventId, newShiftId });
@@ -24,6 +32,7 @@ export const useApi = () => {
     error: globalError,
     post,
     get,
+    advanceRotation,
     undo,
     reassign,
     changeRoom,
