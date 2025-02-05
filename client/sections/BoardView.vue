@@ -19,14 +19,16 @@ const getZoneGroup = (group) => {
 <template>
   <Nav />
   <BoardLayout>
-    <template v-slot:timeline>
+    <template #timeline>
       <Timeline />
     </template>
-    <template v-slot:main>
+    <template #main>
       <ZoneList :zones="getZoneGroup(1)" />
     </template>
-    <template v-slot:secondary>
+    <template #secondary>
       <ZoneList :zones="getZoneGroup(2)" />
+
+      <BoardHeader>Off Rotation</BoardHeader>
       <Zone v-if="site.store.board.zones.off" :zone="site.getZone('off')" />
     </template>
   </BoardLayout>

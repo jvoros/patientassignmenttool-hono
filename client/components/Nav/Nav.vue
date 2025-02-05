@@ -1,7 +1,7 @@
 <script setup>
 import { useColorMode } from "@vueuse/core";
 import { Sun, Moon, LogOut } from "lucide-vue-next";
-import { useAuth } from "../use";
+import { useAuth } from "&";
 
 const auth = useAuth();
 
