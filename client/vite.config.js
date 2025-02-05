@@ -35,6 +35,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("/shadcn-vue", import.meta.url)),
+      "&": fileURLToPath(new URL("/use", import.meta.url)),
     },
   },
 });

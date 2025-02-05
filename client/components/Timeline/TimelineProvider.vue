@@ -1,22 +1,13 @@
 <script setup>
-import { computed } from "vue";
 import { ChevronDown } from "lucide-vue-next";
-import { useSite, useApi } from "../use";
+import { useSite, useApi } from "&";
+const props = defineProps(["eventId", "shift"]);
 
 const site = useSite();
 const api = useApi();
 
-const props = defineProps(["eventId", "shift"]);
-
-const otherShifts = computed(() => {
-  const shifts = site.store.board.shifts;
-  return Object.keys(shifts)
-    .filter((key) => shifts[key].id !== props.shift.id)
-    .map((key) => shifts[key]);
-});
-
 const reassignPatient = (newShiftId) => {
-  api.post("/api/board/reassignPatient", { eventId: props.eventId, newShiftId });
+  api.reassign({ eventId: props.eventId, newShiftId });
 };
 </script>
 <template>
@@ -28,11 +19,10 @@ const reassignPatient = (newShiftId) => {
       </div>
     </DropdownMenuTrigger>
 
-    <!-- PROVIDER -->
     <DropdownMenuContent align="start" v-if="shift">
       <DropdownMenuLabel>Reassign to:</DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <div v-for="shift in otherShifts">
+      <div v-for="shift in site.getOtherShifts(props.shift.id)">
         <DropdownMenuItem class="px-4" @click="reassignPatient(shift.id)">
           {{ shift?.provider.first }} {{ shift?.provider.last }}
         </DropdownMenuItem>

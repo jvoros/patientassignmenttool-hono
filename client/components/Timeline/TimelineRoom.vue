@@ -1,14 +1,12 @@
 <script setup>
-import { computed } from "vue";
 import { ChevronDown } from "lucide-vue-next";
-import { useSite, useApi } from "../use";
+import { useSite, useApi } from "&";
 
 const props = defineProps(["eventId", "shift", "room"]);
 const site = useSite();
 const api = useApi();
-const details = computed(() => site.store.details);
 const changeRoom = (newRoom) => {
-  api.post("/api/board/changeRoom", { eventId: props.eventId, newRoom });
+  api.changeRoom({ eventId: props.eventId, newRoom });
 };
 </script>
 <template>
@@ -25,7 +23,7 @@ const changeRoom = (newRoom) => {
       <DropdownMenuSeparator />
       <DropdownMenuItem class="p-0 focus:bg-white dark:focus:bg-background">
         <ScrollArea class="w-full h-44">
-          <div v-for="room in details.rooms">
+          <div v-for="room in site.store.details.rooms">
             <div
               class="py-1 pl-6 text-sm hover:bg-secondary hover:cursor-pointer"
               @click="changeRoom(room)"

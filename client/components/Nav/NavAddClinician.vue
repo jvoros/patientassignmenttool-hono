@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { Stethoscope, ChevronDown } from "lucide-vue-next";
-import { useApi, useSite } from "../use";
+import { useApi, useSite } from "&";
 
 const site = useSite();
 const open = ref(false);

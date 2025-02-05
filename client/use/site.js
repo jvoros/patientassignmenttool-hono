@@ -33,6 +33,14 @@ export const useSite = () => {
   const getShift = (id) => getBoardItem("shifts", id);
   const getZone = (id) => getBoardItem("zones", id);
   const getEvent = (id) => getBoardItem("events", id);
+  const getTimeline = () => store.board.timeline.map((id) => getEvent(id));
+
+  const getOtherShifts = (shiftId) => {
+    const shifts = store.board.shifts;
+    return Object.keys(shifts)
+      .filter((key) => shifts[key].id !== shiftId)
+      .map((key) => shifts[key]);
+  };
 
   // FETCH FROM DB
   const fetchBoard = async () => {
@@ -78,14 +86,19 @@ export const useSite = () => {
   };
 
   return {
+    // top level
     store,
-    getShift,
-    getZone,
-    getEvent,
     fetchBoard,
     fetchDetails,
     useStream,
     error: globalError,
     setError,
+    // board items
+    getShift,
+    getZone,
+    getEvent,
+    getTimeline,
+    // other
+    getOtherShifts,
   };
 };
