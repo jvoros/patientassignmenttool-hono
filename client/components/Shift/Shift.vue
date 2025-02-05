@@ -79,7 +79,7 @@ const supervisorTotal = () => props.shift.counts.supervisor ?? 0;
       <div class="text-[.8rem] font-bold uppercase">
         {{ shift.name }}
       </div>
-      <ShiftMenu :shift="shift" :zoneId="zone.id" />
+      <ShiftMenu :shift="shift" :zone="zone" />
     </div>
 
     <!-- CONTENT  -->

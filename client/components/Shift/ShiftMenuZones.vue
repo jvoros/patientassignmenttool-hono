@@ -1,21 +1,20 @@
 <script setup>
 import { computed } from "vue";
 import { SquareArrowOutUpLeft, ArrowRightLeft, SquarePlus } from "lucide-vue-next";
-import { useSite, useApi } from "../use";
+import { useSite, useApi } from "&";
 
 const props = defineProps(["zoneId", "shiftId", "isApp", "cannotLeave"]);
 const site = useSite();
 
-const isInOtherZones = computed(() => {
-  const zones = site.store.board.zones;
-  return (
-    Object.keys(zones).filter((zoneId) => zones[zoneId].shifts.includes(props.shiftId)).length > 1
+const otherZones = computed(() => {
+  return [...site.store.board.zoneList1, ...site.store.board.zoneList2].filter(
+    (zone) => zone.id !== props.zoneId && zone.id !== "off"
   );
 });
 
-const otherZones = computed(() =>
-  Object.keys(site.store.board.zones).filter((key) => key !== props.zoneId && key !== "off")
-);
+const isInOtherZones = computed(() => {
+  return otherZones.value.some((zone) => zone.shifts.some((shift) => shift.id === props.shiftId));
+});
 
 const api = useApi();
 const leaveZone = () => {
@@ -25,7 +24,7 @@ const leaveZone = () => {
     site.setError(error);
     return;
   }
-  api.post("/api/board/leaveZone", {
+  api.leaveZone({
     leaveZoneId: props.zoneId,
     shiftId: props.shiftId,
   });
@@ -38,7 +37,7 @@ const switchZone = (joinZoneId) => {
     site.setError(error);
     return;
   }
-  api.post("/api/board/switchZone", {
+  api.switchZone({
     leaveZoneId: props.zoneId,
     joinZoneId: joinZoneId,
     shiftId: props.shiftId,
@@ -46,7 +45,7 @@ const switchZone = (joinZoneId) => {
 };
 
 const joinZone = (joinZoneId) => {
-  api.post("/api/board/joinZone", {
+  api.joinZone({
     joinZoneId,
     shiftId: props.shiftId,
   });
@@ -62,8 +61,8 @@ const joinZone = (joinZoneId) => {
       <ArrowRightLeft size="14" class="mr-2" />Switch Zones
     </DropdownMenuSubTrigger>
     <DropdownMenuSubContent class="bg-white dark:bg-background">
-      <DropdownMenuItem v-for="zoneId in otherZones" @click="switchZone(zoneId)">
-        {{ site.store.board.zones[zoneId].name }}
+      <DropdownMenuItem v-for="zone in otherZones" @click="switchZone(zone.id)">
+        {{ zone.name }}
       </DropdownMenuItem>
     </DropdownMenuSubContent>
   </DropdownMenuSub>
@@ -73,8 +72,8 @@ const joinZone = (joinZoneId) => {
       <SquarePlus size="14" class="mr-2" />Join Additional Zone
     </DropdownMenuSubTrigger>
     <DropdownMenuSubContent class="bg-white dark:bg-background">
-      <DropdownMenuItem v-for="zoneId in otherZones" @click="joinZone(zoneId)">
-        {{ site.store.board.zones[zoneId].name }}
+      <DropdownMenuItem v-for="zone in otherZones" @click="joinZone(zone.id)">
+        {{ zone.name }}
       </DropdownMenuItem>
     </DropdownMenuSubContent>
   </DropdownMenuSub>

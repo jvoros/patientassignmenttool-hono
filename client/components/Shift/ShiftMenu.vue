@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed } from "vue";
-import { useApi, useSite } from "../use";
+import { useApi, useSite } from "&";
 import { Menu, UserPlus, Smile, X } from "lucide-vue-next";
 
-const props = defineProps(["shift", "zoneId"]);
+const props = defineProps(["shift", "zone"]);
 
 const api = useApi();
 const site = useSite();
@@ -12,11 +12,8 @@ const site = useSite();
 const isApp = computed(() => props.shift.role === "app");
 const hasPatients = computed(() => Object.values(props.shift.counts).length > 0);
 const cannotLeave = computed(() => {
-  const zone = site.getZone(props.zoneId);
-  const docCount = zone.shifts.filter(
-    (shiftId) => site.getShift(shiftId).role === "physician"
-  ).length;
-  return !isApp.value && zone.type.includes("super") && docCount < 2;
+  const docCount = props.zone.shifts.filter((shift) => shift.role === "physician").length;
+  return !isApp.value && props.zone.type.includes("super") && docCount < 2;
 });
 
 // DIALOGS
@@ -70,16 +67,16 @@ const deleteDialogMenuClick = () => {
       <DropdownMenuLabel>Shift Tools</DropdownMenuLabel>
       <DropdownMenuSeparator class="bg-secondary" />
 
-      <ShiftMenuChangePosition :zoneId="props.zoneId" :shiftId="props.shift.id" />
+      <ShiftMenuChangePosition :zoneId="props.zone.id" :shiftId="props.shift.id" />
 
       <DropdownMenuItem @click="assignDialogToggle"> <UserPlus />Assign Patient </DropdownMenuItem>
       <DropdownMenuSeparator class="bg-secondary" />
 
-      <ShiftMenuPause v-if="isApp" :shiftId="props.shift.id" />
+      <ShiftMenuPause v-if="isApp" :shift="shift" />
 
       <ShiftMenuZones
         :shiftId="props.shift.id"
-        :zoneId="props.zoneId"
+        :zoneId="props.zone.id"
         :isApp="isApp"
         :cannotLeave="cannotLeave"
       />
@@ -99,7 +96,7 @@ const deleteDialogMenuClick = () => {
   <ShiftMenuAssignDialog
     :open="assignDialogOpen"
     @close="assignDialogToggle"
-    :zoneId="zoneId"
+    :zoneId="props.zone.id"
     :shiftId="shift.id"
   />
 </template>
