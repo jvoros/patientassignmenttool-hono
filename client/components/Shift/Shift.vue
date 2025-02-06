@@ -54,7 +54,7 @@ const getClasses = () => {
       content: "text-ft-foreground dark:bg-background",
     };
   }
-  return { box: "bg-white dark:bg-background", content: "" };
+  return { box: "bg-white border-outline dark:bg-background", content: "" };
 };
 
 // counts
@@ -64,7 +64,7 @@ const supervisorTotal = () => props.shift.counts.supervisor ?? 0;
 </script>
 
 <template>
-  <div class="my-4 overflow-hidden border rounded-md border-outline" :class="getClasses().box">
+  <div class="my-4 overflow-hidden border rounded-md" :class="getClasses().box">
     <!-- NEXT FLAG -->
     <div
       class="font-bold text-white uppercase bg-next-outline rounded-t-sm text-[0.7rem] text-center"
