@@ -19,11 +19,27 @@ module.exports = {
     },
     extend: {
       colors: {
+        // my custom colors
+        foreground2: "hsl(var(--foreground2))",
+        outline: "hsl(var(--input))",
+        ft: {
+          DEFAULT: "hsl(var(--ft))",
+          foreground: "hsl(var(--ft-foreground))",
+          outline: "hsl(var(--ft-outline))",
+        },
+        next: {
+          DEFAULT: "hsl(var(--next))",
+          foreground: "hsl(var(--next-foreground))",
+          outline: "hsl(var(--next-outline))",
+        },
+
+        // shadcn theme colors
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

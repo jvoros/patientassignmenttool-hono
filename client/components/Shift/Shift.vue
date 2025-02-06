@@ -38,23 +38,23 @@ const tags = computed(() => {
 const getClasses = () => {
   if (tags.value.includes("off")) {
     return {
-      box: "bg-muted border-slate-200 dark:border-slate-600 dark:bg-slate-800",
-      content: "text-muted-foreground",
+      box: "bg-outline border-outline dark:bg-muted",
+      content: "text-foreground2",
     };
   }
   if (tags.value.includes("rotation") && tags.value.includes("next")) {
     return {
-      box: "border-amber-300 bg-amber-50 dark:bg-slate-800 dark:border-amber-200",
+      box: "border-next-outline bg-next dark:bg-muted",
       content: "",
     };
   }
   if (tags.value.includes("ft")) {
     return {
-      box: "bg-green-50 border-green-600 dark:bg-slate-800 dark:border-green-100",
-      content: "text-green-800 dark:text-green-300",
+      box: "bg-ft border-ft-outline",
+      content: "text-ft-foreground dark:bg-background",
     };
   }
-  return { box: "bg-white dark:bg-slate-800", content: "dark:bg-slate-800" };
+  return { box: "bg-white dark:bg-background", content: "" };
 };
 
 // counts
@@ -64,17 +64,17 @@ const supervisorTotal = () => props.shift.counts.supervisor ?? 0;
 </script>
 
 <template>
-  <div class="my-4 border rounded-md dark:border-slate-400" :class="getClasses().box">
+  <div class="my-4 overflow-hidden border rounded-md border-outline" :class="getClasses().box">
     <!-- NEXT FLAG -->
     <div
-      class="font-bold text-white uppercase bg-amber-300 rounded-t-sm text-[0.7rem] text-center dark:bg-amber-400 dark:text-amber-100"
+      class="font-bold text-white uppercase bg-next-outline rounded-t-sm text-[0.7rem] text-center"
       v-if="tags.includes('next') && tags.includes('rotation')"
     >
       next
     </div>
     <!-- SHIFT NAME & MENU BAR -->
     <div
-      class="flex items-center justify-between px-2 py-1 bg-slate-500/10 dark:bg-white/10 dark:text-slate-400 first:rounded-t-md text-slate-500"
+      class="flex items-center justify-between px-2 py-1 bg-outline dark:bg-muted text-muted-foreground"
     >
       <div class="text-[.8rem] font-bold uppercase">
         {{ shift.name }}
@@ -91,7 +91,7 @@ const supervisorTotal = () => props.shift.counts.supervisor ?? 0;
       <div>
         <h4 class="text-2xl font-bold">{{ shift.provider.first }} {{ shift.provider.last }}</h4>
 
-        <div class="my-2 font-mono text-xs text-slate-500 dark:text-slate-400">
+        <div class="my-2 font-mono text-xs text-muted-foreground">
           Total: {{ patientTotal() }} &#x2022; Supervisor: {{ supervisorTotal() }}
         </div>
       </div>

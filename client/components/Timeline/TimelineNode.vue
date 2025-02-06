@@ -7,8 +7,8 @@ const icon = computed(() => (type.value === "assign" ? props.event.patient.mode 
 
 const styles = {
   base: "flex gap-4 -ml-[22px]",
-  info: "items-start pt-4 pb-8  text-slate-400",
-  assign: "items-center py-2 text-slate-500 dark:text-slate-400",
+  info: "items-start pt-4 pb-8  text-muted-foreground",
+  assign: "items-center py-2 text-foreground2",
 };
 const classes = computed(() => styles.base + " " + styles[type.value]);
 </script>
