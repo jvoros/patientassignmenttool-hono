@@ -1,55 +1,45 @@
-import { MongoClient, ServerApiVersion } from "mongodb";
-const createDbConnection = (mongoUri) => {
-    const client = new MongoClient(mongoUri, {
-        serverApi: {
-            version: ServerApiVersion.v1,
-            strict: true,
-            deprecationErrors: true,
-        },
-    });
+import { PrismaClient } from "@prisma/client";
+import { withAccelerate } from "@prisma/extension-accelerate";
+const createDbConnection = () => {
+    const prisma = new PrismaClient().$extends(withAccelerate());
     const getSiteComplete = async (site) => {
-        const database = client.db("pat");
-        const collection = database.collection("boards");
-        return await collection.findOne({
-            site,
+        return await prisma.site.findFirst({
+            where: { site },
         });
     };
     const getSiteDetails = async (site) => {
-        const database = client.db("pat");
-        const collection = database.collection("boards");
-        return await collection.findOne({ site }, { projection: { site: 1, details: 1 } });
+        return await prisma.site.findFirst({
+            where: { site },
+            select: { details: true },
+        });
     };
     const getBoard = async (site) => {
-        const database = client.db("pat");
-        const collection = database.collection("boards");
-        return await collection.findOne({ site }, { projection: { site: 1, board: 1 } });
+        return await prisma.site.findFirst({
+            where: { site },
+            select: { board: true },
+        });
     };
     const updateBoard = async (site, board) => {
-        const database = client.db("pat");
-        const collection = database.collection("boards");
-        return await collection.updateOne({ site }, { $set: { board } });
+        return await prisma.site.update({
+            where: { site },
+            data: { board },
+        });
     };
     const saveLogs = async (logs) => {
-        const database = client.db("pat");
-        const collection = database.collection("logs");
-        return await collection.bulkWrite(logs.map((log) => ({
-            updateOne: {
-                filter: { date: log.date, site: log.site, shift: log.shift },
-                update: { $set: log },
-                upsert: true,
-            },
-        })));
+        const date = logs[0].date;
+        const site = logs[0].site;
+        prisma.$transaction([
+            prisma.log.deleteMany({ where: { date: date, site: site } }),
+            prisma.log.createMany({ data: logs }),
+        ]);
     };
     const tryCatchWrap = (fn) => async (...args) => {
         try {
-            await client.connect();
-            return await fn(...args);
+            const result = await fn(...args);
+            return result;
         }
         catch (err) {
             console.error(err);
-        }
-        finally {
-            //await client.close();
         }
     };
     return {

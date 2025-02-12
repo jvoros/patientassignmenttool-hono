@@ -1,9 +1,9 @@
 import Board from "./board.js";
 import createDbConnection from "./db.js";
-import { hydrate } from "./hydrate.js";
+import hydrate from "./hydrate.js";
 // BOARD STORE
-const createBoardStore = (siteName, mongoUri) => {
-    const db = createDbConnection(mongoUri);
+const createBoardStore = (siteName) => {
+    const db = createDbConnection();
     let board;
     const site = siteName ?? "default";
     const getBoard = async () => {
@@ -39,10 +39,6 @@ const createBoardStore = (siteName, mongoUri) => {
     const saveLogs = async () => {
         try {
             const result = await db.saveLogs(buildLogs(site, await getBoard()));
-            console.log("saveLogs: ", result);
-            if (result.insertedCount + result.modifiedCount === 0) {
-                throw new Error("Failed to save logs");
-            }
             return result;
         }
         catch (error) {
@@ -73,22 +69,16 @@ const createBoardStore = (siteName, mongoUri) => {
     };
     // APPLY UPDATE
     const applyUpdate = (fn) => async (...args) => {
+        const newBoard = fn(await getBoard(), ...args);
         try {
-            const newBoard = fn(await getBoard(), ...args);
-            board = newBoard;
-            // don't need to wait on database to update
-            // start promise and return immediately
-            db.updateBoard(site, newBoard).then((result) => {
-                if (result.modifiedCount !== 1) {
-                    console.error("Failed to update database");
-                }
-            });
-            return { success: true, board: newBoard };
+            await db.updateBoard(site, newBoard);
         }
         catch (err) {
             console.error(err);
             return { success: false, error: err };
         }
+        board = newBoard;
+        return { success: true, board: newBoard };
     };
     // EXPORTS
     const wrappedBoard = {};
