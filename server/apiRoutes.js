@@ -1,7 +1,7 @@
 import { Hono } from "hono";
-import auth from "./auth.js";
-import board from "./board.js";
-import stream from "./stream.js";
+import auth from "./authRoutes.js";
+import board from "./boardRoutes.js";
+import stream from "./streamRoutes.js";
 
 const api = new Hono();
 

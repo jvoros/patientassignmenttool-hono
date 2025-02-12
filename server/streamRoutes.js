@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { jwt } from "hono/jwt";
 import { streamSSE } from "hono/streaming";
 import ShortUniqueId from "short-unique-id";
-import { sites } from "./board.js";
+import { sites } from "./boardRoutes.js";
 import hydrate from "./core/hydrate.js";
 
 // setup

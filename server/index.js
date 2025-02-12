@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
-import api from "./api.js";
+import api from "./apiRoutes.js";
 
 const app = new Hono();
 

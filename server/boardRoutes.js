@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
 import BoardCore from "./core/board.js";
-import { broadcast } from "./stream.js";
+import { broadcast } from "./streamRoutes.js";
 
 const boardRoutes = new Hono();
 const prisma = new PrismaClient().$extends(withAccelerate());
