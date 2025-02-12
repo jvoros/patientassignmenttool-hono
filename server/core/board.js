@@ -2,6 +2,8 @@ import Shift from "./shift.js";
 import Zone from "./zone.js";
 import Undo from "./undo.js";
 import Assign from "./assign.js";
+import hydrate from "./hydrate.js";
+import buildLogs from "./logs.js";
 import { getMountainTimeDateString } from "./dates.js";
 const reset = Undo.produce((draft) => {
     draft.date = getMountainTimeDateString();
@@ -164,6 +166,7 @@ const unpauseShift = Undo.produce((draft, shiftId) => {
     };
     return eventParams;
 });
+// LOGS
 export default {
     reset,
     undo: Undo.undo,
@@ -181,4 +184,6 @@ export default {
     assignToZone: Assign.assignToZone,
     reassignPatient: Assign.reassignPatient,
     changeRoom: Assign.changeRoom,
+    buildLogs,
+    hydrate,
 };

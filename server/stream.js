@@ -3,6 +3,7 @@ import { jwt } from "hono/jwt";
 import { streamSSE } from "hono/streaming";
 import ShortUniqueId from "short-unique-id";
 import { sites } from "./board.js";
+import hydrate from "./core/hydrate.js";
 
 // setup
 const stream = new Hono();
@@ -48,7 +49,7 @@ stream.get("/", async (c) => {
     });
 
     stream.writeSSE({
-      data: JSON.stringify(await sites[site].store.getBoardHydrated(), null, 2),
+      data: JSON.stringify(hydrate(sites[site].board), null, 2),
       event: "board",
     });
 

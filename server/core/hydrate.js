@@ -34,7 +34,7 @@ const hydrateTimeline = (board) => {
         .map(trimEvent)
         .map((event) => getEventShifts(board, event));
 };
-export const hydrate = (board) => {
+export default (board) => {
     return {
         date: board.date,
         zoneList1: hydrateZoneList(board, 1),
