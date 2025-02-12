@@ -3,7 +3,7 @@ import { jwt } from "hono/jwt";
 import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
-import BoardCore from "./core/board.js";
+import BoardCore from "../core/board.js";
 import { broadcast } from "./streamRoutes.js";
 
 const boardRoutes = new Hono();

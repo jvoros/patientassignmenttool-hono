@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev:client": "vite client",
-    "dev:server": "node --env-file=.dev.env --watch server/index.js",
+    "dev:server": "node --env-file=.env --watch server/index.js",
     "dev": "concurrently -k -p \"[{name}]\" -n \"client,server\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run dev:client\" \"npm run dev:server\"",
     "build:client": "vite build client",
     "build": "npm run build:client",

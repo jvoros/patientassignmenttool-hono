@@ -3,7 +3,7 @@ import { jwt } from "hono/jwt";
 import { streamSSE } from "hono/streaming";
 import ShortUniqueId from "short-unique-id";
 import { sites } from "./boardRoutes.js";
-import hydrate from "./core/hydrate.js";
+import hydrate from "../core/hydrate.js";
 
 // setup
 const stream = new Hono();
