@@ -5,15 +5,7 @@ const site = useSite();
 site.fetchBoard();
 site.fetchDetails();
 site.useStream();
-
 useErrorBoundary();
-
-const getZoneGroup = (group) => {
-  const filteredZones = Object.values(site.store.board.zones).filter(
-    (zone) => zone.order >= group * 10 && zone.order < group * 10 + 10
-  );
-  return filteredZones.sort((a, b) => a.order - b.order);
-};
 </script>
 
 <template>

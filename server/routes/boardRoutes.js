@@ -18,6 +18,8 @@ const getBoard = async (site) => {
   return data.board;
 };
 
+const getBoardHydrated = (site) => BoardCore.hydrate(sites[site].board);
+
 const getSiteDetails = async (site) => {
   const data = await prisma.site.findFirst({
     where: { site },
@@ -28,7 +30,7 @@ const getSiteDetails = async (site) => {
 
 const broadcastBoard = async (site) => {
   console.log(`[${site}] board broadcasted`);
-  broadcast(sites[site].clients, "board", BoardCore.hydrate(sites[site].board));
+  broadcast(sites[site].clients, "board", getBoardHydrated(site));
 };
 
 // SETUP SITES
@@ -40,6 +42,11 @@ export const sites = {
   },
 };
 
+const refreshSiteFromDatabase = async (site) => {
+  sites[site].board = await getBoard(site);
+  sites[site].details = await getSiteDetails(site);
+};
+
 // MIDDLEWARE
 boardRoutes.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 
@@ -47,12 +54,19 @@ boardRoutes.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 
 boardRoutes.get("/getBoard", async (c) => {
   const site = c.get("jwtPayload").site;
-  return c.json({ data: sites[site].board });
+  return c.json({ data: getBoardHydrated(site) });
 });
 
 boardRoutes.get("/getSiteDetails", async (c) => {
   const site = c.get("jwtPayload").site;
   return c.json({ data: sites[site].details });
+});
+
+boardRoutes.get("/refreshSiteFromDatabase", async (c) => {
+  const site = c.get("jwtPayload").site;
+  await refreshSiteFromDatabase(site);
+  broadcastBoard(site);
+  return c.text("Site Refreshed");
 });
 
 boardRoutes.post("/boardReset", async (c) => {
