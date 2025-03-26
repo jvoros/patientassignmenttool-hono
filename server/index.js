@@ -1,11 +1,11 @@
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
-import api from "./routes/apiRoutes.js";
+import apiRoutes from "./routes/apiRoutes.js";
 
 const app = new Hono();
 
-app.route("/api", api);
+app.route("/api", apiRoutes);
 
 // VITE BUILT FILES
 
