@@ -18,7 +18,7 @@ app.get("/*", serveStatic({ root: "./dist/client" }));
 app.get("/", serveStatic({ path: "./dist/client" }));
 
 // START
-const port = 3000;
+const port = 8080;
 console.log(`Server is running on http://localhost:${port}`);
 
 serve({
