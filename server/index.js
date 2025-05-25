@@ -11,11 +11,11 @@ app.route("/api", apiRoutes);
 
 // paths relative to project root, not this file
 // client/assets
-app.get("/assets/*", serveStatic({ root: "./dist/client" }));
+app.get("/assets/*", serveStatic({ root: "./dist/client/assets" }));
 // client/public
 app.get("/*", serveStatic({ root: "./dist/client" }));
 // client/index.html
-app.get("/", serveStatic({ path: "./dist/client" }));
+app.get("/", serveStatic({ path: "./dist/client/index.html" }));
 
 // START
 const port = 8080;
