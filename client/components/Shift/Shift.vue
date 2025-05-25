@@ -54,7 +54,7 @@ const getClasses = () => {
       content: "text-ft-foreground dark:bg-background",
     };
   }
-  return { box: "bg-white border-outline dark:bg-background", content: "" };
+  return { box: "bg-white border-outline dark:bg-background", content: "text-foreground1" };
 };
 
 // counts

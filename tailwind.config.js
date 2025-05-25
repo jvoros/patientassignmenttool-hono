@@ -20,6 +20,7 @@ module.exports = {
     extend: {
       colors: {
         // my custom colors
+        foreground1: "hsl(var(--foreground1))",
         foreground2: "hsl(var(--foreground2))",
         outline: "hsl(var(--input))",
         ft: {

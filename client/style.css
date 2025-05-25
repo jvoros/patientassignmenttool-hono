@@ -14,7 +14,6 @@ html {
     /* shadcn theme with my mods annotated */
     --background: 0 0% 98%; /* zinc-50 */
     --foreground: 240 10% 3.9%;
-    --foreground2: 240 3.8% 46.1%; /* zinc-500 */
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
@@ -40,6 +39,9 @@ html {
     --chart-5: 27 87% 67%;
 
     /* my styles */
+    --foreground1: 240, 5%, 26%; /* zinc-700 */
+    --foreground2: 240 3.8% 46.1%; /* zinc-500 */
+
     --ft: 138.5 76.5% 96.7%; /* green-50 */
     --ft-foreground: 142.8 64.2% 24.1%; /* green-800 */
     --ft-outline: 142.1 76.2% 36.3%; /* green-600 */
