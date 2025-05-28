@@ -55,6 +55,7 @@ streamRoutes.get("/", async (c) => {
 
     while (true) {
       //console.log(clients);
+      console.log("start of while loop");
       await stream.writeSSE({
         data: ": keep-alive",
         event: "ping",
