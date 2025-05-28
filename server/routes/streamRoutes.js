@@ -6,7 +6,7 @@ import { sites } from "./boardRoutes.js";
 import hydrate from "../core/hydrate.js";
 
 // setup
-const stream = new Hono();
+const streamRoutes = new Hono();
 const uid = new ShortUniqueId({ length: 6 });
 
 // helpers
@@ -26,10 +26,10 @@ export const broadcast = async (clients, event, data) => {
 };
 
 // middleware
-stream.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
+streamRoutes.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 
 // routes
-stream.get("/", async (c) => {
+streamRoutes.get("/", async (c) => {
   const { site, id } = c.get("jwtPayload");
   const clients = sites[site].clients;
   return streamSSE(c, async (stream) => {
@@ -64,4 +64,4 @@ stream.get("/", async (c) => {
   });
 });
 
-export default stream;
+export default streamRoutes;
