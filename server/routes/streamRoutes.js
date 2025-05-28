@@ -37,31 +37,25 @@ streamRoutes.get("/", async (c) => {
     if (!SITE_INCLUDES_CLIENT(site, id)) clients.push({ id, stream });
     console.log(`[${site}](clients: ${clients.length}) ${id} connected to stream`);
 
-    // remove client from list when they disconnect
-    stream.onAbort(() => {
-      sites[site].clients = clients.filter((c) => c.id !== id);
-      console.log(`[${site}](clients: ${clients.length}) ${id} disconnected from stream`);
-    });
+    while (SITE_INCLUDES_CLIENT(site, id)) {
+      // remove client from list when they disconnect
+      stream.onAbort(() => {
+        sites[site].clients = clients.filter((c) => c.id !== id);
+        console.log(`[${site}](clients: ${clients.length}) ${id} disconnected from stream`);
+      });
 
-    stream.writeSSE({
-      data: `connected to stream (${site}) with id (${id})`,
-      event: "message",
-    });
+      stream.writeSSE({
+        data: `connected to stream (${site}) with id (${id})`,
+        event: "message",
+      });
 
-    stream.writeSSE({
-      data: JSON.stringify(hydrate(sites[site].board), null, 2),
-      event: "board",
-    });
+      stream.writeSSE({
+        data: JSON.stringify(hydrate(sites[site].board), null, 2),
+        event: "board",
+      });
 
-    // while (true) {
-    //   //console.log(clients);
-    //   console.log("start of while loop");
-    //   await stream.writeSSE({
-    //     data: ": keep-alive",
-    //     event: "ping",
-    //   });
-    //   await stream.sleep(15000);
-    // }
+      await stream.sleep(15000);
+    }
   });
 });
 
