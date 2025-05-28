@@ -53,15 +53,15 @@ streamRoutes.get("/", async (c) => {
       event: "board",
     });
 
-    while (true) {
-      //console.log(clients);
-      console.log("start of while loop");
-      await stream.writeSSE({
-        data: ": keep-alive",
-        event: "ping",
-      });
-      await stream.sleep(15000);
-    }
+    // while (true) {
+    //   //console.log(clients);
+    //   console.log("start of while loop");
+    //   await stream.writeSSE({
+    //     data: ": keep-alive",
+    //     event: "ping",
+    //   });
+    //   await stream.sleep(15000);
+    // }
   });
 });
 
