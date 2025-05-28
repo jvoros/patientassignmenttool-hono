@@ -53,7 +53,7 @@ streamRoutes.get("/", async (c) => {
       event: "board",
     });
 
-    while (SITE_INCLUDES_CLIENT(site, id)) {
+    while (true) {
       //console.log(clients);
       await stream.writeSSE({
         data: ": keep-alive",
