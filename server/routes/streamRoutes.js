@@ -32,12 +32,13 @@ streamRoutes.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 streamRoutes.get("/", async (c) => {
   const { site, id } = c.get("jwtPayload");
   const clients = sites[site].clients;
-  return streamSSE(c, async (stream) => {
-    // add to client list for site if not already there
-    if (!SITE_INCLUDES_CLIENT(site, id)) clients.push({ id, stream });
-    console.log(`[${site}](clients: ${clients.length}) ${id} connected to stream`);
 
-    while (SITE_INCLUDES_CLIENT(site, id)) {
+  return streamSSE(c, async (stream) => {
+    while (true) {
+      // add to client list for site if not already there
+      if (!SITE_INCLUDES_CLIENT(site, id)) clients.push({ id, stream });
+      console.log(`[${site}](clients: ${clients.length}) ${id} connected to stream`);
+
       // remove client from list when they disconnect
       stream.onAbort(() => {
         sites[site].clients = clients.filter((c) => c.id !== id);
