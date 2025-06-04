@@ -2,9 +2,10 @@ import { Hono } from "hono";
 import { jwt } from "hono/jwt";
 import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
+import { createChannel } from "better-sse";
 
 import BoardCore from "../core/board.js";
-import { broadcast } from "./streamRoutes.js";
+// import { broadcast } from "./streamRoutes.js";
 
 const boardRoutes = new Hono();
 const prisma = new PrismaClient().$extends(withAccelerate());
@@ -29,8 +30,8 @@ const getSiteDetails = async (site) => {
 };
 
 const broadcastBoard = async (site) => {
+  sites[site].channel.broadcast(getBoardHydrated(site), "board");
   console.log(`[${site}] board broadcasted`);
-  broadcast(sites[site].clients, "board", getBoardHydrated(site));
 };
 
 // SETUP SITES
@@ -38,7 +39,7 @@ export const sites = {
   stmarks: {
     board: await getBoard("stmarks"),
     details: await getSiteDetails("stmarks"),
-    clients: [],
+    channel: createChannel(),
   },
 };
 

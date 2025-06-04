@@ -57,7 +57,7 @@ export const useSite = () => {
     onBeforeMount(() => {
       stream = new EventSource("/api/stream");
       stream.onmessage = (event) => {
-        console.log("[stream] message:", event.data);
+        console.log("[stream] message:", JSON.parse(event.data));
       };
       stream.addEventListener("board", (event) => {
         console.log("[stream] board: new board");
