@@ -30,8 +30,8 @@ const streamRoutes = new Hono();
 streamRoutes.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 
 // routes
-streamRoutes.get("/", async (c) => {
-  const { site, id } = c.get("jwtPayload");
+streamRoutes.post("/", async (c) => {
+  const { site } = c.get("jwtPayload");
   const channel = sites[site].channel;
   return createResponse(c.req.raw, (session) => {
     // add client to channel for site
