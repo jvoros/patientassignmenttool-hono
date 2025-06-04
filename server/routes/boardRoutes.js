@@ -5,6 +5,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 
 import BoardCore from "../core/board.js";
 import { broadcast } from "./streamRoutes.js";
+import { io } from "../index.js";
 
 const boardRoutes = new Hono();
 const prisma = new PrismaClient().$extends(withAccelerate());
@@ -30,7 +31,8 @@ const getSiteDetails = async (site) => {
 
 const broadcastBoard = async (site) => {
   console.log(`[${site}] board broadcasted`);
-  broadcast(sites[site].clients, "board", getBoardHydrated(site));
+  io.to(site).emit("board", getBoardHydrated(site));
+  //broadcast(sites[site].clients, "board", getBoardHydrated(site));
 };
 
 // SETUP SITES

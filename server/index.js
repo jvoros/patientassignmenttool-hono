@@ -17,8 +17,9 @@ console.log(`Server is running on http://localhost:${port}`);
 export const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
-  console.log("[socket] id:", socket.id);
-  io.emit("connection", "connected with ID: " + socket.id);
+  console.log("[socket] new connection:", socket.id);
+  console.log("[socket] total connections: ", io.of("/").sockets.size);
+  io.emit("connection", "ID: " + socket.id);
 
   socket.on("room", (value) => {
     socket.join(value);
@@ -28,10 +29,6 @@ io.on("connection", (socket) => {
 });
 
 // ROUTES
-app.use(async (c, next) => {
-  c.set("io", io);
-  await next();
-});
 app.route("/api", apiRoutes);
 
 // VITE routes

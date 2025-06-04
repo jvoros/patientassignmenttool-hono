@@ -75,6 +75,7 @@ export const useSite = () => {
     store,
     fetchBoard,
     fetchDetails,
+    updateBoard,
     error: globalError,
     setError,
     useStream,
