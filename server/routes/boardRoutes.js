@@ -2,9 +2,7 @@ import { Hono } from "hono";
 import { jwt } from "hono/jwt";
 import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
-
 import BoardCore from "../core/board.js";
-import { broadcast } from "./streamRoutes.js";
 import { io } from "../index.js";
 
 const boardRoutes = new Hono();
@@ -32,7 +30,6 @@ const getSiteDetails = async (site) => {
 const broadcastBoard = async (site) => {
   console.log(`[${site}] board broadcasted`);
   io.to(site).emit("board", getBoardHydrated(site));
-  //broadcast(sites[site].clients, "board", getBoardHydrated(site));
 };
 
 // SETUP SITES

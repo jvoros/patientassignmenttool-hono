@@ -51,25 +51,6 @@ export const useSite = () => {
     globalError.value = { message };
   };
 
-  // STREAM
-  const useStream = () => {
-    let stream;
-    onBeforeMount(() => {
-      stream = new EventSource("/api/stream");
-      stream.onmessage = (event) => {
-        console.log("[stream] message:", event.data);
-      };
-      stream.addEventListener("board", (event) => {
-        console.log("[stream] board: new board");
-        updateBoard(JSON.parse(event.data));
-      });
-    });
-
-    onUnmounted(() => {
-      stream.close();
-    });
-  };
-
   return {
     // top level
     store,
@@ -78,7 +59,6 @@ export const useSite = () => {
     updateBoard,
     error: globalError,
     setError,
-    useStream,
     getShifts,
   };
 };

@@ -4,7 +4,6 @@ import { useSite, useErrorBoundary } from "/use";
 const site = useSite();
 site.fetchBoard();
 site.fetchDetails();
-// site.useStream();
 useErrorBoundary();
 </script>
 
