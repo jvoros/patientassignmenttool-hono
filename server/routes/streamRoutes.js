@@ -33,6 +33,10 @@ streamRoutes.use("/*", jwt({ secret: process.env.JWT_SECRET, cookie: "auth" }));
 streamRoutes.post("/", async (c) => {
   const { site } = c.get("jwtPayload");
   const channel = sites[site].channel;
+  c.header("Connection", "keep-alive"),
+    c.header("Content-Type", "text/event-stream"),
+    c.header("Cache-Control", "no-cache"),
+    c.header("X-Accel-Buffering", "no");
   return createResponse(c.req.raw, (session) => {
     // add client to channel for site
     channel.register(session);
