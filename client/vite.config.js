@@ -30,6 +30,9 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:8080",
       },
+      "/socket.io": {
+        target: "ws://localhost:8080",
+      },
     },
   },
   resolve: {

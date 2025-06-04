@@ -38,7 +38,6 @@ streamRoutes.get("/", async (c) => {
       // add to client list for site if not already there
       if (!SITE_INCLUDES_CLIENT(site, id)) clients.push({ id, stream });
       console.log(`[${site}](clients: ${clients.length}) ${id} connected to stream`);
-      console.log(clients);
 
       // remove client from list when they disconnect
       stream.onAbort(() => {

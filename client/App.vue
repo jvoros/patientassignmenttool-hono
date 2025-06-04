@@ -1,5 +1,8 @@
 <script setup>
 import Toaster from "./shadcn-vue/components/sonner";
+import { useSocket } from "./use";
+
+const socket = useSocket();
 </script>
 
 <template>

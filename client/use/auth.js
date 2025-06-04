@@ -1,5 +1,6 @@
 import { ref, reactive } from "vue";
 import { useApi } from "./api.js";
+import { socket } from "./socket.js";
 
 const api = useApi();
 
@@ -24,9 +25,10 @@ export const useAuth = () => {
       authError.value = error;
     }
     if (!data) return;
-    console.log("[auth] login success");
-    authError.value = null;
     setState(data);
+    authError.value = null;
+    socket.emit("room", details.site);
+    console.log("[auth] login success");
   };
 
   const logout = async () => {
@@ -41,8 +43,9 @@ export const useAuth = () => {
   const checkLogin = async () => {
     const { data } = await api.post("api/auth/checkLogin");
     if (!data) return false;
-    console.log("[auth] checkLogin success.");
     setState(data);
+    socket.emit("room", details.site);
+    console.log("[auth] checkLogin success.");
     return true;
   };
 
